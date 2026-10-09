@@ -1,0 +1,13 @@
+.blrchat{position:fixed;inset-block-end:22px;inset-inline-start:22px;z-index:99990;font-family:var(--font,'El Messiri',sans-serif)}
+.blrchat__fab{width:56px;height:56px;border-radius:50%;border:0;cursor:pointer;color:var(--on-accent,#fff);background:var(--grad,linear-gradient(135deg,#22C3F0,#2F5BFF));font-size:24px;box-shadow:0 14px 34px -12px rgba(11,18,32,.45)}
+.blrchat__panel{position:absolute;inset-block-end:70px;inset-inline-start:0;width:min(360px,calc(100vw - 32px));height:min(480px,70vh);display:flex;flex-direction:column;background:var(--card,#fff);color:var(--body,#39465C);border:1px solid var(--line,#E6EBF5);border-radius:18px;box-shadow:0 30px 70px -24px rgba(11,18,32,.4);overflow:hidden}
+.blrchat__panel[hidden]{display:none}
+.blrchat__head{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--grad,#2F5BFF);color:#fff;font-weight:700}
+.blrchat__x{background:none;border:0;color:#fff;font-size:24px;cursor:pointer;line-height:1}
+.blrchat__log{flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:8px}
+.blrchat__m{max-width:85%;padding:9px 13px;border-radius:14px;line-height:1.6;white-space:pre-wrap;font-size:.95rem}
+.blrchat__m--bot{background:var(--soft,#EEF2FB);align-self:flex-start}
+.blrchat__m--user{background:var(--accent,#2F5BFF);color:var(--on-accent,#fff);align-self:flex-end}
+.blrchat__form{display:flex;gap:6px;padding:10px;border-top:1px solid var(--line,#E6EBF5)}
+.blrchat__form input{flex:1;padding:.6em .8em;border:1px solid var(--line-2,#D7DEEC);border-radius:10px;font:inherit}
+.blrchat__form button{border:0;border-radius:10px;padding:0 14px;background:var(--accent,#2F5BFF);color:var(--on-accent,#fff);cursor:pointer;font:inherit}

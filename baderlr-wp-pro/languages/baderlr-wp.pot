@@ -1,0 +1,9 @@
+# BaderLR WP — translation template.
+msgid ""
+msgstr ""
+"Project-Id-Version: BaderLR WP 2.0.0\n"
+"Report-Msgid-Bugs-To: https://baderinfo.com\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Domain: baderlr-wp\n"

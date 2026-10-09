@@ -1,0 +1,37 @@
+{
+    "slug": "business",
+    "name": "شركة احترافية",
+    "emoji": "🏢",
+    "accent": "#2F5BFF",
+    "variant": "aurora",
+    "desc": "موقع شركة متكامل: رئيسية، خدمات، من نحن، تواصل.",
+    "front": "home",
+    "menu": [
+        "home",
+        "services",
+        "about",
+        "contact"
+    ],
+    "pages": [
+        {
+            "slug": "home",
+            "title": "الرئيسية",
+            "content": "<!-- wp:cover {\"minHeight\":480,\"gradient\":\"brand-soft\",\"align\":\"full\"} -->\n<div class=\"wp-block-cover alignfull has-brand-soft-gradient-background has-background-gradient\" style=\"min-height:480px\"><span aria-hidden=\"true\" class=\"wp-block-cover__background has-background-dim-0 has-background-dim\"></span><div class=\"wp-block-cover__inner-container\"><!-- wp:paragraph {\"align\":\"center\",\"textColor\":\"accent\"} --><p class=\"has-text-align-center has-accent-color has-text-color\">✦ حلول رقمية متكاملة</p><!-- /wp:paragraph -->\n<!-- wp:heading {\"textAlign\":\"center\",\"level\":1,\"fontSize\":\"xx-large\"} --><h1 class=\"wp-block-heading has-text-align-center has-xx-large-font-size\">نُطوّر أعمالك نحو النجاح</h1><!-- /wp:heading -->\n<!-- wp:paragraph {\"align\":\"center\",\"textColor\":\"muted\",\"fontSize\":\"medium\"} --><p class=\"has-text-align-center has-muted-color has-text-color has-medium-font-size\">فريق خبير يقدّم حلولاً مبتكرة تناسب طموح شركتك وتحقّق أهدافك.</p><!-- /wp:paragraph -->\n<!-- wp:buttons {\"layout\":{\"type\":\"flex\",\"justifyContent\":\"center\"}} --><div class=\"wp-block-buttons\"><!-- wp:button --><div class=\"wp-block-button\"><a class=\"wp-block-button__link wp-element-button\">ابدأ معنا</a></div><!-- /wp:button --></div><!-- /wp:buttons --></div></div>\n<!-- /wp:cover --><!-- wp:heading {\"textAlign\":\"center\"} --><h2 class=\"wp-block-heading has-text-align-center\">خدماتنا</h2><!-- /wp:heading --><!-- wp:columns {\"align\":\"wide\"} --><div class=\"wp-block-columns alignwide\"><!-- wp:column --><div class=\"wp-block-column\"><!-- wp:paragraph {\"fontSize\":\"x-large\"} --><p class=\"has-x-large-font-size\">💼</p><!-- /wp:paragraph --><!-- wp:heading {\"level\":3} --><h3 class=\"wp-block-heading\">الاستشارات</h3><!-- /wp:heading --><!-- wp:paragraph {\"textColor\":\"muted\"} --><p class=\"has-muted-color has-text-color\">نحلّل أعمالك ونرسم خارطة طريق واضحة للنمو.</p><!-- /wp:paragraph --></div><!-- /wp:column --><!-- wp:column --><div class=\"wp-block-column\"><!-- wp:paragraph {\"fontSize\":\"x-large\"} --><p class=\"has-x-large-font-size\">📈</p><!-- /wp:paragraph --><!-- wp:heading {\"level\":3} --><h3 class=\"wp-block-heading\">التسويق الرقمي</h3><!-- /wp:heading --><!-- wp:paragraph {\"textColor\":\"muted\"} --><p class=\"has-muted-color has-text-color\">حملات مدروسة تصل بعلامتك إلى جمهورها.</p><!-- /wp:paragraph --></div><!-- /wp:column --><!-- wp:column --><div class=\"wp-block-column\"><!-- wp:paragraph {\"fontSize\":\"x-large\"} --><p class=\"has-x-large-font-size\">⚙️</p><!-- /wp:paragraph --><!-- wp:heading {\"level\":3} --><h3 class=\"wp-block-heading\">التطوير</h3><!-- /wp:heading --><!-- wp:paragraph {\"textColor\":\"muted\"} --><p class=\"has-muted-color has-text-color\">مواقع وتطبيقات سريعة وآمنة وقابلة للتوسّع.</p><!-- /wp:paragraph --></div><!-- /wp:column --></div><!-- /wp:columns --><!-- wp:group {\"align\":\"wide\",\"style\":{\"spacing\":{\"padding\":{\"top\":\"56px\",\"bottom\":\"56px\",\"left\":\"36px\",\"right\":\"36px\"}},\"border\":{\"radius\":\"28px\"}},\"gradient\":\"brand\",\"layout\":{\"type\":\"constrained\"}} -->\n<div class=\"wp-block-group alignwide has-brand-gradient-background has-background\" style=\"border-radius:28px;padding:56px 36px\"><!-- wp:heading {\"textAlign\":\"center\",\"textColor\":\"white\"} --><h2 class=\"wp-block-heading has-text-align-center has-white-color has-text-color\">هل أنت جاهز للبدء؟</h2><!-- /wp:heading -->\n<!-- wp:paragraph {\"align\":\"center\",\"textColor\":\"white\"} --><p class=\"has-text-align-center has-white-color has-text-color\">تواصل معنا اليوم ودعنا نحوّل فكرتك إلى واقع.</p><!-- /wp:paragraph -->\n<!-- wp:buttons {\"layout\":{\"type\":\"flex\",\"justifyContent\":\"center\"}} --><div class=\"wp-block-buttons\"><!-- wp:button {\"backgroundColor\":\"white\",\"textColor\":\"accent\"} --><div class=\"wp-block-button\"><a class=\"wp-block-button__link has-accent-color has-white-background-color has-text-color has-background wp-element-button\">تواصل معنا</a></div><!-- /wp:button --></div><!-- /wp:buttons --></div>\n<!-- /wp:group -->"
+        },
+        {
+            "slug": "services",
+            "title": "خدماتنا",
+            "content": "<!-- wp:heading {\"textAlign\":\"center\"} --><h2 class=\"wp-block-heading has-text-align-center\">ماذا نقدّم</h2><!-- /wp:heading --><!-- wp:columns {\"align\":\"wide\"} --><div class=\"wp-block-columns alignwide\"><!-- wp:column --><div class=\"wp-block-column\"><!-- wp:paragraph {\"fontSize\":\"x-large\"} --><p class=\"has-x-large-font-size\">🎯</p><!-- /wp:paragraph --><!-- wp:heading {\"level\":3} --><h3 class=\"wp-block-heading\">استراتيجية</h3><!-- /wp:heading --><!-- wp:paragraph {\"textColor\":\"muted\"} --><p class=\"has-muted-color has-text-color\">خطط نمو مبنية على بيانات.</p><!-- /wp:paragraph --></div><!-- /wp:column --><!-- wp:column --><div class=\"wp-block-column\"><!-- wp:paragraph {\"fontSize\":\"x-large\"} --><p class=\"has-x-large-font-size\">🧩</p><!-- /wp:paragraph --><!-- wp:heading {\"level\":3} --><h3 class=\"wp-block-heading\">تصميم</h3><!-- /wp:heading --><!-- wp:paragraph {\"textColor\":\"muted\"} --><p class=\"has-muted-color has-text-color\">هوية وواجهات تترك انطباعاً.</p><!-- /wp:paragraph --></div><!-- /wp:column --><!-- wp:column --><div class=\"wp-block-column\"><!-- wp:paragraph {\"fontSize\":\"x-large\"} --><p class=\"has-x-large-font-size\">🚀</p><!-- /wp:paragraph --><!-- wp:heading {\"level\":3} --><h3 class=\"wp-block-heading\">إطلاق</h3><!-- /wp:heading --><!-- wp:paragraph {\"textColor\":\"muted\"} --><p class=\"has-muted-color has-text-color\">تنفيذ ومتابعة حتى النتائج.</p><!-- /wp:paragraph --></div><!-- /wp:column --></div><!-- /wp:columns -->"
+        },
+        {
+            "slug": "about",
+            "title": "من نحن",
+            "content": "<!-- wp:paragraph --><p>نحن فريق من المختصين نساعد الشركات على التحوّل الرقمي منذ أكثر من عشر سنوات، بخبرة في أكثر من 500 مشروع ناجح.</p><!-- /wp:paragraph --><!-- wp:paragraph --><p>رسالتنا أن نجعل التقنية في متناول كل عمل، مهما كان حجمه.</p><!-- /wp:paragraph -->"
+        },
+        {
+            "slug": "contact",
+            "title": "تواصل معنا",
+            "content": "<!-- wp:paragraph --><p>يسعدنا تواصلك معنا عبر الهاتف أو البريد، أو عبر نموذج التواصل.</p><!-- /wp:paragraph -->"
+        }
+    ]
+}
