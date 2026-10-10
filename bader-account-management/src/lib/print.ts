@@ -1,8 +1,38 @@
+import { getOwner } from "@/lib/owner";
+
 export function printPage(title?: string) {
   if (title) {
     document.title = title;
   }
   window.print();
+}
+
+/**
+ * Prints an HTML document through a hidden iframe: pop-up windows are blocked in the
+ * desktop app (and by browsers), and an iframe also works offline.
+ */
+export function printHtml(html: string) {
+  const frame = document.createElement("iframe");
+  frame.setAttribute("aria-hidden", "true");
+  frame.style.cssText = "position:fixed;width:0;height:0;border:0;right:0;bottom:0;visibility:hidden";
+  document.body.appendChild(frame);
+  const win = frame.contentWindow;
+  if (!win) {
+    frame.remove();
+    alert("Print failed");
+    return;
+  }
+  win.document.open();
+  win.document.write(html);
+  win.document.close();
+  win.onafterprint = () => setTimeout(() => frame.remove(), 500);
+  // let styles settle, then open the print dialog of the hidden frame
+  setTimeout(() => {
+    win.focus();
+    win.print();
+    // some engines never fire afterprint for frames: do not leave the frame behind
+    setTimeout(() => frame.isConnected && frame.remove(), 60_000);
+  }, 400);
 }
 
 export function printElement(elementId: string, title?: string) {
@@ -22,25 +52,15 @@ export function printElement(elementId: string, title?: string) {
 
   cleanContent.querySelectorAll(".print-only").forEach((el) => el.remove());
 
-  // Print through a hidden iframe: pop-up windows are blocked in the desktop app (and by browsers).
-  const frame = document.createElement("iframe");
-  frame.setAttribute("aria-hidden", "true");
-  frame.style.cssText = "position:fixed;width:0;height:0;border:0;right:0;bottom:0;visibility:hidden";
-  document.body.appendChild(frame);
-  const printWindow = frame.contentWindow;
-  if (!printWindow) {
-    frame.remove();
-    alert("تعذرت الطباعة");
-    return;
-  }
-
+  const owner = getOwner();
+  const esc = (v: string) => v.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const currentDate = new Date().toLocaleDateString("ar-DZ", {
     year: "numeric",
     month: "long",
     day: "numeric",
   });
 
-  printWindow.document.write(`
+  const html = `
     <!DOCTYPE html>
     <html lang="ar" dir="rtl">
       <head>
@@ -246,6 +266,10 @@ export function printElement(elementId: string, title?: string) {
           <div class="logo">Bader Account Management</div>
           <div class="date">${currentDate}</div>
         </div>
+        <div style="display:flex;gap:24px;margin:-10px 0 18px;font-size:13px;color:#334155">
+          <div>صاحب الحساب: <strong>${esc(owner.name) || "—"}</strong></div>
+          <div>اسم المستخدم: <strong dir="ltr">${esc(owner.username) || "—"}</strong></div>
+        </div>
         
         ${cleanContent.innerHTML}
         
@@ -257,18 +281,8 @@ export function printElement(elementId: string, title?: string) {
         
       </body>
     </html>
-  `);
-  printWindow.document.close();
-
-  const cleanup = () => setTimeout(() => frame.remove(), 500);
-  printWindow.onafterprint = cleanup;
-  // let styles/fonts settle, then open the print dialog of the (hidden) frame
-  setTimeout(() => {
-    printWindow.focus();
-    printWindow.print();
-    // some engines never fire afterprint for frames: do not leave the frame behind
-    setTimeout(() => frame.isConnected && frame.remove(), 60_000);
-  }, 400);
+  `;
+  printHtml(html);
 }
 
 export function exportToJSON(data: any, filename: string) {

@@ -18,7 +18,10 @@ module.exports = {
 
     // Ask the server every N hours; stop after N days without any successful check (0 = never stop)
     check_interval_hours: 12,
-    max_offline_days: 14,
+    // 0 = never stop: after one online activation the program works for life, even with no internet.
+    // (the server is still asked every check_interval_hours whenever the device happens to be online,
+    //  so a cancelled/refunded license is still revoked the next time it connects)
+    max_offline_days: 0,
 
     // Activation window language: ar | fr | en
     lang: 'ar',

@@ -25,9 +25,11 @@ import {
 import { copyToClipboard } from "@/lib/utils";
 import PreviewModal from "@/components/ui/PreviewModal";
 import { printElement } from "@/lib/print";
+import { printContacts } from "@/lib/reports";
 
 export default function ContactsPage() {
   const t = useTranslations("contacts");
+  const tp = useTranslations("print") as unknown as (key: string, values?: Record<string, string | number>) => string;
   const locale = useLocale();
 
   const contacts = useStore((state) => state.contacts);
@@ -168,7 +170,7 @@ export default function ContactsPage() {
             </button>
 
             <button
-              onClick={() => printElement("contacts-content", printTitle)}
+              onClick={() => printContacts({ locale: currentLocale, tp, title: t("title") }, filtered, (v: string) => getCategoryInfo(v).label)}
               className="px-4 py-2.5 rounded-xl glass hover:bg-white/80 transition-colors flex items-center gap-2"
             >
               <Printer className="w-4 h-4" />

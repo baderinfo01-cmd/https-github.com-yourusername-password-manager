@@ -32,9 +32,11 @@ import {
 import { copyToClipboard } from "@/lib/utils";
 import PreviewModal from "@/components/ui/PreviewModal";
 import { printElement } from "@/lib/print";
+import { printCards } from "@/lib/reports";
 
 export default function CardsPage() {
   const t = useTranslations("cards");
+  const tp = useTranslations("print") as unknown as (key: string, values?: Record<string, string | number>) => string;
   const locale = useLocale();
 
   const cards = useStore((state) => state.cards);
@@ -167,7 +169,7 @@ export default function CardsPage() {
             </button>
 
             <button
-              onClick={() => printElement("cards-content", printTitle)}
+              onClick={() => printCards({ locale: currentLocale, tp, title: t("title") }, filtered, (v: string) => getCategoryInfo(v).label)}
               className="px-4 py-2.5 rounded-xl glass hover:bg-white/80 transition-colors flex items-center gap-2"
             >
               <Printer className="w-4 h-4" />

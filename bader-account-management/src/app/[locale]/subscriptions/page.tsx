@@ -32,9 +32,11 @@ import {
 import { copyToClipboard } from "@/lib/utils";
 import PreviewModal from "@/components/ui/PreviewModal";
 import { printElement } from "@/lib/print";
+import { printSubscriptions } from "@/lib/reports";
 
 export default function SubscriptionsPage() {
   const t = useTranslations("subscriptions");
+  const tp = useTranslations("print") as unknown as (key: string, values?: Record<string, string | number>) => string;
   const locale = useLocale();
 
   const subscriptions = useStore((state) => state.subscriptions);
@@ -206,7 +208,7 @@ export default function SubscriptionsPage() {
               </button>
 
               <button
-                onClick={() => printElement("subscriptions-content", printTitle)}
+                onClick={() => printSubscriptions({ locale, tp, title: t("title") }, filtered, getCategoryLabel)}
                 className="px-4 py-2.5 rounded-xl glass hover:bg-white/80 transition-colors flex items-center gap-2"
               >
                 <Printer className="w-4 h-4" />
