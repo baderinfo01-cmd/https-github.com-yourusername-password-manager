@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Baderinfo — فهرس الصفحات للنسخ</title>
+<style>
+:root{--a:#2F5BFF;--b:#22C3F0;--ink:#0f1b3d;--mut:#5b6785;--line:#e3e8f3}
+*{box-sizing:border-box}body{margin:0;font-family:'El Messiri','Segoe UI',Tahoma,sans-serif;background:#f5f7fb;color:var(--ink)}
+header{background:linear-gradient(135deg,#0f1b3d,#1d3a9e 55%,var(--a));color:#fff;padding:26px 16px}
+header h1{margin:0 0 6px;font-size:26px}header p{margin:0;opacity:.9}
+.wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+.bar{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);z-index:5;padding:10px 0}
+.bar .wrap{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.tab,.chip{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:6px 16px;cursor:pointer;font:inherit}
+.tab.on{background:var(--a);color:#fff;border-color:var(--a)}
+input[type=search]{flex:1;min-width:200px;border:1.5px solid var(--line);border-radius:999px;padding:8px 16px;font:inherit}
+.row{display:flex;gap:10px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px 14px;margin:8px 0}
+.row .t{flex:1;min-width:0}.row .t b{display:block}.row .t small{color:var(--mut);direction:ltr;display:block;text-align:start;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.btn{border:0;border-radius:999px;padding:7px 16px;cursor:pointer;font:inherit;background:linear-gradient(135deg,var(--a),var(--b));color:#fff;text-decoration:none;white-space:nowrap}
+.btn.g{background:#fff;color:var(--a);border:1.5px solid var(--a)}
+.btn.ok{background:#12a150}
+.d1{margin-inline-start:22px}.d2{margin-inline-start:44px}.d3{margin-inline-start:66px}.d4{margin-inline-start:88px}
+.cnt{color:var(--mut);margin:12px 0}
+@media(max-width:640px){.row{flex-wrap:wrap}}
+</style></head><body>
+<header><div class="wrap"><h1>فهرس صفحات Baderinfo — انسخ صفحة صفحة</h1>
+<p>اختر اللغة، ابحث عن الصفحة، اضغط «نسخ الكود» ثم الصقه في كتلة HTML مخصص داخل صفحة ووردبريس بالعنوان والرابط الظاهرين. «معاينة» تفتح الصفحة كما ستبدو.</p></div></header>
+<div class="bar"><div class="wrap">
+<button class="tab on" data-l="ar">العربية</button><button class="tab" data-l="en">English</button><button class="tab" data-l="fr">Français</button>
+<input type="search" id="q" placeholder="ابحث عن صفحة…"></div></div>
+<main class="wrap"><div class="cnt" id="cnt"></div><div id="list"></div></main>
+<script>
+const DATA=/*DATA*/[];
+let L='ar';const list=document.getElementById('list'),q=document.getElementById('q'),cnt=document.getElementById('cnt');
+function path(u){try{return new URL(u,'https://x.y').pathname}catch(e){return u}}
+function render(){
+  const s=q.value.trim().toLowerCase();list.innerHTML='';let n=0;
+  DATA.forEach((p,i)=>{ if(p.l!==L)return; if(s&&!(p.t.toLowerCase().includes(s)||p.u.toLowerCase().includes(s)))return; n++;
+    const d=document.createElement('div');d.className='row d'+Math.min(p.d,4);
+    d.innerHTML='<div class="t"><b></b><small></small></div><a class="btn g" target="_blank">معاينة</a><button class="btn">نسخ الكود</button>';
+    d.querySelector('b').textContent=p.t;d.querySelector('small').textContent=path(p.u);
+    d.querySelector('a').href='preview/'+p.l+'/'+p.f+'.html';
+    const b=d.querySelector('button');b.onclick=async()=>{try{await navigator.clipboard.writeText(p.h)}catch(e){const t=document.createElement('textarea');t.value=p.h;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove()}
+      b.textContent='تم النسخ ✓';b.classList.add('ok');setTimeout(()=>{b.textContent='نسخ الكود';b.classList.remove('ok')},1800)};
+    list.appendChild(d);});
+  cnt.textContent=n+' صفحة';
+}
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));t.classList.add('on');L=t.dataset.l;render()});
+q.oninput=render;render();
+</script></body></html>

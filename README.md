@@ -62,3 +62,10 @@
 
 ## الصفحات الإعلانية متعددة اللغات
 `promo/index.html` (عربي) و`index-en.html` و`index-fr.html` فهارس للمنتجات الأربعة، ولكل منتج `ar.html` و`en.html` و`fr.html` مع مبدّل لغة وhreflang. الأسعار توضيحية. لتعديل النصوص عدّل `content.py` ثم شغّل `build.py`.
+
+## Baderinfo site pages + service-request forms (`site-content/`, `plugins/blr-service-requests/`)
+
+- `site-content/build_site.py` generates 300 pages (100 per language: ar at `/`, `/en/`, `/fr/`), a WordPress import file (`out/baderinfo-pages.xml`, with hierarchy and 3 nav menus), an interactive copy index (`out/index.html`), a link map (`out/link-map.csv`) and the form catalog JSON used by the plugin. Run `python3 build_site.py [--base https://baderinfo.com]`.
+- Content lives in `data_*.py`; the service tree in `catalog.py`; per-service form fields in `forms_catalog.py`.
+- `plugins/blr-service-requests/`: `[bi_request]`, `[bi_contact]`, `[bi_contact_info]`, `[bi_products]`, `[bi_posts]`, `[bi_portfolio]`, request inbox (status, notes, CSV export), email + auto-reply, anti-spam (honeypot, signed timestamp, rate limit), works CPT.
+- `site-content/GUIDE.md` / `GUIDE.html`: Arabic step-by-step guide (import vs page-by-page copy, menus, buttons/links, forms).
