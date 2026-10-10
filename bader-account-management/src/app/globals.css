@@ -1,0 +1,172 @@
+@import "tailwindcss";
+
+:root {
+  --color-primary: 14 165 233;
+  --color-primary-foreground: 255 255 255;
+  --color-background: 240 249 255;
+  --color-foreground: 15 23 42;
+  --color-muted: 100 116 139;
+  --color-muted-foreground: 71 85 105;
+  --color-card: 255 255 255;
+  --color-card-foreground: 15 23 42;
+  --color-border: 186 230 253;
+  --color-accent: 224 242 254;
+}
+
+[data-theme="purple"] {
+  --color-primary: 168 85 247;
+  --color-background: 250 245 255;
+  --color-accent: 245 243 255;
+  --color-border: 233 213 255;
+}
+
+[data-theme="blue"] {
+  --color-primary: 14 165 233;
+  --color-background: 240 249 255;
+  --color-accent: 224 242 254;
+  --color-border: 186 230 253;
+}
+
+[data-theme="green"] {
+  --color-primary: 34 197 94;
+  --color-background: 240 253 244;
+  --color-accent: 220 252 231;
+  --color-border: 187 247 208;
+}
+
+[data-theme="pink"] {
+  --color-primary: 236 72 153;
+  --color-background: 253 242 248;
+  --color-accent: 252 231 243;
+  --color-border: 249 168 212;
+}
+
+[data-theme="brown"] {
+  --color-primary: 146 64 14;
+  --color-background: 254 243 232;
+  --color-accent: 254 215 170;
+  --color-border: 253 186 116;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  font-family: "Tajawal", "Inter", system-ui, sans-serif;
+  background: rgb(var(--color-background));
+  color: rgb(var(--color-foreground));
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+body[dir="rtl"] {
+  font-family: "Tajawal", system-ui, sans-serif;
+  text-align: right;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+.btn-3d {
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow:
+    0 4px 14px 0 rgba(var(--color-primary), 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.btn-3d:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 8px 20px 0 rgba(var(--color-primary), 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.btn-3d:active {
+  transform: translateY(0px);
+}
+
+.card-hover {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-hover:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+}
+
+.animated-bg {
+  background: linear-gradient(
+    135deg,
+    rgb(var(--color-background)) 0%,
+    rgba(var(--color-primary), 0.1) 50%,
+    rgb(var(--color-background)) 100%
+  );
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes slideUp {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.5s ease-out;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(var(--color-accent));
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--color-primary));
+  border-radius: 4px;
+}
+
+@media print {
+  .no-print { display: none !important; }
+  body { background: white !important; }
+}
+/* إخفاء قسم السيرة الذاتية من الواجهة العادية */
+.cv-section-print {
+  display: none !important;
+}
+
+/* إظهاره عند الطباعة فقط */
+@media print {
+  .cv-section-print {
+    display: block !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-block {
+    display: block !important;
+  }
+}

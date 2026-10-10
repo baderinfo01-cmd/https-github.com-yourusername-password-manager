@@ -1,0 +1,1732 @@
+{
+  "common": {
+    "appName": "Bader Account Management",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "search": "Rechercher...",
+    "add": "Ajouter",
+    "loading": "Chargement...",
+    "yes": "Oui",
+    "no": "Non",
+    "copy": "Copier",
+    "copied": "Copié",
+    "show": "Afficher",
+    "hide": "Masquer",
+    "print": "Imprimer",
+    "export": "Exporter",
+    "back": "Retour",
+    "done": "Terminé",
+    "all": "Tous",
+    "favorite": "Favoris",
+    "weak": "Faibles",
+    "duplicate": "Doublons",
+    "categories": "Catégories"
+  },
+  "nav": {
+    "dashboard": "Tableau de bord",
+    "myAccount": "Mon compte",
+    "accounts": "Comptes",
+    "subscriptions": "Abonnements",
+    "myInfo": "Mes infos",
+    "cards": "Cartes",
+    "documents": "Documents",
+    "contacts": "Contacts",
+    "generator": "Générateur",
+    "analytics": "Analyses",
+    "settings": "Paramètres",
+    "developer": "Développeur",
+    "contact": "Contact",
+    "logout": "Verrouiller",
+    "license": "Informations de licence",
+    "ai": "Assistant IA"
+  },
+  "auth": {
+    "welcome": "Bon retour",
+    "enterPassword": "Saisissez votre mot de passe principal pour déverrouiller",
+    "unlock": "Déverrouiller",
+    "wrongPassword": "Mot de passe incorrect",
+    "createTitle": "Créez votre mot de passe principal",
+    "createDescription": "Il protège toutes vos données et ne peut pas être récupéré.",
+    "confirmPassword": "Répétez le mot de passe",
+    "create": "Créer le coffre et ouvrir",
+    "passwordsMismatch": "Les mots de passe ne correspondent pas",
+    "passwordTooShort": "Au moins {min} caractères",
+    "passwordWeak": "Doit contenir des lettres et des chiffres",
+    "tooManyAttempts": "Trop d’essais. Patientez {seconds} secondes",
+    "noRecoveryWarning": "⚠️ Aucune récupération possible : si vous le perdez, les données sont perdues.",
+    "legacyNotice": "Des données non protégées d’une ancienne version ont été trouvées. Elles seront chiffrées avec le nouveau mot de passe.",
+    "lock": "Verrouiller"
+  },
+  "license": {
+    "titleAr": "",
+    "titleEn": "Activer Bader Account Management",
+    "subtitle": "Choisissez le type de licence qui vous convient",
+    "personal": "Personnel",
+    "professional": "Professionnel",
+    "enterprise": "Entreprise",
+    "mostPopular": "Plus populaire",
+    "devicesCount": "appareils",
+    "unlimited": "Illimité",
+    "contactUs": "Contactez-nous",
+    "haveKey": "J'ai une clé",
+    "noKey": "Vous n'avez pas de clé?",
+    "buyFrom": "Acheter de",
+    "deviceId": "ID de l'appareil",
+    "howItWorks": "Comment ça marche?",
+    "steps": {
+      "1": {
+        "title": "Choisir",
+        "desc": "Sélectionnez la licence"
+      },
+      "2": {
+        "title": "Obtenir",
+        "desc": "De baderinfo.com"
+      },
+      "3": {
+        "title": "Activer",
+        "desc": "Entrez la clé"
+      },
+      "4": {
+        "title": "Profiter",
+        "desc": "Utilisez toutes les fonctions"
+      }
+    },
+    "features": {
+      "device1": "1 appareil",
+      "device3": "3 appareils",
+      "basicFeatures": "Toutes les fonctions de base",
+      "allFeatures": "Toutes les fonctions",
+      "updates1y": "Mises à jour 1 an",
+      "lifetimeUpdates": "Mises à jour à vie",
+      "emailSupport": "Support par email",
+      "prioritySupport": "Support prioritaire",
+      "cloudSync": "Synchronisation cloud",
+      "unlimitedDevices": "Appareils illimités",
+      "customization": "Personnalisation complète",
+      "dedicatedSupport": "Support dédié",
+      "teamTraining": "Formation d'équipe",
+      "customAPI": "API personnalisée"
+    },
+    "back": "Retour",
+    "enterKey": "Entrez la clé d'activation",
+    "keyHint": "Entrez la clé obtenue de baderinfo.com",
+    "key": "Clé d'activation",
+    "activating": "Activation en cours...",
+    "activate": "Activer",
+    "successTitle": "Activation réussie!",
+    "welcomeMsg": "Bienvenue dans Bader Account Management",
+    "type": "Type de licence",
+    "activatedAt": "Activé le",
+    "expiresAt": "Expire le",
+    "status": "Statut",
+    "active": "Actif",
+    "enterApp": "Entrer dans l'application",
+    "deactivate": "Désactiver",
+    "confirmDeactivate": "Êtes-vous sûr de vouloir désactiver la licence sur cet appareil?",
+    "errors": {
+      "emptyKey": "Veuillez entrer la clé d'activation",
+      "invalidKey": "Clé d'activation invalide",
+      "invalidFormat": "Clé invalide. La clé doit commencer par BADER-"
+    }
+  },
+  "dashboard": {
+    "welcome": {
+      "title": "Bienvenue!",
+      "summary": "Vous avez <accountsStrong>{accounts}</accountsStrong> comptes et <subscriptionsStrong>{subscriptions}</subscriptionsStrong> abonnements actifs"
+    },
+    "stats": {
+      "accounts": "Comptes",
+      "activeSubscriptions": "Abonnements actifs",
+      "cardsAndDocuments": "Cartes et documents",
+      "totalSpending": "Dépenses totales",
+      "contacts": "Contacts",
+      "favorites": "Favoris",
+      "todayActions": "Actions du jour",
+      "monthlySpending": "Dépenses du mois",
+      "thisWeek": "cette semaine",
+      "expiringSoon": "expirent bientôt"
+    },
+    "sections": {
+      "mostUsedCategories": "Catégories les plus utilisées",
+      "weeklyActivity": "Activité hebdomadaire",
+      "recentActivity": "Activités récentes"
+    },
+    "messages": {
+      "noData": "Aucune donnée disponible",
+      "noActivities": "Aucune activité pour le moment"
+    },
+    "expiring": {
+      "title": "Alertes d'expiration",
+      "today": "Aujourd'hui!",
+      "tomorrow": "Demain",
+      "afterDays": "Dans {days} jours"
+    },
+    "quickActions": {
+      "title": "Actions rapides",
+      "accounts": "Comptes",
+      "subscriptions": "Abonnements",
+      "analytics": "Analyses",
+      "settings": "Paramètres"
+    },
+    "empty": {
+      "title": "Bienvenue!",
+      "description": "Commencez par ajouter votre premier compte ou abonnement",
+      "addAccount": "Ajouter un compte",
+      "addSubscription": "Ajouter un abonnement"
+    },
+    "currency": {
+      "dzd": "DZD"
+    },
+    "days": {
+      "sunday": "Dimanche",
+      "monday": "Lundi",
+      "tuesday": "Mardi",
+      "wednesday": "Mercredi",
+      "thursday": "Jeudi",
+      "friday": "Vendredi",
+      "saturday": "Samedi"
+    },
+    "activity": {
+      "actions": {
+        "add": "Ajout",
+        "delete": "Suppression",
+        "edit": "Modification",
+        "other": "Action"
+      },
+      "itemTypes": {
+        "account": "compte",
+        "subscription": "abonnement",
+        "card": "carte",
+        "document": "document",
+        "contact": "contact",
+        "info": "information"
+      }
+    },
+    "categories": {
+      "general": "Général",
+      "services": "Services",
+      "social": "Réseaux sociaux",
+      "work": "Travail",
+      "finance": "Finance",
+      "banking": "Banque",
+      "shopping": "Shopping",
+      "entertainment": "Divertissement",
+      "education": "Éducation",
+      "health": "Santé",
+      "travel": "Voyage",
+      "gaming": "Jeux",
+      "streaming": "Streaming",
+      "email": "Email",
+      "cloud": "Cloud",
+      "government": "Gouvernement",
+      "business": "Business",
+      "personal": "Personnel",
+      "other": "Autre"
+    }
+  },
+  "accounts": {
+    "title": "Comptes",
+    "subtitle": "Gérez tous vos comptes au même endroit",
+    "searchPlaceholder": "Rechercher par nom, email ou nom d'utilisateur...",
+    "confirmDelete": "Êtes-vous sûr de vouloir supprimer ce compte ?",
+    "actions": {
+      "export": "Exporter",
+      "import": "Importer",
+      "preview": "Aperçu",
+      "print": "Imprimer",
+      "addAccount": "Ajouter un compte",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "copy": "Copier",
+      "favorite": "Favori",
+      "showPassword": "Afficher le mot de passe",
+      "hidePassword": "Masquer le mot de passe"
+    },
+    "view": {
+      "list": "Liste",
+      "grid": "Grille"
+    },
+    "stats": {
+      "total": "Total des comptes",
+      "favorites": "Favoris",
+      "weakPasswords": "Mots de passe faibles",
+      "duplicatePasswords": "Mots de passe dupliqués"
+    },
+    "filters": {
+      "allCategories": "Toutes les catégories"
+    },
+    "sort": {
+      "recent": "Plus récent",
+      "updated": "Dernière modification",
+      "name": "Nom"
+    },
+    "empty": {
+      "title": "Aucun compte",
+      "description": "Commencez par ajouter votre premier compte"
+    },
+    "warnings": {
+      "oldPassword": "Ancien mot de passe",
+      "weak": "Faible",
+      "duplicate": "Dupliqué"
+    },
+    "fields": {
+      "username": "Utilisateur",
+      "password": "Mot de passe",
+      "emails": "Emails",
+      "url": "Lien",
+      "recoveryEmail": "Email de récupération",
+      "notes": "Notes"
+    },
+    "alerts": {
+      "importSuccess": "✅ Données importées avec succès",
+      "invalidFile": "❌ Fichier invalide"
+    },
+    "preview": {
+      "title": "Comptes",
+      "date": "Date",
+      "total": "Total",
+      "favorites": "Favoris",
+      "weak": "Faibles",
+      "duplicate": "Dupliqués",
+      "generatedBy": "Ce rapport a été généré par Bader Account Management v2.0.0"
+    },
+    "table": {
+      "siteName": "Nom du site",
+      "category": "Catégorie",
+      "username": "Nom d'utilisateur",
+      "password": "Mot de passe",
+      "url": "Lien"
+    },
+    "passwordStrength": {
+      "red": "Très faible",
+      "orange": "Faible",
+      "yellow": "Moyen",
+      "green": "Fort"
+    },
+    "modal": {
+      "addTitle": "Ajouter un nouveau compte",
+      "editTitle": "Modifier le compte",
+      "siteName": "Nom du site",
+      "siteNamePlaceholder": "Exemple : Facebook",
+      "category": "Catégorie",
+      "siteUrl": "Lien du site",
+      "username": "Nom d'utilisateur",
+      "usernamePlaceholder": "Nom d'utilisateur",
+      "password": "Mot de passe",
+      "extraEmails": "Emails supplémentaires",
+      "addEmail": "Ajouter un email",
+      "recoveryEmail": "Email de récupération",
+      "notes": "Notes",
+      "notesPlaceholder": "Informations supplémentaires...",
+      "addToFavorites": "Ajouter aux favoris",
+      "save": "Enregistrer",
+      "cancel": "Annuler"
+    },
+    "categories": {
+      "general": "Général",
+      "social": "Réseaux sociaux",
+      "work": "Travail",
+      "finance": "Finance",
+      "banking": "Banque",
+      "shopping": "Shopping",
+      "entertainment": "Divertissement",
+      "education": "Éducation",
+      "health": "Santé",
+      "travel": "Voyage",
+      "gaming": "Jeux",
+      "streaming": "Streaming",
+      "email": "Email",
+      "cloud": "Cloud",
+      "government": "Gouvernement",
+      "business": "Business",
+      "personal": "Personnel",
+      "other": "Autre"
+    }
+  },
+  "subscriptions": {
+    "title": "Abonnements",
+    "subtitle": "Gérez facilement tous vos abonnements",
+    "searchPlaceholder": "Rechercher par nom, email ou nom d'utilisateur...",
+    "confirmDelete": "Êtes-vous sûr de vouloir supprimer cet abonnement ?",
+    "actions": {
+      "export": "Exporter",
+      "import": "Importer",
+      "preview": "Aperçu",
+      "print": "Imprimer",
+      "addSubscription": "Ajouter un abonnement",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "copy": "Copier",
+      "favorite": "Favori",
+      "showPassword": "Afficher le mot de passe",
+      "hidePassword": "Masquer le mot de passe"
+    },
+    "view": {
+      "list": "Liste",
+      "grid": "Grille"
+    },
+    "stats": {
+      "total": "Total des abonnements",
+      "active": "Actifs",
+      "expiring": "Expirent bientôt",
+      "totalSpent": "Dépenses totales"
+    },
+    "sort": {
+      "recent": "Plus récent",
+      "expiry": "Date d'expiration",
+      "name": "Nom",
+      "price": "Prix"
+    },
+    "empty": {
+      "title": "Aucun abonnement",
+      "description": "Commencez par ajouter votre premier abonnement"
+    },
+    "status": {
+      "active": "Actif",
+      "expired": "Expiré",
+      "frozen": "Gelé"
+    },
+    "remaining": {
+      "today": "Aujourd'hui",
+      "tomorrow": "Demain",
+      "afterDays": "Dans {days} jours"
+    },
+    "fields": {
+      "from": "De",
+      "to": "À",
+      "price": "Prix",
+      "url": "Lien",
+      "username": "Utilisateur",
+      "email": "Email",
+      "phone": "Téléphone",
+      "password": "Mot de passe",
+      "notes": "Notes"
+    },
+    "alerts": {
+      "importSuccess": "✅ Données importées avec succès",
+      "invalidFile": "❌ Fichier invalide"
+    },
+    "preview": {
+      "title": "Abonnements",
+      "date": "Date",
+      "generatedBy": "Ce rapport a été généré par Bader Account Management v2.0.0"
+    },
+    "table": {
+      "name": "Nom",
+      "category": "Catégorie",
+      "username": "Utilisateur",
+      "email": "Email",
+      "from": "De",
+      "to": "À",
+      "price": "Prix",
+      "status": "Statut"
+    },
+    "modal": {
+      "addTitle": "Ajouter un nouvel abonnement",
+      "editTitle": "Modifier l'abonnement",
+      "sections": {
+        "basic": "Informations de base",
+        "login": "Informations de connexion",
+        "duration": "Durée et dates",
+        "priceStatus": "Prix et statut"
+      },
+      "name": "Nom de l'abonnement",
+      "namePlaceholder": "Exemple : Netflix",
+      "customerName": "Nom du client",
+      "customerNamePlaceholder": "Nom du client",
+      "category": "Catégorie",
+      "siteUrl": "Lien du site",
+      "username": "Nom d'utilisateur",
+      "usernamePlaceholder": "Nom d'utilisateur",
+      "password": "Mot de passe",
+      "email": "Email",
+      "phone": "Numéro de téléphone",
+      "duration": "Durée de l'abonnement",
+      "autoEndDateHint": "La date de fin sera calculée automatiquement",
+      "startDate": "Date de début",
+      "endDate": "Date de fin",
+      "daysCount": "Durée en jours",
+      "daysValue": "{days} jours",
+      "invalidDuration": "Invalide",
+      "selectedDuration": "Durée sélectionnée : {days} jours - vous pouvez modifier la date manuellement pour passer en personnalisé",
+      "price": "Prix",
+      "currency": "Devise",
+      "status": "Statut",
+      "notes": "Notes",
+      "notesPlaceholder": "Informations supplémentaires...",
+      "addToFavorites": "Ajouter aux favoris",
+      "save": "Enregistrer",
+      "cancel": "Annuler",
+      "durations": {
+        "week": "Semaine (7 jours)",
+        "month": "Mois (30 jours)",
+        "threeMonths": "3 mois (90 jours)",
+        "sixMonths": "6 mois (180 jours)",
+        "year": "Année (365 jours)",
+        "twoYears": "2 ans (730 jours)",
+        "fiveYears": "5 ans (1825 jours)",
+        "custom": "Personnalisé"
+      },
+      "currencies": {
+        "dzd": "DZD (Dinar algérien)",
+        "sar": "SAR (Riyal saoudien)",
+        "aed": "AED (Dirham émirati)",
+        "usd": "$ (Dollar)",
+        "eur": "€ (Euro)"
+      }
+    },
+    "categories": {
+      "general": "Général",
+      "services": "Services",
+      "social": "Réseaux sociaux",
+      "work": "Travail",
+      "finance": "Finance",
+      "banking": "Banque",
+      "shopping": "Shopping",
+      "entertainment": "Divertissement",
+      "education": "Éducation",
+      "health": "Santé",
+      "travel": "Voyage",
+      "gaming": "Jeux",
+      "streaming": "Streaming",
+      "email": "Email",
+      "cloud": "Cloud",
+      "government": "Gouvernement",
+      "business": "Business",
+      "personal": "Personnel",
+      "other": "Autre"
+    }
+  },
+  "myInfo": {
+    "title": "Mes infos",
+    "subtitle": "Vos informations sensibles et personnelles",
+    "actions": {
+      "edit": "Modifier",
+      "save": "Enregistrer",
+      "cancel": "Annuler",
+      "add": "Ajouter",
+      "delete": "Supprimer",
+      "call": "Appeler",
+      "loading": "Chargement...",
+      "changeImage": "Changer l'image"
+    },
+    "alerts": {
+      "saved": "✅ Enregistré avec succès",
+      "imageTooLarge": "❌ La taille de l'image est trop grande",
+      "locationSuccess": "✅ Localisation détectée",
+      "locationError": "❌ Impossible d'obtenir la localisation"
+    },
+    "fallback": {
+      "firstName": "Prénom",
+      "lastName": "Nom"
+    },
+    "tabs": {
+      "personal": "Personnel",
+      "emails": "Emails",
+      "phones": "Téléphones",
+      "addresses": "Adresses",
+      "secrets": "Secrets",
+      "experience": "Expériences",
+      "education": "Éducation",
+      "certifications": "Certificats",
+      "achievements": "Travaux"
+    },
+    "fields": {
+      "password": "Mot de passe",
+      "startDate": "Date de début",
+      "endDate": "Date de fin",
+      "untilNow": "Jusqu'à maintenant"
+    },
+    "personal": {
+      "title": "Informations personnelles",
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "username": "Nom d'utilisateur",
+      "nationality": "Nationalité",
+      "birthDate": "Date de naissance",
+      "gender": "Genre",
+      "choose": "Choisir...",
+      "male": "Homme",
+      "female": "Femme",
+      "bio": "Bio"
+    },
+    "emails": {
+      "title": "Emails",
+      "empty": "Aucun email pour le moment"
+    },
+    "phones": {
+      "title": "Numéros de téléphone",
+      "empty": "Aucun numéro de téléphone pour le moment"
+    },
+    "addresses": {
+      "title": "Adresses",
+      "empty": "Aucune adresse pour le moment",
+      "gps": "Localisation GPS",
+      "labelPlaceholder": "Libellé comme maison ou travail",
+      "country": "Pays",
+      "state": "Région",
+      "city": "Ville",
+      "municipality": "Commune",
+      "postalCode": "Code postal",
+      "fullAddress": "Adresse complète...",
+      "primary": "Adresse principale",
+      "primaryShort": "Principale"
+    },
+    "secrets": {
+      "title": "Numéros secrets",
+      "empty": "Aucun numéro secret pour le moment",
+      "labelPlaceholder": "Nom du secret comme PIN1",
+      "valuePlaceholder": "Valeur"
+    },
+    "experience": {
+      "title": "Expériences professionnelles",
+      "empty": "Aucune expérience pour le moment",
+      "positionPlaceholder": "Poste comme Développeur Web",
+      "companyPlaceholder": "Nom de l'entreprise",
+      "companyLocation": "Lieu de l'entreprise",
+      "current": "Je travaille actuellement dans cette entreprise",
+      "description": "Description des tâches",
+      "descriptionPlaceholder": "Que faisiez-vous dans ce poste...",
+      "skills": "Compétences",
+      "addSkill": "Ajouter une compétence...",
+      "referenceName": "Nom de référence",
+      "referenceContact": "Contact de référence",
+      "types": {
+        "fullTime": "Temps plein",
+        "partTime": "Temps partiel",
+        "contract": "Contrat",
+        "freelance": "Freelance",
+        "internship": "Stage",
+        "remote": "À distance"
+      }
+    },
+    "education": {
+      "title": "Éducation",
+      "empty": "Aucun diplôme pour le moment",
+      "degree": "Diplôme",
+      "institution": "Nom de l'établissement",
+      "fieldOfStudy": "Domaine d'étude",
+      "graduationDate": "Date d'obtention",
+      "current": "J'étudie actuellement",
+      "description": "Description des études..."
+    },
+    "certifications": {
+      "title": "Certificats et diplômes",
+      "empty": "Aucun certificat pour le moment",
+      "name": "Nom du certificat",
+      "issuer": "Organisme émetteur",
+      "issueDate": "Date d'émission",
+      "expiryDate": "Date d'expiration",
+      "credentialId": "ID d'accréditation",
+      "description": "Description du certificat..."
+    },
+    "achievements": {
+      "title": "Travaux réalisés",
+      "empty": "Aucun travail pour le moment",
+      "titlePlaceholder": "Titre de la réalisation",
+      "description": "Description de la réalisation..."
+    }
+  },
+  "cards": {
+    "title": "Cartes",
+    "subtitle": "Gérez vos cartes en toute sécurité",
+    "searchPlaceholder": "Rechercher par nom, numéro ou banque...",
+    "confirmDelete": "Êtes-vous sûr de vouloir supprimer cette carte ?",
+    "actions": {
+      "export": "Exporter",
+      "import": "Importer",
+      "preview": "Aperçu",
+      "print": "Imprimer",
+      "addCard": "Ajouter une carte",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "copy": "Copier",
+      "favorite": "Favori",
+      "show": "Afficher",
+      "hide": "Masquer",
+      "open": "Ouvrir"
+    },
+    "alerts": {
+      "importSuccess": "✅ Données importées avec succès",
+      "invalidFile": "❌ Fichier invalide"
+    },
+    "stats": {
+      "total": "Total des cartes",
+      "bank": "Cartes bancaires",
+      "membership": "Cartes d'adhésion",
+      "favorites": "Favoris"
+    },
+    "filters": {
+      "allCategories": "Toutes les catégories"
+    },
+    "empty": {
+      "title": "Aucune carte",
+      "description": "Commencez par ajouter votre première carte"
+    },
+    "cardVisual": {
+      "holder": "Titulaire",
+      "expiry": "Expiration"
+    },
+    "onlineInfo": {
+      "title": "Informations en ligne de l'organisme",
+      "accountLink": "Lien du compte"
+    },
+    "preview": {
+      "title": "Cartes",
+      "date": "Date",
+      "total": "Total",
+      "bank": "Bancaires",
+      "membership": "Adhésion",
+      "favorites": "Favoris",
+      "generatedBy": "Ce rapport a été généré par Bader Account Management v2.0.0"
+    },
+    "table": {
+      "type": "Type",
+      "holder": "Titulaire",
+      "cardNumber": "Numéro de carte",
+      "bank": "Banque",
+      "expiry": "Expiration"
+    },
+    "categories": {
+      "bank": "Carte bancaire",
+      "membership": "Carte d'adhésion",
+      "shopping": "Carte d'achat",
+      "gaming": "Carte de jeux",
+      "loyalty": "Carte de fidélité",
+      "transport": "Carte de transport",
+      "student": "Carte étudiant",
+      "insurance": "Carte d'assurance",
+      "health": "Carte santé",
+      "work": "Carte professionnelle",
+      "gift": "Carte cadeau",
+      "other": "Autre"
+    },
+    "modal": {
+      "addTitle": "Ajouter une nouvelle carte",
+      "editTitle": "Modifier la carte",
+      "holderPlaceholder": "Nom complet",
+      "cardCategory": "Catégorie de la carte",
+      "new": "Nouveau",
+      "customTypePlaceholder": "Saisir le nom de la catégorie...",
+      "issuerBank": "Nom de la banque / organisme",
+      "cardNumber": "Numéro de carte",
+      "holderName": "Nom du titulaire",
+      "expiryDate": "Expiration",
+      "websiteUrl": "Lien du site",
+      "accountUrl": "Lien du compte",
+      "email": "Email",
+      "phone": "Téléphone",
+      "accountUsername": "Nom d'utilisateur du compte",
+      "accountPassword": "Mot de passe du compte",
+      "accountNotes": "Notes du compte",
+      "accountNotesPlaceholder": "Notes liées à ce compte...",
+      "generalNotes": "Notes générales",
+      "generalNotesPlaceholder": "Notes supplémentaires...",
+      "addToFavorites": "Ajouter aux favoris",
+      "save": "Enregistrer",
+      "cancel": "Annuler",
+      "addCategoryTitle": "Ajouter une nouvelle catégorie",
+      "categoryName": "Nom de la catégorie",
+      "categoryNamePlaceholder": "Carte de fidélité",
+      "categoryNameArPlaceholder": "Nom de la catégorie en arabe",
+      "categoryNameEnPlaceholder": "Nom de la catégorie en anglais",
+      "categoryNameFrPlaceholder": "Nom de la catégorie en français",
+      "emoji": "Emoji",
+      "color": "Couleur",
+      "addCategory": "Ajouter la catégorie",
+      "categoryAlerts": {
+        "enterName": "Veuillez saisir le nom de la catégorie",
+        "exists": "Cette catégorie existe déjà",
+        "added": "✅ Catégorie ajoutée avec succès"
+      },
+      "colors": {
+        "blue": "Bleu",
+        "green": "Vert",
+        "orange": "Orange",
+        "purple": "Violet",
+        "yellow": "Jaune",
+        "cyan": "Cyan",
+        "pink": "Rose",
+        "red": "Rouge"
+      }
+    }
+  },
+  "documents": {
+    "title": "Documents",
+    "subtitle": "Gérez vos documents officiels en toute sécurité",
+    "searchPlaceholder": "Rechercher par nom, numéro de document, numéro d'identité ou nationalité...",
+    "confirmDelete": "Êtes-vous sûr de vouloir supprimer ce document ?",
+    "actions": {
+      "export": "Exporter",
+      "import": "Importer",
+      "preview": "Aperçu",
+      "print": "Imprimer",
+      "addDocument": "Ajouter un document",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "copy": "Copier",
+      "favorite": "Favori",
+      "show": "Afficher",
+      "hide": "Masquer"
+    },
+    "alerts": {
+      "importSuccess": "✅ Données importées avec succès",
+      "invalidFile": "❌ Fichier invalide"
+    },
+    "stats": {
+      "total": "Total des documents",
+      "nationalId": "Carte d'identité",
+      "passport": "Passeports",
+      "favorites": "Favoris"
+    },
+    "filters": {
+      "allTypes": "Tous les types"
+    },
+    "empty": {
+      "title": "Aucun document",
+      "description": "Commencez par ajouter votre premier document"
+    },
+    "preview": {
+      "title": "Documents",
+      "date": "Date",
+      "generatedBy": "Ce rapport a été généré par Bader Account Management v2.0.0"
+    },
+    "table": {
+      "type": "Type",
+      "name": "Nom",
+      "documentNumber": "Numéro du document",
+      "nationalId": "Numéro d'identité",
+      "nationality": "Nationalité"
+    },
+    "card": {
+      "republic": "République",
+      "name": "Nom",
+      "birth": "Date de naissance",
+      "number": "N°",
+      "documentNumber": "Numéro du document",
+      "nationalId": "Numéro d'identification national",
+      "nationality": "Nationalité",
+      "birthDate": "Naissance",
+      "expiryDate": "Expiration",
+      "address": "Adresse",
+      "birthPlace": "Lieu de naissance",
+      "gender": "Genre",
+      "bloodType": "Groupe sanguin",
+      "notes": "Notes"
+    },
+    "gender": {
+      "male": "Homme",
+      "female": "Femme"
+    },
+    "categories": {
+      "national_id": "Carte d'identité",
+      "passport": "Passeport",
+      "driver_license": "Permis de conduire",
+      "driving_license": "Permis de conduire",
+      "residence": "Résidence",
+      "residence_card": "Carte de résidence",
+      "birth_certificate": "Acte de naissance",
+      "family_book": "Livret de famille",
+      "health_card": "Carte santé",
+      "work_permit": "Permis de travail",
+      "work_card": "Carte de travail",
+      "diploma": "Diplôme",
+      "student_card": "Carte étudiant",
+      "vehicle_registration": "Carte grise",
+      "tax_card": "Carte fiscale",
+      "military": "Document militaire",
+      "military_card": "Carte de service national",
+      "custom": "Autre",
+      "other": "Autre"
+    },
+    "modal": {
+      "addTitle": "Ajouter un nouveau document",
+      "editTitle": "Modifier le document",
+      "documentPreview": "Aperçu du document",
+      "changeImage": "Changer l'image",
+      "uploadImage": "Télécharger la photo personnelle",
+      "addCategoryButton": "Ajouter une nouvelle catégorie",
+      "documentType": "Type de document",
+      "documentNumber": "Numéro du document",
+      "nationalIdNumber": "Numéro d'identification national NIN",
+      "customDocumentName": "Nom du document personnalisé",
+      "customDocumentPlaceholder": "Licence commerciale",
+      "arabicName": "Nom en arabe",
+      "latinName": "Nom en latin",
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "firstNamePlaceholder": "Mohamed",
+      "lastNamePlaceholder": "Larbi",
+      "nationality": "Nationalité",
+      "nationalityPlaceholder": "Algérienne",
+      "gender": "Genre",
+      "choose": "Choisir...",
+      "birthDate": "Date de naissance",
+      "birthPlace": "Lieu de naissance",
+      "bloodType": "Groupe sanguin",
+      "postalCode": "Code postal",
+      "fullAddress": "Adresse complète",
+      "issueDate": "Date d'émission",
+      "expiryDate": "Date d'expiration",
+      "issuePlace": "Lieu d'émission",
+      "issuePlacePlaceholder": "Autorité émettrice",
+      "notes": "Notes",
+      "addToFavorites": "Ajouter aux favoris",
+      "save": "Enregistrer",
+      "cancel": "Annuler",
+      "addCategoryTitle": "Ajouter une nouvelle catégorie",
+      "categoryName": "Nom de la catégorie",
+      "categoryNamePlaceholder": "Carte de fidélité",
+      "categoryNameArPlaceholder": "Nom de la catégorie en arabe",
+      "categoryNameEnPlaceholder": "Nom de la catégorie en anglais",
+      "categoryNameFrPlaceholder": "Nom de la catégorie en français",
+      "emoji": "Emoji",
+      "color": "Couleur",
+      "addCategory": "Ajouter la catégorie",
+      "alerts": {
+        "imageTooLarge": "❌ La taille de l'image est trop grande, maximum 5MB"
+      },
+      "categoryAlerts": {
+        "enterName": "Veuillez saisir le nom de la catégorie",
+        "exists": "Cette catégorie existe déjà",
+        "added": "✅ Catégorie ajoutée avec succès"
+      },
+      "colors": {
+        "blue": "Bleu",
+        "green": "Vert",
+        "orange": "Orange",
+        "purple": "Violet",
+        "red": "Rouge",
+        "teal": "Turquoise",
+        "yellow": "Jaune",
+        "gray": "Gris"
+      }
+    }
+  },
+  "contacts": {
+    "title": "Contacts",
+    "subtitle": "Gérez facilement vos contacts",
+    "searchPlaceholder": "Rechercher par nom ou numéro...",
+    "confirmDelete": "Êtes-vous sûr de vouloir supprimer ce contact ?",
+    "actions": {
+      "export": "Exporter",
+      "import": "Importer",
+      "preview": "Aperçu",
+      "print": "Imprimer",
+      "addContact": "Ajouter un contact",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "copy": "Copier",
+      "favorite": "Favori",
+      "call": "Appeler",
+      "send": "Envoyer"
+    },
+    "view": {
+      "list": "Liste",
+      "grid": "Grille"
+    },
+    "alerts": {
+      "importSuccess": "✅ Données importées avec succès",
+      "invalidFile": "❌ Fichier invalide"
+    },
+    "stats": {
+      "total": "Total des contacts",
+      "favorites": "Favoris"
+    },
+    "filters": {
+      "allCategories": "Toutes les catégories"
+    },
+    "empty": {
+      "title": "Aucun contact",
+      "description": "Commencez par ajouter votre première personne"
+    },
+    "preview": {
+      "title": "Contacts",
+      "date": "Date",
+      "generatedBy": "Ce rapport a été généré par Bader Account Management v2.0.0"
+    },
+    "table": {
+      "name": "Nom",
+      "category": "Catégorie",
+      "phone": "Téléphone",
+      "email": "Email",
+      "city": "Ville"
+    },
+    "categories": {
+      "family": "Famille",
+      "relatives": "Proches",
+      "friends": "Amis",
+      "work": "Travail",
+      "business": "Business",
+      "school": "Études",
+      "health": "Santé",
+      "important": "Important",
+      "personal": "Personnel",
+      "companies": "Entreprises",
+      "other": "Autre"
+    },
+    "modal": {
+      "addTitle": "Ajouter un nouveau contact",
+      "editTitle": "Modifier le contact",
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "firstNamePlaceholder": "Ahmed",
+      "lastNamePlaceholder": "Mohamed",
+      "category": "Catégorie",
+      "new": "Nouveau",
+      "phone1": "Téléphone 1",
+      "phone2": "Téléphone 2",
+      "email": "Email",
+      "state": "Région",
+      "statePlaceholder": "Alger",
+      "city": "Ville/Commune",
+      "cityPlaceholder": "Bab Ezzouar",
+      "notes": "Notes",
+      "notesPlaceholder": "Notes...",
+      "addToFavorites": "Ajouter aux favoris",
+      "save": "Enregistrer",
+      "cancel": "Annuler",
+      "addCategoryTitle": "Ajouter une nouvelle catégorie",
+      "categoryName": "Nom de la catégorie",
+      "categoryNamePlaceholder": "Camarades de classe",
+      "categoryNameArPlaceholder": "Nom de la catégorie en arabe",
+      "categoryNameEnPlaceholder": "Nom de la catégorie en anglais",
+      "categoryNameFrPlaceholder": "Nom de la catégorie en français",
+      "emoji": "Emoji",
+      "color": "Couleur",
+      "addCategory": "Ajouter la catégorie",
+      "categoryAlerts": {
+        "enterName": "Veuillez saisir le nom de la catégorie",
+        "exists": "Cette catégorie existe déjà",
+        "added": "✅ Catégorie ajoutée avec succès"
+      },
+      "colors": {
+        "red": "Rouge",
+        "orange": "Orange",
+        "yellow": "Jaune",
+        "green": "Vert",
+        "blue": "Bleu",
+        "purple": "Violet",
+        "pink": "Rose",
+        "gray": "Gris"
+      }
+    }
+  },
+  "generator": {
+    "title": "Générateur de mots de passe",
+    "subtitle": "Créez des mots de passe forts et sécurisés",
+    "actions": {
+      "export": "Exporter",
+      "print": "Imprimer",
+      "copy": "Copier",
+      "delete": "Supprimer",
+      "clearAll": "Tout supprimer",
+      "show": "Afficher",
+      "hide": "Masquer",
+      "done": "Terminé"
+    },
+    "alerts": {
+      "selectOneType": "Sélectionnez au moins un type de caractère",
+      "copied": "✅ Mot de passe copié"
+    },
+    "generate": {
+      "title": "Générer un nouveau mot de passe",
+      "placeholder": "Cliquez sur générer pour créer un mot de passe...",
+      "strength": "Force du mot de passe",
+      "button": "Générer un nouveau mot de passe"
+    },
+    "settings": {
+      "title": "Paramètres",
+      "length": "Longueur du mot de passe"
+    },
+    "options": {
+      "uppercase": "Lettres majuscules A-Z",
+      "lowercase": "Lettres minuscules a-z",
+      "numbers": "Chiffres 0-9",
+      "symbols": "Symboles !@#$",
+      "excludeSimilar": "Exclure les caractères similaires",
+      "excludeAmbiguous": "Exclure les caractères ambigus"
+    },
+    "strength": {
+      "veryWeak": "Très faible",
+      "weak": "Faible",
+      "medium": "Moyen",
+      "strong": "Fort",
+      "veryStrong": "Très fort"
+    },
+    "filters": {
+      "all": "Tous les niveaux"
+    },
+    "history": {
+      "title": "Historique",
+      "confirmClear": "Êtes-vous sûr de vouloir supprimer tous les mots de passe enregistrés ?",
+      "searchPlaceholder": "Rechercher des mots de passe...",
+      "empty": "Aucun mot de passe enregistré pour le moment",
+      "noResults": "Aucun résultat de recherche",
+      "hint": "Cliquez sur générer un nouveau mot de passe pour en créer un",
+      "lengthChars": "{length} caractères"
+    },
+    "tips": {
+      "title": "Conseils pour des mots de passe sécurisés",
+      "useLongPassword": "Utilisez au moins 16 caractères pour vos comptes importants",
+      "mixCharacters": "Mélangez majuscules, minuscules, chiffres et symboles",
+      "uniquePassword": "N'utilisez pas le même mot de passe pour plusieurs comptes",
+      "changeRegularly": "Changez vos mots de passe tous les 3 à 6 mois",
+      "noPersonalInfo": "N'utilisez pas d'informations personnelles comme votre nom ou date de naissance",
+      "doNotShare": "Ne partagez vos mots de passe avec personne"
+    }
+  },
+  "analytics": {
+    "title": "Analyses",
+    "subtitle": "Graphiques et rapports détaillés pour chaque section",
+    "actions": {
+      "printReport": "Imprimer le rapport"
+    },
+    "tabs": {
+      "overview": "Vue d'ensemble",
+      "accounts": "Comptes",
+      "subscriptions": "Abonnements",
+      "cards": "Cartes",
+      "documents": "Documents",
+      "contacts": "Contacts"
+    },
+    "common": {
+      "total": "Total",
+      "active": "Actifs",
+      "favorites": "Favoris",
+      "thisMonth": "ce mois"
+    },
+    "labels": {
+      "accounts": "Comptes",
+      "subscriptions": "Abonnements",
+      "activeSubscriptions": "Abonnements actifs",
+      "cards": "Cartes",
+      "documents": "Documents",
+      "contacts": "Contacts"
+    },
+    "overview": {
+      "totalDistribution": "Distribution totale",
+      "monthlyActivity": "Activité mensuelle des 30 derniers jours"
+    },
+    "accounts": {
+      "total": "Total des comptes",
+      "duplicates": "Doublons",
+      "byCategory": "Comptes par catégorie",
+      "distributionByCategory": "Distribution par catégorie",
+      "barByCategory": "Comptes par catégorie"
+    },
+    "subscriptions": {
+      "statusTitle": "Statut des abonnements",
+      "byCategory": "Abonnements par catégorie",
+      "expiringSoon": "Expirent bientôt"
+    },
+    "cards": {
+      "normal": "Normales",
+      "byType": "Cartes par type"
+    },
+    "documents": {
+      "distribution": "Distribution des documents",
+      "gender": "Genre"
+    },
+    "contacts": {
+      "byCategory": "Contacts par catégorie"
+    },
+    "status": {
+      "active": "Actifs",
+      "expired": "Expirés",
+      "frozen": "Gelés"
+    },
+    "gender": {
+      "male": "Homme",
+      "female": "Femme"
+    },
+    "quick": {
+      "mostUsedCategory": "Catégorie la plus utilisée",
+      "expiringSubscriptions": "Abonnements expirant bientôt",
+      "totalActivity": "Activité totale"
+    },
+    "units": {
+      "subscriptionsCount": "{count} abonnements",
+      "itemsCount": "{count} éléments"
+    },
+    "messages": {
+      "noData": "Aucune donnée",
+      "noActivity": "Aucune activité",
+      "noAccounts": "Aucun compte",
+      "noSubscriptions": "Aucun abonnement",
+      "none": "Aucun"
+    },
+    "footer": {
+      "user": "Utilisateur",
+      "storage": "Stockage",
+      "local": "Local",
+      "protection": "Protection",
+      "enabled": "Activée",
+      "version": "Version",
+      "rights": "Tous droits réservés"
+    },
+    "categories": {
+      "general": "Général",
+      "services": "Services",
+      "social": "Réseaux sociaux",
+      "work": "Travail",
+      "finance": "Finance",
+      "banking": "Banque",
+      "shopping": "Shopping",
+      "entertainment": "Divertissement",
+      "education": "Éducation",
+      "health": "Santé",
+      "travel": "Voyage",
+      "gaming": "Jeux",
+      "streaming": "Streaming",
+      "email": "Email",
+      "cloud": "Cloud",
+      "government": "Gouvernement",
+      "business": "Business",
+      "personal": "Personnel",
+      "other": "Autre"
+    },
+    "cardTypes": {
+      "bank": "Carte bancaire",
+      "membership": "Carte d'adhésion",
+      "shopping": "Carte d'achat",
+      "gaming": "Carte de jeux",
+      "loyalty": "Carte de fidélité",
+      "gift": "Carte cadeau",
+      "transport": "Carte de transport",
+      "student": "Carte étudiant",
+      "insurance": "Carte d'assurance",
+      "health": "Carte santé",
+      "work": "Carte professionnelle",
+      "other": "Autre"
+    },
+    "documentTypes": {
+      "national_id": "Carte d'identité",
+      "passport": "Passeport",
+      "driver_license": "Permis de conduire",
+      "driving_license": "Permis de conduire",
+      "residence": "Résidence",
+      "residence_card": "Carte de résidence",
+      "birth_certificate": "Acte de naissance",
+      "family_book": "Livret de famille",
+      "health_card": "Carte santé",
+      "work_permit": "Permis de travail",
+      "work_card": "Carte de travail",
+      "diploma": "Diplôme",
+      "student_card": "Carte étudiant",
+      "vehicle_registration": "Carte grise",
+      "tax_card": "Carte fiscale",
+      "military": "Document militaire",
+      "military_card": "Carte de service national",
+      "custom": "Personnalisé",
+      "other": "Autre"
+    },
+    "contactCategories": {
+      "family": "Famille",
+      "relatives": "Proches",
+      "friends": "Amis",
+      "work": "Travail",
+      "business": "Business",
+      "school": "Études",
+      "health": "Santé",
+      "important": "Important",
+      "personal": "Personnel",
+      "companies": "Entreprises",
+      "other": "Autre"
+    }
+  },
+  "settings": {
+    "title": "Paramètres",
+    "subtitle": "Personnaliser l'application et gérer la sécurité",
+    "saveSettings": "Enregistrer les paramètres",
+    "savedSuccess": "✅ Paramètres enregistrés avec succès",
+    "appearance": {
+      "title": "Apparence",
+      "currentTheme": "Couleur actuelle du thème",
+      "currentFontSize": "Taille actuelle de la police",
+      "themes": {
+        "blue": "Bleu",
+        "purple": "Violet",
+        "green": "Vert",
+        "pink": "Rose",
+        "brown": "Marron"
+      },
+      "font": {
+        "small": "Petit",
+        "medium": "Moyen",
+        "large": "Grand"
+      }
+    },
+    "security": {
+      "title": "Sécurité",
+      "autoLockCurrent": "Verrouillage automatique après : {minutes} minutes",
+      "minutes": "{minutes} minutes",
+      "hour": "1 heure",
+      "sessionTimeout": "Délai de session en minutes",
+      "encryptionTitle": "Chiffrement fort AES-256",
+      "encryptionDescription": "Protection complète de toutes les données",
+      "changeMainPassword": "Changer le mot de passe principal",
+      "changePasswordPrompt": "Entrez le nouveau mot de passe, au moins 4 caractères :",
+      "changePasswordSuccess": "✅ Mot de passe changé et données rechiffrées",
+      "passwordTooShort": "❌ Au moins 8 caractères avec lettres et chiffres",
+      "changePasswordTitle": "Changer le mot de passe principal",
+      "currentPassword": "Mot de passe actuel",
+      "newPassword": "Nouveau mot de passe",
+      "wrongCurrent": "❌ Mot de passe actuel incorrect",
+      "save": "Enregistrer",
+      "cancel": "Annuler",
+      "confirmWithPassword": "Saisissez votre mot de passe principal pour confirmer",
+      "confirmFailed": "❌ Mot de passe incorrect"
+    },
+    "backup": {
+      "title": "Sauvegarde",
+      "frequencyCurrent": "Fréquence actuelle de sauvegarde",
+      "formatCurrent": "Format actuel d'exportation",
+      "frequencies": {
+        "daily": "Quotidien",
+        "weekly": "Hebdomadaire",
+        "monthly": "Mensuel",
+        "never": "Désactivé"
+      },
+      "formats": {
+        "json": "Structuré",
+        "csv": "Excel",
+        "encryptedLabel": "Chiffré",
+        "encrypted": "Protégé"
+      },
+      "autoUpdate": "Mise à jour automatique",
+      "autoUpdateDescription": "Mettre à jour l'application automatiquement",
+      "stats": {
+        "accounts": "Comptes",
+        "subscriptions": "Abonnements",
+        "cards": "Cartes"
+      },
+      "exportButton": "Exporter {format}",
+      "importData": "Importer les données"
+    },
+    "advanced": {
+      "title": "Avancé",
+      "systemSounds": "Sons du système",
+      "systemSoundsDescription": "Effets sonores lors des actions"
+    },
+    "system": {
+      "title": "Informations système",
+      "version": "Version",
+      "releaseDate": "Date de sortie",
+      "totalItems": "Nombre d'éléments",
+      "dataSize": "Taille des données",
+      "encryption": "Chiffrement",
+      "storage": "Stockage",
+      "lastUpdate": "Dernière mise à jour",
+      "status": "Statut",
+      "local": "Local",
+      "now": "Maintenant",
+      "active": "Actif ✓"
+    },
+    "danger": {
+      "title": "Zone dangereuse",
+      "description": "Ces actions ne peuvent pas être annulées. Veuillez être prudent.",
+      "confirmDeleteAll": "Êtes-vous sûr de vouloir supprimer toutes les données ? Cette action est irréversible !",
+      "deleteAll": "Supprimer toutes les données et réinitialiser l'application",
+      "confirmRestore": "Voulez-vous restaurer les paramètres par défaut ?",
+      "restoreDefaults": "Restaurer les paramètres par défaut"
+    },
+    "footer": {
+      "rights": "Tous droits réservés"
+    }
+  },
+  "developer": {
+    "title": "Informations du développeur",
+    "hero": {
+      "badge": "Application de gestion des comptes et informations privées",
+      "description": "Une page d'information sur le développeur et l'application, présentant une brève description du projet, ses spécifications, ses avantages, les informations de contact et la version."
+    },
+    "developer": {
+      "role": "Développeur et fondateur de Baderinfo",
+      "description": "Un développeur qui se concentre sur la création de solutions pratiques aidant l'utilisateur à organiser et gérer facilement ses informations importantes. Cette application a été conçue pour être simple à utiliser, claire dans sa présentation et adaptée à une utilisation quotidienne pour conserver les comptes, abonnements, documents et données personnelles."
+    },
+    "contact": {
+      "officialWebsite": "Site officiel",
+      "email": "Email"
+    },
+    "programDescription": {
+      "title": "Description du programme",
+      "description": "est une application dédiée à la gestion des informations personnelles importantes telles que les comptes, les abonnements, les cartes, les documents et les données de contact. Elle vise à regrouper ces données dans une seule interface organisée au lieu de les disperser dans plusieurs endroits, avec une attention particulière à la facilité d'utilisation et à une organisation claire et sécurisée."
+    },
+    "specificationsTitle": "Spécifications du programme",
+    "specifications": {
+      "accounts": {
+        "title": "Gestion des comptes",
+        "description": "Organiser les comptes importants et conserver leurs informations de manière ordonnée."
+      },
+      "subscriptions": {
+        "title": "Gestion des abonnements",
+        "description": "Suivre les services actifs, les abonnements et leurs dates importantes."
+      },
+      "cardsDocuments": {
+        "title": "Gestion des cartes et documents",
+        "description": "Conserver les informations des cartes et documents dans des sections claires."
+      },
+      "contacts": {
+        "title": "Données de contact",
+        "description": "Regrouper les informations de contact importantes et y accéder rapidement."
+      },
+      "protection": {
+        "title": "Protection des données",
+        "description": "Veiller à conserver les informations sensibles de manière plus sécurisée."
+      },
+      "interface": {
+        "title": "Interface organisée",
+        "description": "Un design clair et facile à utiliser pour accéder rapidement à chaque section."
+      }
+    },
+    "advantagesTitle": "Avantages du programme",
+    "advantages": {
+      "1": "Interface claire adaptée à une utilisation quotidienne.",
+      "2": "Données divisées en sections organisées pour faciliter l'accès.",
+      "3": "Design responsive et agréable visuellement.",
+      "4": "Possibilité d'exporter les données et de conserver une copie de sauvegarde.",
+      "5": "Expérience utilisateur simple sans complexité.",
+      "6": "Adapté à la gestion des informations personnelles et des comptes importants en un seul endroit."
+    },
+    "contactMethod": {
+      "title": "Méthode de contact",
+      "emailTitle": "Contact par email",
+      "emailDescription": "L'email peut être utilisé pour les demandes, les remarques ou les demandes d'améliorations supplémentaires de l'application.",
+      "websiteTitle": "Site officiel",
+      "websiteDescription": "Vous pouvez visiter le site officiel pour obtenir plus d'informations ou suivre les services et travaux de Baderinfo."
+    },
+    "version": {
+      "title": "Informations de version",
+      "appName": "Nom du programme",
+      "version": "Version",
+      "releaseYear": "Année de sortie",
+      "status": "Statut du programme",
+      "active": "Actif"
+    },
+    "footer": {
+      "madeWith": "Créé avec",
+      "by": "par",
+      "rights": "Tous droits réservés"
+    }
+  },
+  "contact": {
+    "title": "Contactez-nous",
+    "subtitle": "Nous sommes là pour vous aider pour toute question, remarque ou demande d'amélioration liée à Bader Account Management.",
+    "hero": {
+      "badge": "Contact direct avec l'équipe Baderinfo"
+    },
+    "cards": {
+      "website": {
+        "title": "Site officiel",
+        "action": "Visiter le site"
+      },
+      "email": {
+        "title": "Email",
+        "copy": "Copier l'email",
+        "copied": "Copié"
+      },
+      "response": {
+        "title": "Temps de réponse",
+        "time": "Généralement sous 24 à 48 heures",
+        "note": "Selon le type de demande"
+      }
+    },
+    "categories": {
+      "general": "Demande générale",
+      "support": "Support technique",
+      "bug": "Signaler un problème",
+      "suggestion": "Suggestion d'amélioration",
+      "security": "Question de sécurité"
+    },
+    "priorities": {
+      "low": "Faible",
+      "normal": "Normale",
+      "high": "Élevée"
+    },
+    "form": {
+      "title": "Envoyer un message",
+      "description": "Remplissez le formulaire et votre application email s'ouvrira pour envoyer le message.",
+      "success": "Votre message a été préparé avec succès. Terminez l'envoi depuis votre application email.",
+      "name": "Nom",
+      "namePlaceholder": "Votre nom complet",
+      "email": "Email",
+      "category": "Type de demande",
+      "priority": "Priorité",
+      "subject": "Sujet",
+      "subjectPlaceholder": "Sujet du message",
+      "message": "Message",
+      "messagePlaceholder": "Écrivez votre message ici en détail...",
+      "noteTitle": "Remarque",
+      "note": "Ce formulaire ouvre votre application email pour envoyer le message à {email}. Si l'application email ne s'ouvre pas, vous pouvez copier l'adresse email et envoyer le message manuellement.",
+      "submit": "Préparer et envoyer le message"
+    },
+    "validation": {
+      "nameRequired": "Veuillez entrer votre nom.",
+      "emailRequired": "Veuillez entrer votre adresse email.",
+      "emailInvalid": "L'adresse email est invalide.",
+      "subjectRequired": "Veuillez entrer le sujet du message.",
+      "messageRequired": "Veuillez écrire votre message.",
+      "messageTooShort": "Le message est trop court. Veuillez ajouter plus de détails."
+    },
+    "mailBody": {
+      "name": "Nom",
+      "email": "Email",
+      "category": "Catégorie",
+      "priority": "Priorité",
+      "message": "Message"
+    },
+    "sidebar": {
+      "helpTitle": "Comment pouvons-nous vous aider ?",
+      "contactInfo": "Informations de contact"
+    },
+    "quickTopics": {
+      "help": {
+        "title": "Demander de l'aide",
+        "description": "Si vous rencontrez un problème lors de l'utilisation de l'application ou de l'enregistrement des données."
+      },
+      "suggestion": {
+        "title": "Suggérer une fonctionnalité",
+        "description": "Partagez une idée qui pourrait rendre l'application meilleure et plus utile."
+      },
+      "bug": {
+        "title": "Signaler un bug",
+        "description": "Signalez toute erreur apparaissant dans l'interface ou pendant l'utilisation."
+      },
+      "security": {
+        "title": "Question de sécurité",
+        "description": "Pour toute question liée à la protection des données ou à la confidentialité."
+      }
+    },
+    "info": {
+      "email": "Email",
+      "website": "Site",
+      "support": "Support",
+      "supportValue": "Disponible par email",
+      "response": "Réponse",
+      "responseValue": "24 - 48 heures"
+    },
+    "footerNote": "Merci d'utiliser Bader Account Management. Vos remarques nous aident à améliorer continuellement l'application."
+  },
+  "setupProfile": {
+    "side": {
+      "title": "Configuration du premier utilisateur",
+      "description": "Avant d'entrer dans l'application, saisissez les informations de base de l'utilisateur. Ces données seront utilisées pour personnaliser l'application et votre profil.",
+      "features": {
+        "user": "Personnaliser le nom d'utilisateur et le nom du responsable",
+        "contact": "Enregistrer les informations de contact de base",
+        "ready": "Préparer l'application pour une utilisation quotidienne"
+      }
+    },
+    "badge": "Une seule étape",
+    "formTitle": "Informations utilisateur",
+    "formDescription": "Vous pourrez modifier ces informations plus tard depuis la page Mes infos.",
+    "fields": {
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "username": "Nom d'utilisateur",
+      "email": "Email",
+      "phone": "Numéro de téléphone",
+      "nationality": "Nationalité",
+      "role": "Rôle utilisateur",
+      "companyName": "Nom de l'entreprise ou de l'activité"
+    },
+    "placeholders": {
+      "firstName": "Exemple : Bader",
+      "lastName": "Exemple : Hamidan",
+      "username": "Exemple : baderinfo",
+      "nationality": "Exemple : Algérienne",
+      "role": "Directeur",
+      "companyName": "Optionnel"
+    },
+    "defaults": {
+      "role": "Directeur"
+    },
+    "validation": {
+      "firstNameRequired": "Veuillez saisir le prénom.",
+      "lastNameRequired": "Veuillez saisir le nom.",
+      "usernameRequired": "Veuillez saisir le nom d'utilisateur."
+    },
+    "saveButton": "Enregistrer et continuer vers l'application",
+    "footerNote": "Ces informations seront affichées dans l'application et pourront être modifiées plus tard."
+  },
+  "myAccount": {
+    "title": "Mon compte",
+    "subtitle": "Vos informations complètes de manière professionnelle",
+    "export": "Exporter",
+    "print": "Imprimer",
+    "edit": "Modifier",
+    "save": "Enregistrer",
+    "add": "Ajouter",
+    "delete": "Supprimer",
+    "call": "Appeler",
+    "saved": "✅ Enregistré avec succès",
+    "imageTooLarge": "❌ La taille de l'image est trop grande (maximum 5MB)",
+    "locationError": "❌ Impossible d'obtenir la localisation",
+    "locationSuccess": "✅ Localisation détectée",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "fallbackFirstName": "Prénom",
+    "fallbackLastName": "Nom",
+    "untilNow": "Jusqu'à maintenant",
+    "tabs": {
+      "personal": "Personnel",
+      "contact": "Contact",
+      "address": "Adresse",
+      "secrets": "Secrets",
+      "experience": "Expériences",
+      "education": "Éducation",
+      "certifications": "Certificats",
+      "achievements": "Travaux",
+      "hobbies": "Loisirs"
+    },
+    "personal": {
+      "title": "Informations personnelles",
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "username": "Nom d'utilisateur",
+      "birthDate": "Date de naissance",
+      "nationality": "Nationalité",
+      "gender": "Genre",
+      "choose": "Choisir...",
+      "male": "Homme",
+      "female": "Femme",
+      "bio": "Bio personnelle",
+      "bioPlaceholder": "Écrivez une brève présentation...",
+      "skills": "Compétences (séparées par des virgules)",
+      "skillsPlaceholder": "JavaScript, React, Design...",
+      "languages": "Langues (séparées par des virgules)",
+      "languagesPlaceholder": "Arabe, Anglais, Français"
+    },
+    "contactInfo": {
+      "emails": "Emails",
+      "phones": "Numéros de téléphone",
+      "password": "Mot de passe",
+      "emailPlaceholder": "email@example.com",
+      "phonePlaceholder": "+213 XXX XXX XXX"
+    },
+    "address": {
+      "title": "Adresse",
+      "country": "Pays",
+      "state": "Région",
+      "city": "Ville",
+      "municipality": "Commune",
+      "postalCode": "Code postal",
+      "fullAddress": "Adresse complète",
+      "gps": "Détecter GPS",
+      "locating": "Localisation..."
+    },
+    "secrets": {
+      "title": "Numéros secrets",
+      "labelPlaceholder": "Nom du secret",
+      "valuePlaceholder": "Valeur"
+    },
+    "experience": {
+      "title": "Expériences professionnelles",
+      "positionPlaceholder": "Poste",
+      "companyPlaceholder": "Entreprise",
+      "current": "Je travaille actuellement ici",
+      "descriptionPlaceholder": "Description des tâches..."
+    },
+    "education": {
+      "title": "Éducation",
+      "degreePlaceholder": "Diplôme",
+      "institutionPlaceholder": "Établissement",
+      "current": "J'étudie actuellement"
+    },
+    "certifications": {
+      "title": "Certificats et diplômes",
+      "namePlaceholder": "Nom du certificat",
+      "issuerPlaceholder": "Organisme émetteur",
+      "credentialIdPlaceholder": "ID d'accréditation",
+      "issueDate": "Date d'émission",
+      "expiryDate": "Date d'expiration",
+      "credentialId": "ID d'accréditation"
+    },
+    "achievements": {
+      "title": "Travaux réalisés",
+      "titlePlaceholder": "Titre de la réalisation",
+      "descriptionPlaceholder": "Description de la réalisation..."
+    },
+    "hobbies": {
+      "title": "Loisirs et intérêts",
+      "iconPlaceholder": "🎨",
+      "namePlaceholder": "Nom du loisir"
+    }
+  },
+  "licenseInfo": {
+    "loading": "Chargement des informations de licence...",
+    "badge": "Informations de licence et d'appareil",
+    "title": "Informations de licence",
+    "subtitle": "Consultez l'état de la licence, le type de plan, le propriétaire, l'identifiant de l'appareil, la date d'activation et la date d'expiration.",
+    "licenseStatus": "État de la licence",
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "expired": "Expirée"
+    },
+    "statusDescriptions": {
+      "active": "La licence est active et fonctionne sur cet appareil.",
+      "inactive": "Aucune licence active n'a été trouvée pour cet appareil.",
+      "expired": "La période de licence a expiré et doit être renouvelée."
+    },
+    "detailsTitle": "Détails de la licence",
+    "fields": {
+      "status": "État",
+      "licenseType": "Type de licence",
+      "ownerName": "Propriétaire de la licence",
+      "deviceId": "ID de l'appareil",
+      "activatedAt": "Date d'activation",
+      "expiresAt": "Date d'expiration",
+      "version": "Version"
+    },
+    "notAvailable": "Non disponible",
+    "whyTitle": "Pourquoi ces informations sont importantes ?",
+    "reasons": {
+      "status": "Savoir si la licence est active ou doit être activée.",
+      "expiry": "Suivre la date d'expiration et renouveler la licence à temps.",
+      "device": "Lier la licence à un appareil spécifique via l'identifiant de l'appareil.",
+      "support": "Faciliter le support technique lors du contact avec le développeur."
+    },
+    "actionsTitle": "Actions de licence",
+    "copyDeviceId": "Copier l'ID de l'appareil",
+    "copied": "Copié",
+    "goToActivation": "Aller à la page d'activation",
+    "manageActivation": "Gérer l'activation",
+    "refresh": "Actualiser les informations",
+    "deviceTitle": "ID de l'appareil",
+    "deviceDescription": "Envoyez cet identifiant lors de la demande de licence ou du contact avec le support technique.",
+    "rights": "Tous droits réservés"
+  },
+  "ai": {
+    "nav": "Assistant IA",
+    "title": "Assistant IA",
+    "subtitle": "Analyse de sécurité locale et aide par IA",
+    "scoreTitle": "Score de sécurité du coffre",
+    "weak": "Mots de passe faibles",
+    "reused": "Mots de passe réutilisés",
+    "old": "Mots de passe anciens (180+ j)",
+    "total": "Total des comptes",
+    "issues": "À corriger",
+    "noIssues": "Parfait ! Aucun problème visible.",
+    "privacy": "🔒 Seul un résumé (noms de sites, force des mots de passe) est envoyé à l’IA. Jamais les mots de passe ni les cartes.",
+    "apiKey": "Clé API Anthropic",
+    "apiKeyHint": "Stockée chiffrée dans le coffre. À obtenir sur console.anthropic.com",
+    "saveKey": "Enregistrer la clé",
+    "ask": "Demander à l’assistant",
+    "placeholder": "ex. Quels comptes renforcer en premier ?",
+    "send": "Envoyer",
+    "thinking": "Réflexion...",
+    "quick1": "Propose un plan pour renforcer mes comptes",
+    "quick2": "Comment mieux organiser mes comptes ?",
+    "quick3": "Quelles sont mes plus grosses erreurs ?",
+    "desktopOnly": "L’assistant IA n’est disponible que dans l’application de bureau. L’analyse locale fonctionne toujours.",
+    "noKey": "Ajoutez d’abord une clé API.",
+    "error": "Assistant injoignable : ",
+    "reusedFor": "utilisé dans {count} comptes",
+    "weakFor": "faible",
+    "oldFor": "inchangé depuis longtemps"
+  }
+}
