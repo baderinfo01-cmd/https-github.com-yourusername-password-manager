@@ -1,0 +1,7 @@
+#blrs-list .blrs-row{border:1px solid #c3c4c7;border-radius:8px;background:#fff;margin-bottom:12px;overflow:hidden}
+.blrs-row>header{display:flex;gap:8px;align-items:center;padding:8px 12px;background:#f6f7f7;cursor:default}
+.blrs-row>header strong{flex:1}
+.blrs-body{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px}
+.blrs-body label{display:block;font-weight:600}.blrs-body input[type=text],.blrs-body input[type=url],.blrs-body input[type=number],.blrs-body input[type=datetime-local],.blrs-body textarea,.blrs-body select{width:100%;font-weight:400}
+.blrs-full{grid-column:1/-1}
+.blrs-pick{display:flex;gap:8px;align-items:center}.blrs-pick img{width:90px;height:56px;object-fit:cover;border-radius:6px;background:#eee}
