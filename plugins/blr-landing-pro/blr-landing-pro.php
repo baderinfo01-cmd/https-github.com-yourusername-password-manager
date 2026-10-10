@@ -3,7 +3,7 @@
  * Plugin Name: BLR Landing Pro
  * Plugin URI: https://baderinfo.com/blr-landing-pro
  * Description: منشئ صفحات هبوط احترافي لأي موقع ووردبريس: بنّاء أقسام مع معاينة حيّة، مولّد صفحات وكتابة بالذكاء الاصطناعي، نماذج عملاء محتملين، اختبار A/B، إحصاءات، قوالب جاهزة، تكامل ووكومرس، وترخيص مرتبط بالدومين.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: baderinfo
  * Author URI: https://baderinfo.com
  * Text Domain: blr-landing-pro
@@ -22,7 +22,7 @@ if ( defined( 'BLRLP_VERSION' ) ) {
 	return; // نسخة أخرى محمّلة.
 }
 
-define( 'BLRLP_VERSION', '1.0.0' );
+define( 'BLRLP_VERSION', '1.0.1' );
 define( 'BLRLP_FILE', __FILE__ );
 define( 'BLRLP_DIR', trailingslashit( plugin_dir_path( __FILE__ ) ) );
 define( 'BLRLP_URL', trailingslashit( plugin_dir_url( __FILE__ ) ) );

@@ -41,11 +41,11 @@ add_action( 'admin_enqueue_scripts', function () {
 		return;
 	}
 	wp_enqueue_style( 'blrlp-font', 'https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;500;600;700&display=swap', array(), null ); // phpcs:ignore
-	wp_enqueue_style( 'blrlp-admin', BLRLP_URL . 'assets/css/admin.css', array(), BLRLP_VERSION );
+	wp_enqueue_style( 'blrlp-admin', BLRLP_URL . 'assets/css/admin.css', array(), blrlp_ver( 'assets/css/admin.css' ) );
 	$s = get_current_screen();
 	if ( 'blr_landing' === $s->post_type && 'post' === $s->base ) {
 		wp_enqueue_media();
-		wp_enqueue_script( 'blrlp-editor', BLRLP_URL . 'assets/js/editor.js', array(), BLRLP_VERSION, true );
+		wp_enqueue_script( 'blrlp-editor', BLRLP_URL . 'assets/js/editor.js', array(), blrlp_ver( 'assets/js/editor.js' ), true );
 		global $post;
 		$landings = array();
 		foreach ( get_posts( array( 'post_type' => 'blr_landing', 'numberposts' => 100, 'post_status' => array( 'publish', 'draft' ), 'exclude' => array( $post ? $post->ID : 0 ) ) ) as $p ) {
@@ -100,9 +100,9 @@ add_action( 'wp_ajax_blrlp_preview', function () {
 	$body = blrlp_render_page( $id, $data, array( 'preview' => true ) );
 	$html = '<!doctype html><html lang="' . esc_attr( get_bloginfo( 'language' ) ) . '" dir="' . ( is_rtl() ? 'rtl' : 'ltr' ) . '"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><base target="_blank">'
 		. blrlp_font_link( $data )
-		. '<link rel="stylesheet" href="' . esc_url( BLRLP_URL . 'assets/css/front.css?ver=' . BLRLP_VERSION ) . '">'
+		. '<link rel="stylesheet" href="' . esc_url( BLRLP_URL . 'assets/css/front.css?ver=' . blrlp_ver( 'assets/css/front.css' ) ) . '">'
 		. '<script>window.BLRLP={preview:true,rest:"",i18n:{d:"يوم",h:"ساعة",m:"دقيقة",s:"ثانية",sending:"…",error:"",invalid:""}};</script>'
-		. '<script src="' . esc_url( BLRLP_URL . 'assets/js/front.js?ver=' . BLRLP_VERSION ) . '" defer></script>'
+		. '<script src="' . esc_url( BLRLP_URL . 'assets/js/front.js?ver=' . blrlp_ver( 'assets/js/front.js' ) ) . '" defer></script>'
 		. '</head><body class="blrlp-canvas">' . $body . '</body></html>';
 	wp_send_json_success( array( 'html' => $html ) );
 } );
@@ -294,7 +294,7 @@ add_action( 'enqueue_block_editor_assets', function () {
 	foreach ( get_posts( array( 'post_type' => 'blr_landing', 'numberposts' => 100, 'post_status' => 'publish' ) ) as $p ) {
 		$list[] = array( 'value' => $p->ID, 'label' => $p->post_title ? $p->post_title : '#' . $p->ID );
 	}
-	wp_enqueue_script( 'blrlp-block', BLRLP_URL . 'assets/js/block.js', array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-block-editor' ), BLRLP_VERSION, true );
+	wp_enqueue_script( 'blrlp-block', BLRLP_URL . 'assets/js/block.js', array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-block-editor' ), blrlp_ver( 'assets/js/block.js' ), true );
 	wp_localize_script( 'blrlp-block', 'BLRLP_LANDINGS', $list );
 } );
 

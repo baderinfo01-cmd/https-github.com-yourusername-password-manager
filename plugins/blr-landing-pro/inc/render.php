@@ -391,8 +391,8 @@ function blrlp_font_link( $data ) {
 
 /* ---------------------------- شورتكود + كتلة ---------------------------- */
 function blrlp_enqueue_front() {
-	wp_enqueue_style( 'blrlp-front', BLRLP_URL . 'assets/css/front.css', array(), BLRLP_VERSION );
-	wp_enqueue_script( 'blrlp-front', BLRLP_URL . 'assets/js/front.js', array(), BLRLP_VERSION, array( 'strategy' => 'defer', 'in_footer' => true ) );
+	wp_enqueue_style( 'blrlp-front', BLRLP_URL . 'assets/css/front.css', array(), blrlp_ver( 'assets/css/front.css' ) );
+	wp_enqueue_script( 'blrlp-front', BLRLP_URL . 'assets/js/front.js', array(), blrlp_ver( 'assets/js/front.js' ), array( 'strategy' => 'defer', 'in_footer' => true ) );
 	wp_localize_script( 'blrlp-front', 'BLRLP', array(
 		'rest' => esc_url_raw( rest_url( 'blrlp/v1/' ) ),
 		'i18n' => array(

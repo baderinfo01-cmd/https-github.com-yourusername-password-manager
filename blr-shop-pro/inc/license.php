@@ -309,7 +309,7 @@ add_action( 'admin_enqueue_scripts', function ( $hook ) {
 		return;
 	}
 	wp_enqueue_style( 'baderlr-license-font', 'https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;500;600;700&display=swap', array(), null ); // phpcs:ignore
-	wp_enqueue_style( 'baderlr-license', BADERLR_URI . 'assets/css/license.css', array(), BADERLR_VERSION );
+	wp_enqueue_style( 'baderlr-license', BADERLR_URI . 'assets/css/license.css', array(), BADERLR_VERSION . '.' . (int) @filemtime( BADERLR_DIR . 'assets/css/license.css' ) );
 } );
 
 function baderlr_license_admin_notice() {

@@ -9,6 +9,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/** نسخة الأصل: وقت تعديل الملف لتجاوز كاش المتصفح بعد كل تحديث. */
+function blrlp_ver( $rel ) {
+	$f = BLRLP_DIR . ltrim( $rel, '/' );
+	return BLRLP_VERSION . '.' . ( is_readable( $f ) ? filemtime( $f ) : '0' );
+}
+
 function blrlp_opt( $key, $default = '' ) {
 	$o = get_option( 'blrlp_settings', array() );
 	return ( is_array( $o ) && isset( $o[ $key ] ) && '' !== $o[ $key ] ) ? $o[ $key ] : $default;

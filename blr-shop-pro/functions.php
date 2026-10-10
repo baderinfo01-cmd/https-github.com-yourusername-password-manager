@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'BADERLR_VERSION', '1.0.0' );
+define( 'BADERLR_VERSION', '1.0.1' );
 define( 'BADERLR_DIR', trailingslashit( get_template_directory() ) );
 define( 'BADERLR_URI', trailingslashit( get_template_directory_uri() ) );
 
