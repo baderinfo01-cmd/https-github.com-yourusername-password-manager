@@ -1,4 +1,4 @@
-const { app, ipcMain, BrowserWindow, powerMonitor, protocol } = require("electron");
+const { app, ipcMain, BrowserWindow, powerMonitor, protocol, shell } = require("electron");
 const path = require("path");
 const fs = require("fs");
 
@@ -98,7 +98,11 @@ async function createWindow() {
   });
 
   // block pop-ups and navigation away from the app
-  win.webContents.setWindowOpenHandler(() => ({ action: "deny" }));
+  win.webContents.setWindowOpenHandler(({ url }) => {
+    // external web links open in the system browser; everything else is refused
+    if (/^https?:\/\//i.test(url)) shell.openExternal(url);
+    return { action: "deny" };
+  });
   win.webContents.on("will-navigate", (event, url) => {
     if (!url.startsWith(APP_ORIGIN + "/") && !/^http:\/\/localhost:3000\//.test(url)) event.preventDefault();
   });

@@ -22,9 +22,15 @@ export function printElement(elementId: string, title?: string) {
 
   cleanContent.querySelectorAll(".print-only").forEach((el) => el.remove());
 
-  const printWindow = window.open("", "_blank");
+  // Print through a hidden iframe: pop-up windows are blocked in the desktop app (and by browsers).
+  const frame = document.createElement("iframe");
+  frame.setAttribute("aria-hidden", "true");
+  frame.style.cssText = "position:fixed;width:0;height:0;border:0;right:0;bottom:0;visibility:hidden";
+  document.body.appendChild(frame);
+  const printWindow = frame.contentWindow;
   if (!printWindow) {
-    alert("الرجاء السماح بالنوافذ المنبثقة");
+    frame.remove();
+    alert("تعذرت الطباعة");
     return;
   }
 
@@ -244,28 +250,25 @@ export function printElement(elementId: string, title?: string) {
         ${cleanContent.innerHTML}
         
         <div class="footer">
-          تم إنشاء هذا التقرير بواسطة Bader Account Management v2.0.0
+          تم إنشاء هذا التقرير بواسطة Bader Account Management v3.0.0
           <br>
           © ${new Date().getFullYear()} baderinfo.com - جميع الحقوق محفوظة
         </div>
         
-        <script>
-          window.onload = function() {
-            document.querySelectorAll('button').forEach(b => b.remove());
-            document.querySelectorAll('.no-print').forEach(el => el.remove());
-            
-            setTimeout(function() {
-              window.print();
-              window.onafterprint = function() {
-                window.close();
-              };
-            }, 300);
-          };
-        </script>
       </body>
     </html>
   `);
   printWindow.document.close();
+
+  const cleanup = () => setTimeout(() => frame.remove(), 500);
+  printWindow.onafterprint = cleanup;
+  // let styles/fonts settle, then open the print dialog of the (hidden) frame
+  setTimeout(() => {
+    printWindow.focus();
+    printWindow.print();
+    // some engines never fire afterprint for frames: do not leave the frame behind
+    setTimeout(() => frame.isConnected && frame.remove(), 60_000);
+  }, 400);
 }
 
 export function exportToJSON(data: any, filename: string) {
