@@ -29,7 +29,7 @@ if ( ! defined( 'BADERLR_LICENSE_PUBKEY' ) ) {
 	define( 'BADERLR_LICENSE_PUBKEY', 'ضع-هنا-المفتاح-العام-من-لوحة-السيرفر' );
 }
 if ( ! defined( 'BADERLR_PRODUCT' ) ) {
-	define( 'BADERLR_PRODUCT', 'blr-shop-pro' );
+	define( 'BADERLR_PRODUCT', 'blr-wp' );
 }
 
 /* =====================================================================
@@ -51,7 +51,7 @@ $baderlr_modules = array(
 	'inc/onboarding.php',
 	'inc/elementor.php',
 	'inc/ai-bridge.php',
-	'inc/shop.php',      // ووكومرس: رقمي/مادي/اشتراك/خدمة + تجربة الشراء.
+	'inc/shop-woo.php',  // ووكومرس: رقمي/مادي/اشتراك/خدمة + تجربة الشراء.
 	'inc/shop-extras.php', // بحث مباشر، واتساب، نشرة بريدية، شورتكودات.
 	'inc/landing.php',   // صفحات الهبوط الإعلانية.
 );

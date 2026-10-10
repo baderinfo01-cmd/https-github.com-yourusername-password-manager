@@ -17,6 +17,28 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * تعارض مع إضافة BaderLR Companion القديمة (نفس الدوال والثوابت) — سبب الخطأ الفادح عند تفعيل الاثنتين.
+ * نتوقّف هنا ونعطّل القديمة تلقائياً من لوحة التحكم؛ بعد إعادة تحميل الصفحة تعمل هذه الإضافة وحدها.
+ */
+if ( defined( 'BADERLR_COMPANION_VERSION' ) || function_exists( 'baderlr_c_menu' ) ) {
+	add_action( 'admin_init', function () {
+		if ( ! current_user_can( 'activate_plugins' ) ) {
+			return;
+		}
+		require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		foreach ( (array) get_option( 'active_plugins', array() ) as $plugin ) {
+			if ( false !== strpos( $plugin, 'baderlr-companion' ) ) {
+				deactivate_plugins( $plugin );
+			}
+		}
+	} );
+	add_action( 'admin_notices', function () {
+		echo '<div class="notice notice-warning"><p><strong>BLR Shop Companion:</strong> ' . esc_html__( 'وُجدت إضافة BaderLR Companion القديمة وتم تعطيلها لأنها تتعارض مع هذه الإضافة. أعد تحميل الصفحة.', 'blr-shop-companion' ) . '</p></div>';
+	} );
+	return;
+}
+
 define( 'BADERLR_COMPANION_VERSION', '1.0.0' );
 define( 'BADERLR_COMPANION_DIR', trailingslashit( plugin_dir_path( __FILE__ ) ) );
 define( 'BADERLR_COMPANION_URI', trailingslashit( plugin_dir_url( __FILE__ ) ) );

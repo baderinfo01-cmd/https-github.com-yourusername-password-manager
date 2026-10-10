@@ -15,6 +15,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 define( 'BADERLR_LICENSE_GRACE', 45 * DAY_IN_SECONDS );
 
+/**
+ * إعدادات الاتصال بالسيرفر: تُحفظ من صفحة «ترخيص القالب» (تتجاوز الثوابت) فلا حاجة لتعديل الكود.
+ *  server  : رابط مجلّد السيرفر   pubkey : المفتاح العام (base64)   product : معرّف المنتج في السيرفر
+ */
+function baderlr_lic_cfg( $key ) {
+	$o = get_option( 'baderlr_license_cfg', array() );
+	$o = is_array( $o ) ? $o : array();
+	if ( ! empty( $o[ $key ] ) ) {
+		return $o[ $key ];
+	}
+	$map = array( 'server' => 'BADERLR_LICENSE_SERVER', 'pubkey' => 'BADERLR_LICENSE_PUBKEY', 'product' => 'BADERLR_PRODUCT' );
+	return defined( $map[ $key ] ) ? constant( $map[ $key ] ) : '';
+}
+
+/** هل المفتاح العام صالح (32 بايت base64)؟ */
+function baderlr_pubkey_ok() {
+	$pub = base64_decode( (string) baderlr_lic_cfg( 'pubkey' ), true );
+	return false !== $pub && 32 === strlen( $pub );
+}
+
+
 function baderlr_license_domain() {
 	$host = strtolower( (string) wp_parse_url( home_url(), PHP_URL_HOST ) );
 	return preg_replace( '/^www\./', '', $host );
@@ -57,7 +78,7 @@ function baderlr_verify_token( $token ) {
 	};
 	$msg = $dec( $parts[0] );
 	$sig = $dec( $parts[1] );
-	$pub = base64_decode( BADERLR_LICENSE_PUBKEY, true );
+	$pub = base64_decode( (string) baderlr_lic_cfg( 'pubkey' ), true );
 	if ( false === $msg || false === $sig || false === $pub || 32 !== strlen( $pub ) || 64 !== strlen( $sig ) ) {
 		return false;
 	}
@@ -72,7 +93,7 @@ function baderlr_verify_token( $token ) {
  * طلب إلى api.php بالسيرفر.
  */
 function baderlr_license_api( $action, $args = array() ) {
-	$url = trailingslashit( BADERLR_LICENSE_SERVER ) . 'api.php';
+	$url = trailingslashit( baderlr_lic_cfg( 'server' ) ) . 'api.php';
 	$res = wp_remote_post( $url, array(
 		'timeout' => 15,
 		'body'    => array_merge( array(
@@ -80,7 +101,7 @@ function baderlr_license_api( $action, $args = array() ) {
 			'domain'   => baderlr_license_domain(),
 			'instance' => baderlr_license_instance(),
 			'version'  => BADERLR_VERSION,
-			'product'  => BADERLR_PRODUCT,
+			'product'  => baderlr_lic_cfg( 'product' ),
 		), $args ),
 	) );
 	if ( is_wp_error( $res ) ) {
@@ -94,11 +115,18 @@ function baderlr_license_activate( $key ) {
 	$key  = trim( $key );
 	$resp = baderlr_license_api( 'activate', array( 'code' => $key ) );
 	if ( is_wp_error( $resp ) ) {
-		return $resp;
+		/* translators: %s: error */
+		return new WP_Error( 'baderlr_net', sprintf( __( 'تعذّر الاتصال بسيرفر الترخيص (%s). تحقّق من «رابط السيرفر» أدناه.', 'blr-shop-pro' ), $resp->get_error_message() ) );
 	}
 	if ( empty( $resp['success'] ) ) {
 		$code = isset( $resp['code'] ) ? $resp['code'] : 'invalid';
 		return new WP_Error( 'baderlr_fail', baderlr_status_message( $code ) );
+	}
+	if ( ! function_exists( 'sodium_crypto_sign_verify_detached' ) ) {
+		return new WP_Error( 'baderlr_sodium', __( 'امتداد PHP Sodium غير مفعّل على الخادم. فعّله من استضافتك (PHP 7.2+ يتضمنه عادةً).', 'blr-shop-pro' ) );
+	}
+	if ( ! baderlr_pubkey_ok() ) {
+		return new WP_Error( 'baderlr_pubkey', __( 'المفتاح العام غير مضبوط. الصقه في الحقل «المفتاح العام» أدناه (من لوحة السيرفر ← الإعدادات ← مفتاح التوقيع).', 'blr-shop-pro' ) );
 	}
 	$payload = isset( $resp['token'] ) ? baderlr_verify_token( $resp['token'] ) : false;
 	if ( false === $payload ) {
@@ -190,7 +218,15 @@ function baderlr_license_page() {
 	$notice = '';
 	$type   = '';
 	if ( 'POST' === $_SERVER['REQUEST_METHOD'] && check_admin_referer( 'baderlr_license' ) ) {
-		if ( isset( $_POST['baderlr_activate'] ) ) {
+		if ( isset( $_POST['baderlr_save_cfg'] ) ) {
+			update_option( 'baderlr_license_cfg', array(
+				'server'  => esc_url_raw( wp_unslash( $_POST['cfg_server'] ?? '' ) ),
+				'pubkey'  => preg_replace( '/\s+/', '', sanitize_text_field( wp_unslash( $_POST['cfg_pubkey'] ?? '' ) ) ),
+				'product' => sanitize_key( wp_unslash( $_POST['cfg_product'] ?? '' ) ),
+			) );
+			$notice = __( 'تم حفظ إعدادات السيرفر.', 'blr-shop-pro' );
+			$type   = 'success';
+		} elseif ( isset( $_POST['baderlr_activate'] ) ) {
 			$key = isset( $_POST['baderlr_key'] ) ? sanitize_text_field( wp_unslash( $_POST['baderlr_key'] ) ) : '';
 			$r   = baderlr_license_activate( $key );
 			if ( is_wp_error( $r ) ) {
@@ -230,6 +266,23 @@ function baderlr_license_page() {
 					<p><button name="baderlr_activate" class="button button-primary button-hero"><?php esc_html_e( 'تفعيل القالب', 'blr-shop-pro' ); ?></button></p>
 				</form>
 			<?php endif; ?>
+		</div>
+		<div class="card" style="padding:20px;margin-top:14px;max-width:none">
+			<h2 style="margin-top:0;font-size:16px"><?php esc_html_e( 'إعدادات سيرفر الترخيص', 'blr-shop-pro' ); ?></h2>
+			<?php if ( ! baderlr_pubkey_ok() ) : ?>
+				<div class="notice notice-error inline"><p><strong><?php esc_html_e( 'المفتاح العام غير مضبوط — لن ينجح التفعيل قبل إدخاله.', 'blr-shop-pro' ); ?></strong></p></div>
+			<?php endif; ?>
+			<?php if ( ! function_exists( 'sodium_crypto_sign_verify_detached' ) ) : ?>
+				<div class="notice notice-error inline"><p><?php esc_html_e( 'امتداد Sodium غير متوفر في PHP.', 'blr-shop-pro' ); ?></p></div>
+			<?php endif; ?>
+			<form method="post"><?php wp_nonce_field( 'baderlr_license' ); ?>
+				<table class="form-table" role="presentation">
+					<tr><th><?php esc_html_e( 'رابط السيرفر', 'blr-shop-pro' ); ?></th><td><input type="url" name="cfg_server" class="large-text" dir="ltr" value="<?php echo esc_attr( baderlr_lic_cfg( 'server' ) ); ?>"></td></tr>
+					<tr><th><?php esc_html_e( 'المفتاح العام (base64)', 'blr-shop-pro' ); ?></th><td><input type="text" name="cfg_pubkey" class="large-text" dir="ltr" style="font-family:monospace" value="<?php echo esc_attr( baderlr_pubkey_ok() ? baderlr_lic_cfg( 'pubkey' ) : '' ); ?>"></td></tr>
+					<tr><th><?php esc_html_e( 'معرّف المنتج', 'blr-shop-pro' ); ?></th><td><input type="text" name="cfg_product" class="regular-text" dir="ltr" value="<?php echo esc_attr( baderlr_lic_cfg( 'product' ) ); ?>"><p class="description"><?php esc_html_e( 'يجب أن يطابق معرّف المنتج في لوحة السيرفر (الافتراضي: blr-wp).', 'blr-shop-pro' ); ?></p></td></tr>
+				</table>
+				<p><button name="baderlr_save_cfg" class="button"><?php esc_html_e( 'حفظ الإعدادات', 'blr-shop-pro' ); ?></button></p>
+			</form>
 		</div>
 	</div>
 	<?php

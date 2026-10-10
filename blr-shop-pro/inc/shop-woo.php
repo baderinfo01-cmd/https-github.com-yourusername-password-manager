@@ -10,11 +10,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/* يُحمَّل المتجر فقط عند تفعيل ووكومرس (ووكومرس يُحمَّل قبل القالب). */
 if ( ! class_exists( 'WooCommerce' ) ) {
-	/** احتياط حتى لا تفشل الاستدعاءات عند غياب ووكومرس. */
-	function bshop_product_kind( $product = null ) {
-		return 'physical';
-	}
 	return;
 }
 
