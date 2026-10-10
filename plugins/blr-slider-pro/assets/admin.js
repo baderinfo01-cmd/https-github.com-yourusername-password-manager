@@ -26,14 +26,14 @@
         '<button type="button" class="button" data-mv="' + i + ':-1">↑</button><button type="button" class="button" data-mv="' + i + ':1">↓</button>' +
         '<button type="button" class="button-link-delete" data-del="' + i + '">حذف</button></header><div class="blrs-body">' +
         pick(i, 'img', 'صورة الحاسوب') + pick(i, 'mimg', 'صورة الجوال (اختياري)') +
-        field(i, 'video', 'فيديو MP4 (يستبدل الصورة)', 'url', 'full') +
+        field(i, 'video', 'فيديو MP4 (يستبدل الصورة) — Pro', 'url', 'full') +
         field(i, 'badge', 'شارة') + field(i, 'title', 'العنوان') +
         '<div class="blrs-full"><label>النص<textarea rows="2" data-i="' + i + '" data-k="text">' + esc(s.text) + '</textarea></label></div>' +
         field(i, 'b1', 'زر 1 — نص') + field(i, 'u1', 'زر 1 — رابط', 'url') +
         field(i, 'b2', 'زر 2 — نص') + field(i, 'u2', 'زر 2 — رابط', 'url') +
         '<div><label>المحاذاة<select data-i="' + i + '" data-k="align"><option value="start"' + (s.align === 'start' ? ' selected' : '') + '>بداية</option><option value="center"' + (s.align === 'center' ? ' selected' : '') + '>وسط</option><option value="end"' + (s.align === 'end' ? ' selected' : '') + '>نهاية</option></select></label></div>' +
         field(i, 'overlay', 'عتامة الطبقة (0-90)', 'number') +
-        field(i, 'end', 'عدّاد تنازلي حتى (YYYY-MM-DD HH:MM)') +
+        field(i, 'end', 'عدّاد تنازلي حتى (YYYY-MM-DD HH:MM) — Pro') +
         '<div><label><input type="checkbox" data-i="' + i + '" data-k="dark"' + (s.dark ? ' checked' : '') + '> نص داكن على خلفية فاتحة</label></div>' +
         '</div></div>';
       list.appendChild(el(h));

@@ -44,43 +44,48 @@ function baderlr_c_ai_settings_page() {
 	}
 	$saved = false;
 	if ( 'POST' === $_SERVER['REQUEST_METHOD'] && check_admin_referer( 'baderlr_ai_settings' ) ) {
+		$old = baderlr_ai_get_settings();
+		$new_key = trim( sanitize_text_field( wp_unslash( $_POST['api_key'] ?? '' ) ) );
 		update_option( 'baderlr_ai', array(
 			'provider' => in_array( ( $_POST['provider'] ?? '' ), array( 'openai', 'anthropic', 'custom' ), true ) ? sanitize_text_field( wp_unslash( $_POST['provider'] ) ) : 'openai',
 			'model'    => sanitize_text_field( wp_unslash( $_POST['model'] ?? '' ) ),
-			'api_key'  => trim( sanitize_text_field( wp_unslash( $_POST['api_key'] ?? '' ) ) ),
+			'api_key'  => '' !== $new_key ? $new_key : $old['api_key'], // لا نعرض المفتاح؛ الفارغ يعني الإبقاء.
 			'endpoint' => esc_url_raw( wp_unslash( $_POST['endpoint'] ?? '' ) ),
 		) );
 		$saved = true;
 	}
-	$s   = baderlr_ai_get_settings();
-	$key = $s['api_key'];
-	$mask = $key ? str_repeat( '•', max( 0, strlen( $key ) - 4 ) ) . substr( $key, -4 ) : '';
+	$s       = baderlr_ai_get_settings();
+	$has_key = '' !== trim( (string) $s['api_key'] );
+	$mask    = $has_key ? str_repeat( '•', 12 ) . substr( $s['api_key'], -4 ) : '';
 	?>
-	<div class="wrap baderlr-c" dir="rtl" style="max-width:720px">
-		<h1><?php esc_html_e( 'إعدادات الذكاء الاصطناعي', 'blr-shop-companion' ); ?></h1>
-		<?php if ( $saved ) : ?><div class="notice notice-success"><p><?php esc_html_e( 'تم الحفظ.', 'blr-shop-companion' ); ?></p></div><?php endif; ?>
-		<p class="description"><?php esc_html_e( 'استعمل مفتاح API الخاص بك. لن يُرسل إلا إلى المزوّد الذي تختاره، ويبقى محفوظاً على موقعك.', 'blr-shop-companion' ); ?></p>
-		<form method="post" class="blrc-form">
+	<div class="wrap blrui baderlr-c">
+		<?php baderlr_c_header( __( 'إعدادات الذكاء الاصطناعي', 'blr-shop-companion' ) ); ?>
+		<?php if ( $saved ) : ?><div class="blrl-msg ok"><?php esc_html_e( '✓ تم حفظ الإعدادات.', 'blr-shop-companion' ); ?></div><?php endif; ?>
+		<form method="post" id="blrc-settings">
 			<?php wp_nonce_field( 'baderlr_ai_settings' ); ?>
-			<label><?php esc_html_e( 'المزوّد', 'blr-shop-companion' ); ?></label>
-			<select name="provider">
-				<option value="openai" <?php selected( $s['provider'], 'openai' ); ?>>OpenAI (ChatGPT)</option>
-				<option value="anthropic" <?php selected( $s['provider'], 'anthropic' ); ?>>Anthropic (Claude)</option>
-				<option value="custom" <?php selected( $s['provider'], 'custom' ); ?>><?php esc_html_e( 'مخصّص (متوافق مع OpenAI)', 'blr-shop-companion' ); ?></option>
-			</select>
-
-			<label><?php esc_html_e( 'النموذج', 'blr-shop-companion' ); ?> <span class="description"><?php esc_html_e( 'اتركه فارغاً للافتراضي', 'blr-shop-companion' ); ?></span></label>
-			<input type="text" name="model" dir="ltr" value="<?php echo esc_attr( $s['model'] ); ?>" placeholder="gpt-4o-mini / claude-haiku-5-5">
-
-			<label><?php esc_html_e( 'مفتاح API', 'blr-shop-companion' ); ?></label>
-			<input type="password" name="api_key" dir="ltr" value="<?php echo esc_attr( $key ); ?>" placeholder="<?php echo esc_attr( $mask ? $mask : 'sk-...' ); ?>" autocomplete="off">
-
-			<label class="blrc-custom"><?php esc_html_e( 'رابط المزوّد المخصّص (اختياري)', 'blr-shop-companion' ); ?></label>
-			<input type="url" name="endpoint" dir="ltr" class="blrc-custom" value="<?php echo esc_attr( $s['endpoint'] ); ?>" placeholder="https://.../v1/chat/completions">
-
-			<p><button class="button button-primary button-hero"><?php esc_html_e( 'حفظ الإعدادات', 'blr-shop-companion' ); ?></button></p>
+			<div class="blrui-card">
+				<div class="blrui-card__h"><span class="blrui-ico">⚙️</span><div><h2><?php esc_html_e( 'مزوّد الذكاء الاصطناعي', 'blr-shop-companion' ); ?></h2><p><?php esc_html_e( 'مفتاحك لا يُرسل إلا للمزوّد الذي تختاره ويبقى على موقعك، ولا يظهر للزوار.', 'blr-shop-companion' ); ?></p></div><span class="blrui-grow"></span><span class="blrui-chip <?php echo $has_key ? 'ok' : 'warn'; ?>"><?php echo $has_key ? esc_html__( 'المفتاح محفوظ', 'blr-shop-companion' ) : esc_html__( 'لا يوجد مفتاح', 'blr-shop-companion' ); ?></span></div>
+				<div class="blrui-card__b">
+					<div class="blrui-row"><label for="blrc-provider"><?php esc_html_e( 'المزوّد', 'blr-shop-companion' ); ?></label>
+						<div><select id="blrc-provider" class="blrui-in" name="provider">
+							<option value="openai" <?php selected( $s['provider'], 'openai' ); ?>>OpenAI (ChatGPT)</option>
+							<option value="anthropic" <?php selected( $s['provider'], 'anthropic' ); ?>>Anthropic (Claude)</option>
+							<option value="custom" <?php selected( $s['provider'], 'custom' ); ?>><?php esc_html_e( 'مخصّص (متوافق مع OpenAI)', 'blr-shop-companion' ); ?></option>
+						</select></div></div>
+					<div class="blrui-row"><label for="blrc-key"><?php esc_html_e( 'مفتاح API', 'blr-shop-companion' ); ?><small><?php esc_html_e( 'اتركه فارغاً للإبقاء على المفتاح المحفوظ.', 'blr-shop-companion' ); ?></small></label>
+						<div><input id="blrc-key" class="blrui-in is-ltr" type="password" name="api_key" value="" autocomplete="new-password" placeholder="<?php echo esc_attr( $mask ? $mask : 'sk-...' ); ?>"></div></div>
+					<div class="blrui-row"><label for="blrc-model"><?php esc_html_e( 'النموذج', 'blr-shop-companion' ); ?><small><?php esc_html_e( 'اتركه فارغاً للنموذج الافتراضي.', 'blr-shop-companion' ); ?></small></label>
+						<div><input id="blrc-model" class="blrui-in is-ltr" type="text" name="model" value="<?php echo esc_attr( $s['model'] ); ?>" placeholder="gpt-4o-mini / claude-haiku-5-5"></div></div>
+					<div class="blrui-row" id="blrc-endpoint-row"><label for="blrc-endpoint"><?php esc_html_e( 'رابط المزوّد المخصّص', 'blr-shop-companion' ); ?></label>
+						<div><input id="blrc-endpoint" class="blrui-in is-ltr" type="url" name="endpoint" value="<?php echo esc_attr( $s['endpoint'] ); ?>" placeholder="https://.../v1/chat/completions"></div></div>
+				</div>
+				<div class="blrui-card__f"><button class="blrui-btn"><?php esc_html_e( 'حفظ الإعدادات', 'blr-shop-companion' ); ?></button><button type="button" class="blrui-btn is-ghost" id="blrc-test"><?php esc_html_e( 'اختبار الاتصال', 'blr-shop-companion' ); ?></button><span class="blrui-test" id="blrc-test-msg"></span></div>
+			</div>
 		</form>
 	</div>
+	<script>
+	(function(){var p=document.getElementById('blrc-provider'),r=document.getElementById('blrc-endpoint-row');function f(){r.style.display=p.value==='custom'?'':'none'}p.addEventListener('change',f);f();})();
+	</script>
 	<?php
 }
 
@@ -92,10 +97,10 @@ function baderlr_c_ai_page() {
 	}
 	$configured = (bool) baderlr_ai_get_key();
 	?>
-	<div class="wrap baderlr-c" dir="rtl">
-		<h1>✦ <?php esc_html_e( 'مولّد المحتوى بالذكاء الاصطناعي', 'blr-shop-companion' ); ?></h1>
+	<div class="wrap blrui baderlr-c">
+		<?php baderlr_c_header( __( 'مولّد المحتوى بالذكاء الاصطناعي', 'blr-shop-companion' ) ); ?>
 		<?php if ( ! $configured ) : ?>
-			<div class="notice notice-warning"><p>
+			<div class="blrl-msg err"><p style="margin:0">
 				<?php esc_html_e( 'لم تُضبط مفاتيح الذكاء الاصطناعي بعد.', 'blr-shop-companion' ); ?>
 				<a href="<?php echo esc_url( admin_url( 'admin.php?page=baderlr-ai-settings' ) ); ?>"><?php esc_html_e( 'اضبطها الآن', 'blr-shop-companion' ); ?></a>
 			</p></div>

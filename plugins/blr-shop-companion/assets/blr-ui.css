@@ -1,0 +1,107 @@
+/* BLR UI — نظام تصميم لوحات الإدارة (المصيري + ألوان Aurora). مشترك بين كل منتجات BLR. */
+.blrui,.blrui *,.blrui *::before,.blrui *::after{box-sizing:border-box}
+.blrui{--p:#2F5BFF;--p2:#22C3F0;--ink:#0B1220;--body:#39465C;--mut:#6B7A92;--line:#E3E9F4;--bg:#F4F7FD;--ok:#15803d;--warn:#b45309;--err:#b91c1c;--g:linear-gradient(135deg,#22C3F0,#2F5BFF);
+  font-family:'El Messiri',system-ui,'Segoe UI',Tahoma,sans-serif;max-width:1040px;margin:18px 20px 40px 0;color:var(--body)}
+.blrui *{font-family:inherit}
+.blrui h1,.blrui h2,.blrui h3{color:var(--ink);margin:0;padding:0;line-height:1.3}
+.blrui p{margin:0}
+/* الرأس */
+.blrui-top{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:16px 22px;margin-bottom:18px;box-shadow:0 12px 30px -24px rgba(11,18,32,.35)}
+.blrui-mark{display:grid;place-items:center;width:48px;height:48px;border-radius:15px;background:var(--g);color:#fff;font:800 23px/1 'El Messiri',sans-serif;flex:none;box-shadow:0 10px 22px -10px rgba(47,91,255,.7)}
+.blrui-top h1{font-size:22px}.blrui-top small{color:var(--mut);font-size:13px}
+.blrui-grow{flex:1}
+.blrui-chip{display:inline-flex;align-items:center;gap:6px;padding:4px 13px;border-radius:99px;font-weight:700;font-size:12.5px;background:#eef1f8;color:var(--mut);white-space:nowrap}
+.blrui-chip.ok{background:#dcfce7;color:var(--ok)}.blrui-chip.warn{background:#fef3c7;color:var(--warn)}.blrui-chip.err{background:#fee2e2;color:var(--err)}.blrui-chip.pro{background:var(--g);color:#fff}
+/* تبويبات */
+.blrui-tabs{display:flex;gap:6px;flex-wrap:wrap;background:#fff;border:1px solid var(--line);border-radius:16px;padding:6px;margin-bottom:18px;width:max-content;max-width:100%}
+.blrui-tabs button{border:0;background:none;padding:10px 22px;border-radius:12px;font:700 14.5px 'El Messiri',sans-serif;color:var(--mut);cursor:pointer;transition:.2s}
+.blrui-tabs button:hover{color:var(--ink)}.blrui-tabs button.is-on{background:var(--g);color:#fff;box-shadow:0 10px 20px -12px rgba(47,91,255,.9)}
+.blrui-pane[hidden]{display:none}
+/* بطاقات */
+.blrui-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:0;margin-bottom:18px;overflow:hidden;box-shadow:0 12px 30px -26px rgba(11,18,32,.4)}
+.blrui-card__h{display:flex;align-items:center;gap:12px;padding:18px 24px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,#fbfcff,#fff)}
+.blrui-card__h h2{font-size:17px}.blrui-card__h p{color:var(--mut);font-size:13.5px;margin-top:2px}
+.blrui-ico{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:rgba(47,91,255,.1);color:var(--p);font-size:19px;flex:none}
+.blrui-card__b{padding:6px 24px 18px}
+.blrui-card__f{padding:14px 24px;border-top:1px solid var(--line);background:var(--bg);display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.blrui-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:18px}
+.blrui-tile{background:#fff;border:1px solid var(--line);border-radius:20px;padding:22px;display:flex;flex-direction:column;gap:8px;transition:.2s;box-shadow:0 12px 30px -26px rgba(11,18,32,.4)}
+.blrui-tile:hover{transform:translateY(-3px);border-color:#c9d6f5}
+.blrui-tile .blrui-ico{width:48px;height:48px;font-size:23px;margin-bottom:4px}
+.blrui-tile h3{font-size:17px}.blrui-tile p{color:var(--mut);flex:1;font-size:14.5px}
+/* صفوف الإعدادات */
+.blrui-row{display:grid;grid-template-columns:minmax(200px,300px) 1fr;gap:10px 28px;padding:18px 0;border-bottom:1px dashed var(--line);align-items:start}
+.blrui-row:last-child{border-bottom:0}
+@media(max-width:800px){.blrui-row{grid-template-columns:1fr}}
+.blrui-row>label,.blrui-lab{font-weight:700;color:var(--ink);font-size:15px;display:block}
+.blrui-row small,.blrui-help{display:block;color:var(--mut);font-weight:400;font-size:13px;margin-top:4px;line-height:1.6}
+.blrui-in,.blrui input[type=text].blrui-in,.blrui input[type=url].blrui-in,.blrui input[type=email].blrui-in,.blrui input[type=password].blrui-in,.blrui input[type=number].blrui-in,.blrui select.blrui-in,.blrui textarea.blrui-in{width:100%;max-width:520px;min-height:44px;padding:9px 14px;border:1.5px solid #d5dcec;border-radius:12px;background:#fff;color:var(--ink);font-size:15px;box-shadow:none;transition:.2s}
+.blrui-in:focus{border-color:var(--p);box-shadow:0 0 0 4px rgba(47,91,255,.14);outline:0}
+.blrui-in.is-ltr{direction:ltr;text-align:left;font-family:ui-monospace,Menlo,monospace;font-size:14px}
+.blrui-sw{display:inline-flex;align-items:center;gap:12px;cursor:pointer;font-weight:600;color:var(--ink)}
+.blrui-sw input{position:absolute;opacity:0;width:0;height:0}
+.blrui-sw i{position:relative;width:44px;height:25px;border-radius:99px;background:#cdd6e8;transition:.2s;flex:none}
+.blrui-sw i::after{content:"";position:absolute;top:3px;inset-inline-start:3px;width:19px;height:19px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 2px 5px rgba(0,0,0,.2)}
+.blrui-sw input:checked+i{background:var(--g)}.blrui-sw input:checked+i::after{inset-inline-start:22px}
+.blrui-sw input:focus-visible+i{box-shadow:0 0 0 4px rgba(47,91,255,.25)}
+/* أزرار */
+.blrui-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:46px;padding:0 26px;border:0;border-radius:13px;background:var(--g);color:#fff!important;font:700 15px 'El Messiri',sans-serif;cursor:pointer;text-decoration:none;box-shadow:0 14px 26px -14px rgba(47,91,255,.85);transition:.2s}
+.blrui-btn:hover{transform:translateY(-2px);color:#fff}
+.blrui-btn.is-ghost{background:#fff;color:var(--ink)!important;border:1.5px solid var(--line);box-shadow:none}.blrui-btn.is-ghost:hover{border-color:var(--p);color:var(--p)!important}
+.blrui-btn.is-sm{height:38px;padding:0 18px;font-size:14px}
+.blrui-btn[disabled]{opacity:.6;pointer-events:none}
+.blrui-test{font-size:13.5px;font-weight:600;margin-inline-start:6px}.blrui-test.ok{color:var(--ok)}.blrui-test.err{color:var(--err)}
+/* خطوات / تقدّم */
+.blrui-prog{height:10px;border-radius:99px;background:#e6ebf6;overflow:hidden;margin:10px 0 4px}.blrui-prog i{display:block;height:100%;border-radius:99px;background:var(--g);transition:width .6s}
+.blrui-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-bottom:18px}
+.blrui-step{display:grid;grid-template-columns:auto 1fr;gap:14px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px 20px;align-items:start}
+.blrui-step.is-done{background:linear-gradient(135deg,#f3fff8,#fff);border-color:#bbf7d0}
+.blrui-num{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:#eef1f8;color:var(--mut);font-weight:800;flex:none}
+.is-done .blrui-num{background:#16a34a;color:#fff}
+.blrui-step h3{font-size:16px;margin-bottom:3px}.blrui-step p{color:var(--mut);font-size:14px;margin-bottom:10px}
+.blrui-hero{display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center;background:linear-gradient(135deg,#22C3F0,#2F5BFF 60%,#1E40C8);border-radius:22px;padding:28px 32px;color:#fff;margin-bottom:18px;box-shadow:0 30px 60px -34px rgba(47,91,255,.8)}
+.blrui-hero h2{color:#fff;font-size:26px;margin-bottom:6px}.blrui-hero p{opacity:.92;max-width:60ch}
+.blrui-hero .blrui-btn{background:#fff;color:#0B1220!important;box-shadow:none}
+@media(max-width:700px){.blrui-hero{grid-template-columns:1fr}}
+.blrui-list{list-style:none;margin:0;padding:0;display:grid;gap:8px}.blrui-list li{display:flex;gap:10px;align-items:center;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);font-weight:600;font-size:14.5px}
+.blrui-list li small{margin-inline-start:auto;color:var(--mut);font-weight:400}
+.blrui code{background:#eef1f8;border-radius:8px;padding:2px 8px;color:var(--ink);direction:ltr;display:inline-block}
+
+/* ===== بطاقة الترخيص ===== */
+.blrl{--p:#2F5BFF;--p2:#22C3F0;--ink:#0B1220;--mut:#6B7A92;--line:#E3E9F4;font-family:'El Messiri',system-ui,'Segoe UI',Tahoma,sans-serif;max-width:920px;margin:18px 0}
+.blrl *{font-family:inherit;box-sizing:border-box}
+.blrl-card{position:relative;overflow:hidden;background:#fff;border:1px solid var(--line);border-radius:22px;box-shadow:0 24px 60px -34px rgba(11,18,32,.35)}
+.blrl-card::before{content:"";position:absolute;inset:0 0 auto 0;height:5px;background:linear-gradient(90deg,var(--p2),var(--p))}
+.blrl-hero{display:grid;grid-template-columns:auto 1fr;gap:24px;padding:34px 34px 30px;align-items:start}
+@media(max-width:700px){.blrl-hero{grid-template-columns:1fr;padding:26px 20px}}
+.blrl-ic{display:grid;place-items:center;width:84px;height:84px;border-radius:24px;background:linear-gradient(135deg,var(--p2),var(--p));color:#fff;box-shadow:0 18px 34px -16px rgba(47,91,255,.7)}
+.blrl h2{margin:0 0 6px;font-size:26px;color:var(--ink);line-height:1.25;padding:0}
+.blrl p{margin:0 0 12px;color:var(--mut);font-size:15px}
+.blrl-feat{list-style:none;margin:14px 0 18px;padding:0;display:grid;grid-template-columns:repeat(2,1fr);gap:8px 22px}
+@media(max-width:700px){.blrl-feat{grid-template-columns:1fr}}
+.blrl-feat li{display:flex;gap:8px;align-items:center;color:var(--ink);font-weight:600;font-size:14px;margin:0}.blrl-feat li::before{content:"✓";display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:#dcfce7;color:#15803d;font-size:12px;flex:none}
+.blrl-domain{display:inline-flex;align-items:center;gap:8px;background:#f1f5fd;border:1px solid var(--line);border-radius:12px;padding:6px 14px;font-size:13px;color:var(--mut);margin-bottom:14px}.blrl-domain code{background:none;color:var(--ink);font-weight:700;padding:0}
+.blrl-form{display:flex;gap:10px;flex-wrap:wrap}
+.blrl-form input[type=text]{flex:1;min-width:240px;height:50px;border-radius:14px;border:2px solid var(--line);padding:0 16px;font-size:16px;letter-spacing:.04em;direction:ltr;text-align:left;font-family:ui-monospace,Menlo,monospace}
+.blrl-form input[type=text]:focus{border-color:var(--p);box-shadow:0 0 0 4px rgba(47,91,255,.15);outline:0}
+.blrl-btn{height:50px;padding:0 28px;border:0;border-radius:14px;background:linear-gradient(135deg,var(--p2),var(--p));color:#fff;font-weight:700;font-size:16px;cursor:pointer;box-shadow:0 14px 28px -14px rgba(47,91,255,.8);transition:.2s}.blrl-btn:hover{transform:translateY(-2px)}
+.blrl-btn.is-ghost{background:#fff;color:#b91c1c;border:1.5px solid #fecaca;box-shadow:none;height:42px;padding:0 20px;font-size:14px}.blrl-btn.is-ghost:hover{background:#fef2f2}
+.blrl-help{font-size:13px!important;margin:12px 0 0!important}
+.blrl-msg{margin:0 0 14px;padding:12px 16px;border-radius:14px;font-weight:600;font-size:14px}.blrl-msg.ok{background:#dcfce7;color:#14532d}.blrl-msg.err{background:#fee2e2;color:#7f1d1d}
+/* الشهادة */
+.blrl-cert{display:grid;grid-template-columns:1fr 250px;gap:10px;padding:32px 34px}
+@media(max-width:760px){.blrl-cert{grid-template-columns:1fr;padding:26px 20px}.blrl-seal{order:-1}}
+.blrl-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 14px;border-radius:99px;background:#dcfce7;color:#15803d;font-weight:700;font-size:13px;margin-bottom:10px}
+.blrl-cert h2{font-size:30px}
+.blrl-dl{margin:18px 0 0;display:grid;gap:0}
+.blrl-dl div{display:grid;grid-template-columns:130px 1fr;gap:12px;padding:11px 0;border-bottom:1px dashed var(--line);align-items:baseline}
+.blrl-dl dt{color:var(--mut);font-size:14px;margin:0}.blrl-dl dd{margin:0;color:var(--ink);font-weight:700;font-size:16px;word-break:break-all}
+.blrl-actions{margin-top:20px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.blrl-seal{display:grid;place-items:center;align-content:center;gap:14px;position:relative}
+.blrl-seal svg{width:150px;height:150px}
+.blrl-sealimg{width:200px;height:200px;object-fit:contain;filter:drop-shadow(0 16px 24px rgba(47,91,255,.22))}
+.blrl-stamp{transform:rotate(-6deg);border:2px solid #2F5BFF;color:#2F5BFF;border-radius:10px;padding:8px 16px;text-align:center;font-weight:700;line-height:1.5;background:rgba(47,91,255,.05);outline:2px solid rgba(47,91,255,.25);outline-offset:3px}
+.blrl-stamp b{display:block;font-size:16px;letter-spacing:.06em}.blrl-stamp small{display:block;font-size:11px;letter-spacing:.08em;direction:ltr}
+.blrl-note{margin-top:14px;padding:12px 16px;border-radius:14px;background:#fffbeb;border:1px solid #fde68a;color:#92400e;font-size:13px}
+
+.blrui .blrl{max-width:none;margin:0}

@@ -41,7 +41,8 @@ add_action( 'admin_enqueue_scripts', function () {
 		return;
 	}
 	wp_enqueue_style( 'blrlp-font', 'https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;500;600;700&display=swap', array(), null ); // phpcs:ignore
-	wp_enqueue_style( 'blrlp-admin', BLRLP_URL . 'assets/css/admin.css', array(), blrlp_ver( 'assets/css/admin.css' ) );
+	wp_enqueue_style( 'blrui', BLRLP_URL . 'assets/css/blr-ui.css', array(), blrlp_ver( 'assets/css/blr-ui.css' ) );
+	wp_enqueue_style( 'blrlp-admin', BLRLP_URL . 'assets/css/admin.css', array( 'blrui' ), blrlp_ver( 'assets/css/admin.css' ) );
 	$s = get_current_screen();
 	if ( 'blr_landing' === $s->post_type && 'post' === $s->base ) {
 		wp_enqueue_media();
@@ -190,7 +191,6 @@ add_action( 'admin_post_blrlp_license_do', function () {
 function blrlp_license_card( $notice = null ) {
 	$lic  = blrlp_license_get();
 	$pro  = blrlp_is_pro();
-	$seal = '<svg viewBox="0 0 120 120" aria-hidden="true"><defs><linearGradient id="blrlg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22C3F0"/><stop offset="1" stop-color="#2F5BFF"/></linearGradient></defs><circle cx="60" cy="60" r="56" fill="none" stroke="url(#blrlg)" stroke-width="3" stroke-dasharray="2 5"/><circle cx="60" cy="60" r="47" fill="url(#blrlg)"/><path d="M60 30l22 8v16c0 14-9 25-22 30-13-5-22-16-22-30V38z" fill="rgba(255,255,255,.18)" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/><path d="M50 60l8 8 14-16" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 	echo '<div class="blrl">';
 	if ( $notice ) {
 		echo '<div class="blrl-msg ' . ( $notice[0] ? 'ok' : 'err' ) . '">' . esc_html( $notice[1] ) . '</div>';
@@ -227,7 +227,7 @@ function blrlp_license_card( $notice = null ) {
 		echo '<form class="blrl-actions" method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" onsubmit="return confirm(\'' . esc_js( __( 'إلغاء تفعيل الترخيص على هذا الموقع؟', 'blr-landing-pro' ) ) . '\')">';
 		wp_nonce_field( 'blrlp_license' );
 		echo '<input type="hidden" name="action" value="blrlp_license_do"><input type="hidden" name="do" value="deactivate"><button class="blrl-btn is-ghost">' . esc_html__( 'إلغاء التفعيل', 'blr-landing-pro' ) . '</button></form>';
-		echo '</div><div class="blrl-seal">' . $seal . '<div class="blrl-stamp"><b>' . esc_html__( 'ترخيص أصلي', 'blr-landing-pro' ) . '</b><small>' . esc_html( strtoupper( $edition ) ) . '</small><small>' . esc_html( $lid ) . '</small></div></div></div>'; // phpcs:ignore WordPress.Security.EscapeOutput
+		echo '</div><div class="blrl-seal"><img class="blrl-sealimg" src="' . esc_url( BLRLP_URL . 'assets/img/seal.png' ) . '" alt=""><div class="blrl-stamp"><b>' . esc_html__( 'ترخيص أصلي', 'blr-landing-pro' ) . '</b><small>' . esc_html( strtoupper( $edition ) ) . '</small><small>' . esc_html( $lid ) . '</small></div></div></div>'; // phpcs:ignore WordPress.Security.EscapeOutput
 	} else {
 		echo '<div class="blrl-card blrl-hero"><div class="blrl-ic"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div><div>';
 		echo '<h2>' . esc_html__( 'فعّل BLR Landing Pro', 'blr-landing-pro' ) . '</h2><p>' . esc_html__( 'أدخل مفتاح الترخيص لفتح كل الميزات الاحترافية على موقعك.', 'blr-landing-pro' ) . '</p>';
@@ -253,35 +253,92 @@ function blrlp_settings_page() {
 	if ( $notice ) {
 		delete_transient( 'blrlp_notice_' . get_current_user_id() );
 	}
-	$o = get_option( 'blrlp_settings', array() );
+	$o        = get_option( 'blrlp_settings', array() );
+	$provider = isset( $o['ai_provider'] ) ? $o['ai_provider'] : 'anthropic';
+	$has_key  = ! empty( $o['ai_key'] );
 	?>
-	<div class="wrap blrlp-admin">
+	<div class="wrap blrui blrlp-admin" id="blrlp-settings">
 		<?php blrlp_admin_header( __( 'الإعدادات والترخيص', 'blr-landing-pro' ) ); ?>
 
-		<?php blrlp_license_card( $notice ); ?>
-
-		<div class="blrlp-grid1">
-			<div class="blrlp-panel">
-				<h2><?php esc_html_e( 'الإعدادات العامة والذكاء الاصطناعي', 'blr-landing-pro' ); ?></h2>
-				<form method="post" action="options.php"><?php settings_fields( 'blrlp_settings_group' ); ?>
-					<h3><?php esc_html_e( 'الذكاء الاصطناعي', 'blr-landing-pro' ); ?> <?php echo blrlp_pro_badge(); // phpcs:ignore ?></h3>
-					<p><label><?php esc_html_e( 'المزوّد', 'blr-landing-pro' ); ?><br>
-						<select name="blrlp_settings[ai_provider]"><?php foreach ( array( 'anthropic' => 'Anthropic (Claude)', 'openai' => 'OpenAI', 'custom' => 'مخصّص (متوافق مع OpenAI)' ) as $k => $l ) { printf( '<option value="%s"%s>%s</option>', esc_attr( $k ), selected( isset( $o['ai_provider'] ) ? $o['ai_provider'] : 'anthropic', $k, false ), esc_html( $l ) ); } ?></select></label></p>
-					<p><label><?php esc_html_e( 'مفتاح API', 'blr-landing-pro' ); ?><br><input type="password" name="blrlp_settings[ai_key]" class="regular-text" dir="ltr" autocomplete="new-password" placeholder="<?php echo ! empty( $o['ai_key'] ) ? esc_attr__( '•••• محفوظ — اتركه فارغاً للإبقاء عليه', 'blr-landing-pro' ) : 'sk-…'; ?>"></label></p>
-					<p><label><?php esc_html_e( 'النموذج (اتركه فارغاً للافتراضي)', 'blr-landing-pro' ); ?><br><input type="text" name="blrlp_settings[ai_model]" class="regular-text" dir="ltr" value="<?php echo esc_attr( isset( $o['ai_model'] ) ? $o['ai_model'] : '' ); ?>" placeholder="claude-sonnet-5-5 / gpt-4o-mini"></label></p>
-					<p><label><?php esc_html_e( 'رابط المزوّد المخصّص', 'blr-landing-pro' ); ?><br><input type="url" name="blrlp_settings[ai_base]" class="large-text" dir="ltr" value="<?php echo esc_attr( isset( $o['ai_base'] ) ? $o['ai_base'] : '' ); ?>" placeholder="https://…/v1/chat/completions"></label></p>
-					<h3><?php esc_html_e( 'عام', 'blr-landing-pro' ); ?></h3>
-					<p><label><?php esc_html_e( 'بريد إشعار العملاء المحتملين', 'blr-landing-pro' ); ?><br><input type="email" name="blrlp_settings[notify]" class="regular-text" dir="ltr" value="<?php echo esc_attr( isset( $o['notify'] ) ? $o['notify'] : '' ); ?>" placeholder="<?php echo esc_attr( get_option( 'admin_email' ) ); ?>"></label></p>
-					<p><label><?php esc_html_e( 'بادئة الروابط', 'blr-landing-pro' ); ?><br><code dir="ltr"><?php echo esc_html( home_url( '/' ) ); ?></code><input type="text" name="blrlp_settings[slug]" size="8" dir="ltr" value="<?php echo esc_attr( blrlp_opt( 'slug', 'lp' ) ); ?>"></label></p>
-					<p><label><input type="checkbox" name="blrlp_settings[isolate]" value="1" <?php checked( blrlp_opt( 'isolate', '1' ), '1' ); ?>> <?php esc_html_e( 'عزل أنماط القالب عن صفحات الهبوط (موصى به)', 'blr-landing-pro' ); ?></label></p>
-					<p><label><input type="checkbox" name="blrlp_settings[wipe]" value="1" <?php checked( blrlp_opt( 'wipe', '0' ), '1' ); ?>> <?php esc_html_e( 'حذف كل البيانات عند حذف الإضافة', 'blr-landing-pro' ); ?></label></p>
-					<?php submit_button(); ?>
-				</form>
-			</div>
+		<div class="blrui-tabs" role="tablist">
+			<button type="button" class="is-on" data-tab="license">🔑 <?php esc_html_e( 'الترخيص', 'blr-landing-pro' ); ?></button>
+			<button type="button" data-tab="ai">✨ <?php esc_html_e( 'الذكاء الاصطناعي', 'blr-landing-pro' ); ?></button>
+			<button type="button" data-tab="general">⚙️ <?php esc_html_e( 'عام', 'blr-landing-pro' ); ?></button>
 		</div>
+
+		<div class="blrui-pane" data-pane="license"><?php blrlp_license_card( $notice ); ?></div>
+
+		<form method="post" action="options.php">
+			<?php settings_fields( 'blrlp_settings_group' ); ?>
+
+			<div class="blrui-pane" data-pane="ai" hidden>
+				<div class="blrui-card">
+					<div class="blrui-card__h"><span class="blrui-ico">✨</span><div><h2><?php esc_html_e( 'مزوّد الذكاء الاصطناعي', 'blr-landing-pro' ); ?> <?php echo blrlp_is_pro() ? '' : '<span class="blrui-chip pro">PRO</span>'; // phpcs:ignore ?></h2><p><?php esc_html_e( 'يُستعمل لتوليد الصفحات وإعادة كتابة الأقسام واقتراح العناوين وSEO. المفتاح يبقى على خادمك ولا يصل للمتصفح.', 'blr-landing-pro' ); ?></p></div><span class="blrui-grow"></span><span class="blrui-chip <?php echo $has_key ? 'ok' : 'warn'; ?>"><?php echo $has_key ? esc_html__( 'المفتاح محفوظ', 'blr-landing-pro' ) : esc_html__( 'لا يوجد مفتاح', 'blr-landing-pro' ); ?></span></div>
+					<div class="blrui-card__b">
+						<div class="blrui-row"><label for="blrlp-provider"><?php esc_html_e( 'المزوّد', 'blr-landing-pro' ); ?><small><?php esc_html_e( 'Claude أو OpenAI أو أي خدمة متوافقة.', 'blr-landing-pro' ); ?></small></label>
+							<div><select id="blrlp-provider" class="blrui-in" name="blrlp_settings[ai_provider]"><?php foreach ( array( 'anthropic' => 'Anthropic (Claude)', 'openai' => 'OpenAI', 'custom' => 'مخصّص (متوافق مع OpenAI)' ) as $k => $l ) { printf( '<option value="%s"%s>%s</option>', esc_attr( $k ), selected( $provider, $k, false ), esc_html( $l ) ); } ?></select></div></div>
+						<div class="blrui-row"><label for="blrlp-key"><?php esc_html_e( 'مفتاح API', 'blr-landing-pro' ); ?><small><?php esc_html_e( 'اتركه فارغاً للإبقاء على المفتاح المحفوظ.', 'blr-landing-pro' ); ?></small></label>
+							<div><input id="blrlp-key" class="blrui-in is-ltr" type="password" name="blrlp_settings[ai_key]" autocomplete="new-password" placeholder="<?php echo $has_key ? '••••••••••••••••' : 'sk-…'; ?>"></div></div>
+						<div class="blrui-row"><label for="blrlp-model"><?php esc_html_e( 'النموذج', 'blr-landing-pro' ); ?><small><?php esc_html_e( 'اتركه فارغاً للنموذج الافتراضي.', 'blr-landing-pro' ); ?></small></label>
+							<div><input id="blrlp-model" class="blrui-in is-ltr" type="text" name="blrlp_settings[ai_model]" value="<?php echo esc_attr( isset( $o['ai_model'] ) ? $o['ai_model'] : '' ); ?>" placeholder="claude-sonnet-5-5 / gpt-4o-mini"></div></div>
+						<div class="blrui-row" id="blrlp-base-row"><label for="blrlp-base"><?php esc_html_e( 'رابط المزوّد المخصّص', 'blr-landing-pro' ); ?><small><?php esc_html_e( 'للمزوّد «مخصّص» فقط.', 'blr-landing-pro' ); ?></small></label>
+							<div><input id="blrlp-base" class="blrui-in is-ltr" type="url" name="blrlp_settings[ai_base]" value="<?php echo esc_attr( isset( $o['ai_base'] ) ? $o['ai_base'] : '' ); ?>" placeholder="https://…/v1/chat/completions"></div></div>
+					</div>
+					<div class="blrui-card__f"><button type="button" class="blrui-btn is-ghost is-sm" id="blrlp-test"><?php esc_html_e( 'اختبار الاتصال', 'blr-landing-pro' ); ?></button><span class="blrui-test" id="blrlp-test-msg"></span><span class="blrui-help"><?php esc_html_e( 'احفظ الإعدادات أولاً ثم اختبر.', 'blr-landing-pro' ); ?></span></div>
+				</div>
+			</div>
+
+			<div class="blrui-pane" data-pane="general" hidden>
+				<div class="blrui-card">
+					<div class="blrui-card__h"><span class="blrui-ico">⚙️</span><div><h2><?php esc_html_e( 'الإعدادات العامة', 'blr-landing-pro' ); ?></h2><p><?php esc_html_e( 'الإشعارات والروابط وسلوك صفحات الهبوط.', 'blr-landing-pro' ); ?></p></div></div>
+					<div class="blrui-card__b">
+						<div class="blrui-row"><label for="blrlp-notify"><?php esc_html_e( 'بريد إشعار العملاء المحتملين', 'blr-landing-pro' ); ?><small><?php esc_html_e( 'يصله بريد عند كل نموذج جديد.', 'blr-landing-pro' ); ?></small></label>
+							<div><input id="blrlp-notify" class="blrui-in is-ltr" type="email" name="blrlp_settings[notify]" value="<?php echo esc_attr( isset( $o['notify'] ) ? $o['notify'] : '' ); ?>" placeholder="<?php echo esc_attr( get_option( 'admin_email' ) ); ?>"></div></div>
+						<div class="blrui-row"><label for="blrlp-slug"><?php esc_html_e( 'بادئة روابط الصفحات', 'blr-landing-pro' ); ?><small><?php esc_html_e( 'مثال: /lp/اسم-الصفحة', 'blr-landing-pro' ); ?></small></label>
+							<div><code><?php echo esc_html( home_url( '/' ) ); ?></code> <input id="blrlp-slug" class="blrui-in is-ltr" style="width:140px" type="text" name="blrlp_settings[slug]" value="<?php echo esc_attr( blrlp_opt( 'slug', 'lp' ) ); ?>"></div></div>
+						<div class="blrui-row"><span class="blrui-lab"><?php esc_html_e( 'عزل أنماط القالب', 'blr-landing-pro' ); ?><small><?php esc_html_e( 'يمنع تنسيقات قالب الموقع من إفساد تصميم صفحة الهبوط (موصى به).', 'blr-landing-pro' ); ?></small></span>
+							<div><label class="blrui-sw"><input type="checkbox" name="blrlp_settings[isolate]" value="1" <?php checked( blrlp_opt( 'isolate', '1' ), '1' ); ?>><i></i><?php esc_html_e( 'مفعّل', 'blr-landing-pro' ); ?></label></div></div>
+						<div class="blrui-row"><span class="blrui-lab"><?php esc_html_e( 'حذف البيانات عند إزالة الإضافة', 'blr-landing-pro' ); ?><small><?php esc_html_e( 'الصفحات والعملاء والإحصاءات والإعدادات. غير قابل للتراجع.', 'blr-landing-pro' ); ?></small></span>
+							<div><label class="blrui-sw"><input type="checkbox" name="blrlp_settings[wipe]" value="1" <?php checked( blrlp_opt( 'wipe', '0' ), '1' ); ?>><i></i><?php esc_html_e( 'احذف كل شيء', 'blr-landing-pro' ); ?></label></div></div>
+					</div>
+				</div>
+			</div>
+
+			<div class="blrui-pane-save" id="blrlp-save" hidden><button class="blrui-btn"><?php esc_html_e( 'حفظ الإعدادات', 'blr-landing-pro' ); ?></button></div>
+		</form>
 	</div>
+	<script>
+	(function(){
+		var root=document.getElementById('blrlp-settings'),tabs=root.querySelectorAll('.blrui-tabs button'),panes=root.querySelectorAll('.blrui-pane'),save=document.getElementById('blrlp-save');
+		function show(t){tabs.forEach(function(b){b.classList.toggle('is-on',b.dataset.tab===t)});panes.forEach(function(p){p.hidden=p.dataset.pane!==t});save.hidden=(t==='license');try{sessionStorage.setItem('blrlpTab',t)}catch(e){}}
+		tabs.forEach(function(b){b.addEventListener('click',function(){show(b.dataset.tab)})});
+		var last='license';try{last=sessionStorage.getItem('blrlpTab')||'license'}catch(e){}
+		if(<?php echo isset( $_GET['settings-updated'] ) ? 'true' : 'false'; // phpcs:ignore ?>&&last==='license'){last='ai';}
+		show(last);
+		var prov=document.getElementById('blrlp-provider'),row=document.getElementById('blrlp-base-row');
+		function pv(){row.style.display=prov.value==='custom'?'':'none'}prov.addEventListener('change',pv);pv();
+		var tb=document.getElementById('blrlp-test'),tm=document.getElementById('blrlp-test-msg');
+		tb.addEventListener('click',function(){tb.disabled=true;tm.className='blrui-test';tm.textContent='…';
+			fetch(ajaxurl,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:'action=blrlp_ai_test&nonce=<?php echo esc_js( wp_create_nonce( 'blrlp_admin' ) ); ?>'}).then(function(r){return r.json()}).then(function(r){tb.disabled=false;tm.className='blrui-test '+(r.success?'ok':'err');tm.textContent=(r.success?'✓ ':'✗ ')+((r.data&&r.data.message)||'')}).catch(function(){tb.disabled=false;tm.className='blrui-test err';tm.textContent='✗ network'});});
+	})();
+	</script>
 	<?php
 }
+
+add_action( 'wp_ajax_blrlp_ai_test', function () {
+	check_ajax_referer( 'blrlp_admin', 'nonce' );
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'غير مسموح.', 'blr-landing-pro' ) ), 403 );
+	}
+	if ( '' === blrlp_ai_key() ) {
+		wp_send_json_error( array( 'message' => __( 'لا يوجد مفتاح محفوظ.', 'blr-landing-pro' ) ) );
+	}
+	$r = blrlp_ai_call( 'Reply with the single word: OK', 'ping', 20 );
+	if ( is_wp_error( $r ) ) {
+		wp_send_json_error( array( 'message' => $r->get_error_message() ) );
+	}
+	wp_send_json_success( array( 'message' => __( 'الاتصال يعمل.', 'blr-landing-pro' ) ) );
+} );
 
 add_filter( 'plugin_action_links_' . plugin_basename( BLRLP_FILE ), function ( $l ) {
 	array_unshift( $l, '<a href="' . esc_url( admin_url( 'admin.php?page=blr-landing-settings' ) ) . '">' . esc_html__( 'الإعدادات', 'blr-landing-pro' ) . '</a>' );

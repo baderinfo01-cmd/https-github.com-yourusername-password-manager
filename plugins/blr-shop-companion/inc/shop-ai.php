@@ -86,6 +86,22 @@ add_action( 'rest_api_init', function () {
 			return current_user_can( 'edit_products' );
 		},
 	) );
+	register_rest_route( 'baderlr/v1', '/ai-test', array(
+		'methods'             => 'POST',
+		'callback'            => function () {
+			if ( ! baderlr_ai_get_key() ) {
+				return new WP_REST_Response( array( 'ok' => false, 'message' => __( 'لا يوجد مفتاح محفوظ — احفظ المفتاح أولاً.', 'blr-shop-companion' ) ), 200 );
+			}
+			$r = baderlr_ai_call( 'Reply with the single word: OK', 'Reply briefly.', array(), 20 );
+			if ( is_wp_error( $r ) ) {
+				return new WP_REST_Response( array( 'ok' => false, 'message' => $r->get_error_message() ), 200 );
+			}
+			return new WP_REST_Response( array( 'ok' => true, 'message' => __( 'الاتصال يعمل.', 'blr-shop-companion' ) ), 200 );
+		},
+		'permission_callback' => function () {
+			return current_user_can( 'manage_options' );
+		},
+	) );
 	register_rest_route( 'baderlr/v1', '/landing', array(
 		'methods'             => 'POST',
 		'callback'            => 'baderlr_landing_rest',

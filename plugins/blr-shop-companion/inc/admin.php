@@ -30,8 +30,11 @@ function baderlr_c_assets( $hook ) {
 	if ( false === strpos( (string) $hook, 'baderlr' ) ) {
 		return;
 	}
-	wp_enqueue_style( 'baderlr-c-admin', BADERLR_COMPANION_URI . 'assets/admin.css', array(), BADERLR_COMPANION_VERSION );
-	wp_enqueue_script( 'baderlr-c-admin', BADERLR_COMPANION_URI . 'assets/admin.js', array(), BADERLR_COMPANION_VERSION, true );
+	$ver = BADERLR_COMPANION_VERSION . '.' . (int) @filemtime( BADERLR_COMPANION_DIR . 'assets/blr-ui.css' ) . (int) @filemtime( BADERLR_COMPANION_DIR . 'assets/admin.css' );
+	wp_enqueue_style( 'baderlr-c-font', 'https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;500;600;700&display=swap', array(), null ); // phpcs:ignore
+	wp_enqueue_style( 'blrui', BADERLR_COMPANION_URI . 'assets/blr-ui.css', array(), $ver );
+	wp_enqueue_style( 'baderlr-c-admin', BADERLR_COMPANION_URI . 'assets/admin.css', array( 'blrui' ), $ver );
+	wp_enqueue_script( 'baderlr-c-admin', BADERLR_COMPANION_URI . 'assets/admin.js', array(), $ver, true );
 	wp_localize_script( 'baderlr-c-admin', 'BaderLRC', array(
 		'root'  => esc_url_raw( rest_url( 'baderlr/v1/' ) ),
 		'nonce' => wp_create_nonce( 'wp_rest' ),
@@ -46,37 +49,67 @@ function baderlr_c_assets( $hook ) {
 }
 add_action( 'admin_enqueue_scripts', 'baderlr_c_assets' );
 
+/** رأس موحّد لكل صفحات الإضافة. */
+function baderlr_c_header( $title ) {
+	$licensed = function_exists( 'baderlr_licensed' ) && baderlr_licensed();
+	$ai       = (bool) baderlr_ai_get_key();
+	?>
+	<div class="blrui-top">
+		<span class="blrui-mark">B</span>
+		<div><h1><?php echo esc_html( $title ); ?></h1><small>BLR Shop Companion · v<?php echo esc_html( BADERLR_COMPANION_VERSION ); ?></small></div>
+		<span class="blrui-grow"></span>
+		<span class="blrui-chip <?php echo $ai ? 'ok' : 'warn'; ?>"><?php echo $ai ? esc_html__( 'AI جاهز', 'blr-shop-companion' ) : esc_html__( 'AI بلا مفتاح', 'blr-shop-companion' ); ?></span>
+		<span class="blrui-chip <?php echo $licensed ? 'pro' : ''; ?>"><?php echo $licensed ? 'PRO ✓' : esc_html__( 'غير مرخّص', 'blr-shop-companion' ); ?></span>
+	</div>
+	<?php
+}
+
 function baderlr_c_dashboard_page() {
 	$configured = (bool) baderlr_ai_get_key();
 	$licensed   = function_exists( 'baderlr_licensed' ) && baderlr_licensed();
+	$lic        = function_exists( 'baderlr_license_get' ) ? baderlr_license_get() : array();
+	$woo        = class_exists( 'WooCommerce' );
+	$slider     = shortcode_exists( 'blr_slider' );
+	$chat       = (bool) get_theme_mod( 'baderlr_ai_chat', false );
+	$checks     = array(
+		array( __( 'ترخيص القالب', 'blr-shop-companion' ), $licensed, admin_url( 'admin.php?page=baderlr-license' ), __( 'تفعيل', 'blr-shop-companion' ) ),
+		array( __( 'مفتاح الذكاء الاصطناعي', 'blr-shop-companion' ), $configured, admin_url( 'admin.php?page=baderlr-ai-settings' ), __( 'إضافة', 'blr-shop-companion' ) ),
+		array( __( 'ووكومرس', 'blr-shop-companion' ), $woo, admin_url( 'plugins.php' ), __( 'تثبيت', 'blr-shop-companion' ) ),
+		array( __( 'إضافة السلايدر', 'blr-shop-companion' ), $slider, admin_url( 'plugins.php' ), __( 'تثبيت', 'blr-shop-companion' ) ),
+		array( __( 'مساعد التسوق للزوار', 'blr-shop-companion' ), $chat && $configured, admin_url( 'customize.php' ), __( 'تفعيل', 'blr-shop-companion' ) ),
+	);
+	$done = count( array_filter( array_column( $checks, 1 ) ) );
+	$pct  = (int) round( $done / count( $checks ) * 100 );
 	?>
-	<div class="wrap baderlr-c" dir="rtl">
-		<div class="blrc-hero">
-			<h1>✦ BLR Shop Companion</h1>
-			<p><?php esc_html_e( 'مولّد المحتوى بالذكاء الاصطناعي واستيراد المواقع الجاهزة لقالب BLR Shop Pro.', 'blr-shop-companion' ); ?></p>
+	<div class="wrap blrui baderlr-c">
+		<?php baderlr_c_header( __( 'لوحة البداية', 'blr-shop-companion' ) ); ?>
+
+		<div class="blrui-hero">
+			<div><h2>✦ <?php esc_html_e( 'ابنِ متجرك بالذكاء الاصطناعي', 'blr-shop-companion' ); ?></h2><p><?php esc_html_e( 'كاتب منتجات، مساعد تسوق، مولّد صفحات هبوط، ومواقع جاهزة بنقرة — كلها من هنا.', 'blr-shop-companion' ); ?></p></div>
+			<a class="blrui-btn" href="<?php echo esc_url( admin_url( 'admin.php?page=baderlr-ai' ) ); ?>"><?php esc_html_e( 'ابدأ التوليد', 'blr-shop-companion' ); ?></a>
 		</div>
-		<div class="blrc-cards">
-			<div class="blrc-card">
-				<span class="blrc-ic">✨</span>
-				<h2><?php esc_html_e( 'مولّد الذكاء الاصطناعي', 'blr-shop-companion' ); ?></h2>
-				<p><?php esc_html_e( 'اكتب فكرتك ليصوغ الذكاء الاصطناعي نصوص صفحاتك ومنتجاتك ووصف السيو.', 'blr-shop-companion' ); ?></p>
-				<a class="button button-primary" href="<?php echo esc_url( admin_url( 'admin.php?page=baderlr-ai' ) ); ?>"><?php esc_html_e( 'ابدأ التوليد', 'blr-shop-companion' ); ?></a>
-				<span class="blrc-status <?php echo $configured ? 'is-ok' : 'is-off'; ?>"><?php echo $configured ? esc_html__( 'المزوّد مهيّأ ✓', 'blr-shop-companion' ) : esc_html__( 'يحتاج إعداد مفتاح API', 'blr-shop-companion' ); ?></span>
-			</div>
-			<div class="blrc-card">
-				<span class="blrc-ic">🧩</span>
-				<h2><?php esc_html_e( 'المواقع الجاهزة', 'blr-shop-companion' ); ?></h2>
-				<p><?php esc_html_e( 'اختر تصميماً كاملاً واستورده بنقرة، ثم عدّله كما تشاء.', 'blr-shop-companion' ); ?></p>
-				<a class="button button-primary" href="<?php echo esc_url( admin_url( 'admin.php?page=baderlr-sites' ) ); ?>"><?php esc_html_e( 'تصفّح المواقع', 'blr-shop-companion' ); ?></a>
-				<span class="blrc-status <?php echo $licensed ? 'is-ok' : 'is-off'; ?>"><?php echo $licensed ? esc_html__( 'الترخيص مفعّل ✓', 'blr-shop-companion' ) : esc_html__( 'يتطلب ترخيصاً مفعّلاً', 'blr-shop-companion' ); ?></span>
-			</div>
-			<div class="blrc-card">
-				<span class="blrc-ic">⚙️</span>
-				<h2><?php esc_html_e( 'الإعدادات', 'blr-shop-companion' ); ?></h2>
-				<p><?php esc_html_e( 'اختر مزوّد الذكاء الاصطناعي (OpenAI / Anthropic / مخصّص) وأدخل مفتاحك.', 'blr-shop-companion' ); ?></p>
-				<a class="button" href="<?php echo esc_url( admin_url( 'admin.php?page=baderlr-ai-settings' ) ); ?>"><?php esc_html_e( 'فتح الإعدادات', 'blr-shop-companion' ); ?></a>
+
+		<div class="blrui-card">
+			<div class="blrui-card__h"><span class="blrui-ico">✔</span><div><h2><?php esc_html_e( 'جاهزية الموقع', 'blr-shop-companion' ); ?></h2><p><?php echo esc_html( sprintf( /* translators: 1: done 2: total */ __( 'أُنجز %1$d من %2$d', 'blr-shop-companion' ), $done, count( $checks ) ) ); ?></p></div><span class="blrui-grow"></span><span class="blrui-chip <?php echo 100 === $pct ? 'ok' : 'warn'; ?>"><?php echo (int) $pct; ?>%</span></div>
+			<div class="blrui-card__b">
+				<div class="blrui-prog"><i style="width:<?php echo (int) $pct; ?>%"></i></div>
+				<ul class="blrui-list" style="margin-top:14px">
+					<?php foreach ( $checks as $c ) : ?>
+						<li><span class="blrui-chip <?php echo $c[1] ? 'ok' : 'warn'; ?>"><?php echo $c[1] ? '✓' : '!'; ?></span><?php echo esc_html( $c[0] ); ?><small><?php if ( ! $c[1] ) : ?><a href="<?php echo esc_url( $c[2] ); ?>"><?php echo esc_html( $c[3] ); ?></a><?php else : esc_html_e( 'جاهز', 'blr-shop-companion' ); endif; ?></small></li>
+					<?php endforeach; ?>
+				</ul>
 			</div>
 		</div>
+
+		<div class="blrui-grid">
+			<div class="blrui-tile"><span class="blrui-ico">✨</span><h3><?php esc_html_e( 'مولّد الذكاء الاصطناعي', 'blr-shop-companion' ); ?></h3><p><?php esc_html_e( 'صفحات كاملة، عناوين، وصف منتجات، SEO وترجمة.', 'blr-shop-companion' ); ?></p><a class="blrui-btn is-sm" href="<?php echo esc_url( admin_url( 'admin.php?page=baderlr-ai' ) ); ?>"><?php esc_html_e( 'فتح المولّد', 'blr-shop-companion' ); ?></a></div>
+			<div class="blrui-tile"><span class="blrui-ico">🧩</span><h3><?php esc_html_e( 'المواقع الجاهزة', 'blr-shop-companion' ); ?></h3><p><?php esc_html_e( 'استورد تصميماً كاملاً بنقرة ثم عدّله.', 'blr-shop-companion' ); ?></p><a class="blrui-btn is-sm" href="<?php echo esc_url( admin_url( 'admin.php?page=baderlr-sites' ) ); ?>"><?php esc_html_e( 'تصفّح المواقع', 'blr-shop-companion' ); ?></a></div>
+			<div class="blrui-tile"><span class="blrui-ico">⚙️</span><h3><?php esc_html_e( 'إعدادات الذكاء الاصطناعي', 'blr-shop-companion' ); ?></h3><p><?php esc_html_e( 'المزوّد والمفتاح والنموذج مع اختبار الاتصال.', 'blr-shop-companion' ); ?></p><a class="blrui-btn is-sm is-ghost" href="<?php echo esc_url( admin_url( 'admin.php?page=baderlr-ai-settings' ) ); ?>"><?php esc_html_e( 'فتح الإعدادات', 'blr-shop-companion' ); ?></a></div>
+		</div>
+
+		<?php if ( $licensed && ! empty( $lic ) ) : ?>
+			<div class="blrui-card"><div class="blrui-card__h"><span class="blrui-ico">🔑</span><div><h2><?php esc_html_e( 'الترخيص', 'blr-shop-companion' ); ?></h2><p><?php echo esc_html( ( ! empty( $lic['edition'] ) ? $lic['edition'] : 'Pro' ) . ' — ' . ( ! empty( $lic['domain'] ) ? $lic['domain'] : '' ) ); ?></p></div><span class="blrui-grow"></span><a class="blrui-btn is-sm is-ghost" href="<?php echo esc_url( admin_url( 'admin.php?page=baderlr-license' ) ); ?>"><?php esc_html_e( 'عرض الشهادة', 'blr-shop-companion' ); ?></a></div></div>
+		<?php endif; ?>
 	</div>
 	<?php
 }

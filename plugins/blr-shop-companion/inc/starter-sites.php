@@ -36,11 +36,11 @@ function baderlr_c_sites_page() {
 	$demos    = baderlr_starter_demos();
 	$licensed = baderlr_starter_licensed();
 	?>
-	<div class="wrap baderlr-c" dir="rtl">
-		<h1>🧩 <?php esc_html_e( 'المواقع الجاهزة', 'blr-shop-companion' ); ?></h1>
-		<p class="description"><?php esc_html_e( 'اختر تصميماً وابنِ موقعك بنقرة. ينشئ الاستيراد الصفحات والقائمة ويضبط الرئيسية والنمط.', 'blr-shop-companion' ); ?></p>
+	<div class="wrap blrui baderlr-c">
+		<?php baderlr_c_header( __( 'المواقع الجاهزة', 'blr-shop-companion' ) ); ?>
+		<p class="blrui-help" style="margin-bottom:14px"><?php esc_html_e( 'اختر تصميماً وابنِ موقعك بنقرة. ينشئ الاستيراد الصفحات والقائمة ويضبط الرئيسية والنمط.', 'blr-shop-companion' ); ?></p>
 		<?php if ( ! $licensed ) : ?>
-			<div class="notice notice-warning"><p>
+			<div class="blrl-msg err"><p style="margin:0">
 				<?php esc_html_e( 'استيراد المواقع ميزة مدفوعة — فعّل ترخيص القالب أولاً.', 'blr-shop-companion' ); ?>
 				<a href="<?php echo esc_url( admin_url( 'admin.php?page=baderlr-license' ) ); ?>"><?php esc_html_e( 'تفعيل الترخيص', 'blr-shop-companion' ); ?></a>
 			</p></div>

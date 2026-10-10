@@ -2,7 +2,7 @@
 /**
  * Plugin Name: BLR Slider Pro
  * Description: سلايدرات حديثة وخفيفة (بدون jQuery) للمتاجر: تأثيرات متعددة، سحب باللمس، تشغيل تلقائي ذكي، صور منفصلة للجوال، فيديو، عدّاد تنازلي، وكتلة Gutenberg وشورتكود.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: BLR
  * Text Domain: blr-slider-pro
  * License: GPL-2.0-or-later
@@ -15,8 +15,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'BLRS_VER', '1.0.0' );
+define( 'BLRS_VER', '1.0.1' );
+define( 'BLRS_VERSION', BLRS_VER );
 define( 'BLRS_URL', plugin_dir_url( __FILE__ ) );
+define( 'BLRS_DIR', plugin_dir_path( __FILE__ ) );
+
+/* إعدادات سيرفر الترخيص — داخلية، لا تظهر في لوحة التحكم. */
+if ( ! defined( 'BLRS_LICENSE_SERVER' ) ) {
+	define( 'BLRS_LICENSE_SERVER', 'https://baderinfo.com/themes-license/' );
+}
+if ( ! defined( 'BLRS_LICENSE_PUBKEY' ) ) {
+	define( 'BLRS_LICENSE_PUBKEY', '8e6G9g431dSU5rcykYca6b+7AfZcFcDpCr/+hrkj61I=' );
+}
+if ( ! defined( 'BLRS_PRODUCT' ) ) {
+	define( 'BLRS_PRODUCT', 'blr-slider-pro' );
+}
+if ( ! defined( 'BLRS_BUY_URL' ) ) {
+	define( 'BLRS_BUY_URL', 'https://baderinfo.com/blr-slider-pro' );
+}
+
+require_once BLRS_DIR . 'inc/license.php';
+require_once BLRS_DIR . 'inc/admin.php';
 
 /* ---------- CPT ---------- */
 add_action( 'init', function () {
@@ -51,7 +70,7 @@ add_action( 'init', function () {
 } );
 
 function blrs_defaults() {
-	return array(
+	$d = array(
 		'effect'   => 'slide',   // slide | fade | zoom | creative
 		'autoplay' => 1,
 		'delay'    => 5500,
@@ -63,6 +82,8 @@ function blrs_defaults() {
 		'height'   => 520,
 		'mheight'  => 420,
 	);
+	$saved = get_option( 'blrs_defaults', array() );
+	return is_array( $saved ) ? array_merge( $d, $saved ) : $d;
 }
 
 /* ---------- Admin UI ---------- */
@@ -79,7 +100,7 @@ function blrs_cfg_box( $post ) {
 	$c = wp_parse_args( json_decode( (string) get_post_meta( $post->ID, '_blrs_cfg', true ), true ) ?: array(), blrs_defaults() );
 	$checks = array( 'autoplay' => 'تشغيل تلقائي', 'loop' => 'تكرار', 'arrows' => 'الأسهم', 'dots' => 'النقاط', 'progress' => 'شريط التقدم', 'hover' => 'إيقاف عند المرور' );
 	echo '<p><label>التأثير<br><select name="blrs_cfg[effect]" class="widefat">';
-	foreach ( array( 'slide' => 'انزلاق', 'fade' => 'تلاشي', 'zoom' => 'تلاشي + تكبير (Ken Burns)', 'creative' => 'إبداعي ثلاثي الأبعاد' ) as $k => $l ) {
+	foreach ( array( 'slide' => 'انزلاق', 'fade' => 'تلاشي', 'zoom' => 'تلاشي + تكبير (Ken Burns) — Pro', 'creative' => 'إبداعي ثلاثي الأبعاد — Pro' ) as $k => $l ) {
 		printf( '<option value="%s"%s>%s</option>', esc_attr( $k ), selected( $c['effect'], $k, false ), esc_html( $l ) );
 	}
 	echo '</select></label></p>';
@@ -182,6 +203,10 @@ function blrs_render( $id ) {
 		return '';
 	}
 	$cfg = wp_parse_args( json_decode( (string) get_post_meta( $id, '_blrs_cfg', true ), true ) ?: array(), blrs_defaults() );
+	$pro = blrs_is_pro();
+	if ( ! $pro ) { // ميزات Pro: تأثيرات متقدمة، فيديو، عدّاد.
+		$cfg['effect'] = 'zoom' === $cfg['effect'] ? 'fade' : ( 'creative' === $cfg['effect'] ? 'slide' : $cfg['effect'] );
+	}
 
 	wp_enqueue_style( 'blrs', BLRS_URL . 'assets/slider.css', array(), BLRS_VER );
 	wp_enqueue_script( 'blrs', BLRS_URL . 'assets/slider.js', array(), BLRS_VER, array( 'strategy' => 'defer', 'in_footer' => true ) );
@@ -209,7 +234,7 @@ function blrs_render( $id ) {
 			esc_attr( ( (int) ( $s['overlay'] ?? 35 ) ) / 100 )
 		);
 		echo '<div class="blrs__media">';
-		if ( ! empty( $s['video'] ) ) {
+		if ( $pro && ! empty( $s['video'] ) ) {
 			printf( '<video src="%s" muted loop playsinline %s preload="metadata"></video>', esc_url( $s['video'] ), $first ? 'autoplay' : '' ); // phpcs:ignore
 		} elseif ( ! empty( $s['img'] ) ) {
 			$attrs = array( 'class' => 'blrs__img', 'alt' => '', 'loading' => $first ? 'eager' : 'lazy', 'decoding' => 'async' );
@@ -233,7 +258,7 @@ function blrs_render( $id ) {
 		if ( ! empty( $s['text'] ) ) {
 			echo '<p class="blrs__text">' . esc_html( $s['text'] ) . '</p>';
 		}
-		if ( ! empty( $s['end'] ) && strtotime( $s['end'] ) ) {
+		if ( $pro && ! empty( $s['end'] ) && strtotime( $s['end'] ) ) {
 			echo '<div class="blrs__cd" data-end="' . esc_attr( strtotime( $s['end'] ) ) . '"></div>';
 		}
 		if ( ! empty( $s['b1'] ) || ! empty( $s['b2'] ) ) {

@@ -1,6 +1,6 @@
 <?php
 /**
- * صفحة ترحيب وإعداد سريع للقالب.
+ * صفحة البدء: خطوات الإعداد مع شريط تقدّم.
  *
  * @package blr-shop-pro
  */
@@ -17,28 +17,54 @@ add_action( 'admin_menu', 'baderlr_onboarding_menu' );
 function baderlr_welcome_page() {
 	$companion = baderlr_has_companion();
 	$licensed  = function_exists( 'baderlr_licensed' ) && baderlr_licensed();
+	$woo       = class_exists( 'WooCommerce' );
+	$slider    = shortcode_exists( 'blr_slider' );
+	$ai        = function_exists( 'baderlr_ai_ready' ) && baderlr_ai_ready();
+	$styled    = null !== get_theme_mod( 'baderlr_variant', null );
+	$home_set  = 'page' === get_option( 'show_on_front' );
+
+	$steps = array(
+		array( __( 'تفعيل الترخيص', 'blr-shop-pro' ), __( 'يفتح استيراد المواقع الجاهزة ويزيل سطر الحقوق.', 'blr-shop-pro' ), $licensed, admin_url( 'admin.php?page=baderlr-license' ), $licensed ? __( 'مُفعَّل', 'blr-shop-pro' ) : __( 'تفعيل الآن', 'blr-shop-pro' ) ),
+		array( __( 'تثبيت ووكومرس', 'blr-shop-pro' ), __( 'أساس المتجر: المنتجات والسلة والدفع.', 'blr-shop-pro' ), $woo, admin_url( 'plugin-install.php?s=woocommerce&tab=search&type=term' ), $woo ? __( 'مثبّت', 'blr-shop-pro' ) : __( 'تثبيت', 'blr-shop-pro' ) ),
+		array( __( 'إضافة BLR Shop Companion', 'blr-shop-pro' ), __( 'كاتب المنتجات، مساعد التسوق، مولّد صفحات الهبوط، والمواقع الجاهزة.', 'blr-shop-pro' ), $companion, $companion ? admin_url( 'admin.php?page=baderlr-dashboard' ) : admin_url( 'plugins.php' ), $companion ? __( 'مثبّتة', 'blr-shop-pro' ) : __( 'تثبيت الإضافة', 'blr-shop-pro' ) ),
+		array( __( 'مفتاح الذكاء الاصطناعي', 'blr-shop-pro' ), __( 'اختر المزوّد (Claude / OpenAI) وأضف مفتاحك.', 'blr-shop-pro' ), $ai, $companion ? admin_url( 'admin.php?page=baderlr-ai-settings' ) : admin_url( 'plugins.php' ), $ai ? __( 'جاهز', 'blr-shop-pro' ) : __( 'إضافة المفتاح', 'blr-shop-pro' ) ),
+		array( __( 'إضافة BLR Slider Pro', 'blr-shop-pro' ), __( 'سلايدر الرئيسية بتأثيرات حديثة وصور للجوال.', 'blr-shop-pro' ), $slider, $slider ? admin_url( 'edit.php?post_type=blr_slider' ) : admin_url( 'plugins.php' ), $slider ? __( 'مثبّتة', 'blr-shop-pro' ) : __( 'تثبيت الإضافة', 'blr-shop-pro' ) ),
+		array( __( 'اختيار النمط والألوان', 'blr-shop-pro' ), __( 'Aurora / Onyx / Verdant مع ألوان وخطوط وأقسام الرئيسية.', 'blr-shop-pro' ), $styled, admin_url( 'customize.php' ), __( 'فتح المخصّص', 'blr-shop-pro' ) ),
+		array( __( 'استيراد موقع جاهز', 'blr-shop-pro' ), __( 'ابنِ الرئيسية والقائمة بنقرة (يتطلب Companion + ترخيص).', 'blr-shop-pro' ), $home_set, $companion ? admin_url( 'admin.php?page=baderlr-sites' ) : admin_url( 'plugins.php' ), __( 'المواقع الجاهزة', 'blr-shop-pro' ) ),
+		array( __( 'صفحة هبوط إعلانية', 'blr-shop-pro' ), __( 'أنشئ صفحة بقالب «BLR — صفحة هبوط إعلانية» وولّدها بالذكاء الاصطناعي.', 'blr-shop-pro' ), false, admin_url( 'post-new.php?post_type=page' ), __( 'صفحة جديدة', 'blr-shop-pro' ) ),
+	);
+	$done = count( array_filter( array_column( $steps, 2 ) ) );
+	$pct  = (int) round( $done / count( $steps ) * 100 );
 	?>
-	<div class="wrap" dir="rtl" style="max-width:900px">
-		<h1 style="font-size:26px"><?php esc_html_e( 'مرحباً بك في BLR Shop Pro', 'blr-shop-pro' ); ?> 🎉</h1>
-		<p style="font-size:15px;color:#50575e;max-width:70ch"><?php esc_html_e( 'قالب احترافي مدفوع مُعزَّز بالذكاء الاصطناعي. أكمل الخطوات التالية لتجهيز موقعك في دقائق.', 'blr-shop-pro' ); ?></p>
-		<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:20px">
-			<?php
-			baderlr_welcome_card( '1 — ' . __( 'تفعيل الترخيص', 'blr-shop-pro' ), __( 'فعّل مفتاحك لإتاحة كل المزايا وإزالة سطر الحقوق.', 'blr-shop-pro' ), admin_url( 'admin.php?page=baderlr-license' ), $licensed ? __( 'مُفعَّل ✓', 'blr-shop-pro' ) : __( 'تفعيل الآن', 'blr-shop-pro' ), $licensed );
-			baderlr_welcome_card( '2 — ' . __( 'إضافة Companion', 'blr-shop-pro' ), __( 'ثبّت إضافة BLR Shop Companion لمولّد المحتوى بالذكاء الاصطناعي واستيراد المواقع الجاهزة.', 'blr-shop-pro' ), $companion ? admin_url( 'admin.php?page=baderlr-ai' ) : admin_url( 'plugins.php' ), $companion ? __( 'مثبّتة ✓', 'blr-shop-pro' ) : __( 'تثبيت الإضافة', 'blr-shop-pro' ), $companion );
-			baderlr_welcome_card( '3 — ' . __( 'اختر النمط', 'blr-shop-pro' ), __( 'بدّل بين Aurora / Onyx / Verdant واضبط الألوان والرأس والتذييل.', 'blr-shop-pro' ), admin_url( 'customize.php' ), __( 'فتح المخصّص', 'blr-shop-pro' ), false );
-			baderlr_welcome_card( '4 — ' . __( 'استورد موقعاً جاهزاً', 'blr-shop-pro' ), __( 'اختر تصميماً جاهزاً وابنِ موقعك بنقرة (يتطلب Companion + ترخيص).', 'blr-shop-pro' ), $companion ? admin_url( 'admin.php?page=baderlr-sites' ) : '#', __( 'المواقع الجاهزة', 'blr-shop-pro' ), false );
-			baderlr_welcome_card( '5 — ' . __( 'السلايدر وأنواع المنتجات', 'blr-shop-pro' ), __( 'ثبّت إضافة BLR Slider Pro لبانر الرئيسية. وفي كل منتج افتح تبويب «BLR Shop» لتحديد النوع (رقمي/مادي/اشتراك/خدمة) وتفاصيل الملف.', 'blr-shop-pro' ), admin_url( 'plugins.php' ), __( 'الإضافات', 'blr-shop-pro' ), shortcode_exists( 'blr_slider' ) );
-			baderlr_welcome_card( '6 — ' . __( 'صفحة هبوط إعلانية', 'blr-shop-pro' ), __( 'أنشئ صفحة بقالب «BLR — صفحة هبوط إعلانية» واكتب وصف منتجك ليولّد الذكاء الاصطناعي كل الأقسام.', 'blr-shop-pro' ), admin_url( 'post-new.php?post_type=page' ), __( 'صفحة جديدة', 'blr-shop-pro' ), false );
-			?>
+	<div class="wrap blrui" dir="rtl">
+		<div class="blrui-top">
+			<span class="blrui-mark">B</span>
+			<div><h1><?php esc_html_e( 'مرحباً بك في BLR Shop Pro', 'blr-shop-pro' ); ?> 🎉</h1><small>v<?php echo esc_html( BADERLR_VERSION ); ?></small></div>
+			<span class="blrui-grow"></span>
+			<span class="blrui-chip <?php echo $licensed ? 'pro' : 'warn'; ?>"><?php echo $licensed ? 'PRO ✓' : esc_html__( 'غير مرخّص', 'blr-shop-pro' ); ?></span>
+		</div>
+
+		<div class="blrui-hero">
+			<div>
+				<h2><?php esc_html_e( 'جهّز متجرك في دقائق', 'blr-shop-pro' ); ?></h2>
+				<p><?php echo esc_html( sprintf( /* translators: 1: done 2: total */ __( 'أُنجز %1$d من %2$d خطوات. أكمل الباقي لتفتح كل إمكانات القالب.', 'blr-shop-pro' ), $done, count( $steps ) ) ); ?></p>
+				<div class="blrui-prog" style="background:rgba(255,255,255,.25);max-width:420px"><i style="width:<?php echo (int) $pct; ?>%;background:#fff"></i></div>
+			</div>
+			<a class="blrui-btn" href="<?php echo esc_url( admin_url( 'customize.php' ) ); ?>"><?php esc_html_e( 'فتح المخصّص', 'blr-shop-pro' ); ?></a>
+		</div>
+
+		<div class="blrui-steps">
+			<?php foreach ( $steps as $i => $st ) : ?>
+				<div class="blrui-step <?php echo $st[2] ? 'is-done' : ''; ?>">
+					<span class="blrui-num"><?php echo $st[2] ? '✓' : (int) ( $i + 1 ); ?></span>
+					<div>
+						<h3><?php echo esc_html( $st[0] ); ?></h3>
+						<p><?php echo esc_html( $st[1] ); ?></p>
+						<a class="blrui-btn is-sm <?php echo $st[2] ? 'is-ghost' : ''; ?>" href="<?php echo esc_url( $st[3] ); ?>"><?php echo esc_html( $st[4] ); ?></a>
+					</div>
+				</div>
+			<?php endforeach; ?>
 		</div>
 	</div>
 	<?php
-}
-
-function baderlr_welcome_card( $title, $desc, $url, $btn, $done ) {
-	echo '<div class="card" style="padding:20px;max-width:none">';
-	echo '<h2 style="margin-top:0;font-size:16px">' . esc_html( $title ) . '</h2>';
-	echo '<p style="color:#50575e;min-height:3em">' . esc_html( $desc ) . '</p>';
-	echo '<a class="button ' . ( $done ? '' : 'button-primary' ) . '" href="' . esc_url( $url ) . '">' . esc_html( $btn ) . '</a>';
-	echo '</div>';
 }

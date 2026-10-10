@@ -233,9 +233,10 @@ function baderlr_license_page() {
 	}
 	$lic    = baderlr_license_get();
 	$active = baderlr_licensed();
-	$seal   = '<svg viewBox="0 0 120 120" aria-hidden="true"><defs><linearGradient id="blrlg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22C3F0"/><stop offset="1" stop-color="#2F5BFF"/></linearGradient></defs><circle cx="60" cy="60" r="56" fill="none" stroke="url(#blrlg)" stroke-width="3" stroke-dasharray="2 5"/><circle cx="60" cy="60" r="47" fill="url(#blrlg)"/><path d="M60 30l22 8v16c0 14-9 25-22 30-13-5-22-16-22-30V38z" fill="rgba(255,255,255,.18)" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/><path d="M50 60l8 8 14-16" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 	?>
-	<div class="wrap blrl" dir="rtl">
+	<div class="wrap blrui" dir="rtl">
+		<div class="blrui-top"><span class="blrui-mark">B</span><div><h1><?php esc_html_e( 'ترخيص القالب', 'blr-shop-pro' ); ?></h1><small>BLR Shop Pro · v<?php echo esc_html( BADERLR_VERSION ); ?></small></div><span class="blrui-grow"></span><span class="blrui-chip <?php echo baderlr_licensed() ? 'pro' : 'warn'; ?>"><?php echo baderlr_licensed() ? 'PRO ✓' : esc_html__( 'غير مفعّل', 'blr-shop-pro' ); ?></span></div>
+		<div class="blrl">
 		<?php if ( $notice ) : ?><div class="blrl-msg <?php echo $notice[0] ? 'ok' : 'err'; ?>"><?php echo esc_html( $notice[1] ); ?></div><?php endif; ?>
 
 		<?php if ( $active ) :
@@ -273,7 +274,7 @@ function baderlr_license_page() {
 					</form>
 				</div>
 				<div class="blrl-seal">
-					<?php echo $seal; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+					<img class="blrl-sealimg" src="<?php echo esc_url( BADERLR_URI . 'assets/img/seal.png' ); ?>" alt="">
 					<div class="blrl-stamp"><b><?php esc_html_e( 'ترخيص أصلي', 'blr-shop-pro' ); ?></b><small><?php echo esc_html( strtoupper( $edition ) ); ?></small><small><?php echo esc_html( $lid ); ?></small></div>
 				</div>
 			</div>
@@ -300,16 +301,16 @@ function baderlr_license_page() {
 				</div>
 			</div>
 		<?php endif; ?>
-	</div>
+	</div></div>
 	<?php
 }
 
 add_action( 'admin_enqueue_scripts', function ( $hook ) {
-	if ( 'toplevel_page_baderlr-license' !== $hook ) {
+	if ( ! in_array( $hook, array( 'toplevel_page_baderlr-license', 'appearance_page_baderlr-welcome' ), true ) ) {
 		return;
 	}
-	wp_enqueue_style( 'baderlr-license-font', 'https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;500;600;700&display=swap', array(), null ); // phpcs:ignore
-	wp_enqueue_style( 'baderlr-license', BADERLR_URI . 'assets/css/license.css', array(), BADERLR_VERSION . '.' . (int) @filemtime( BADERLR_DIR . 'assets/css/license.css' ) );
+	wp_enqueue_style( 'baderlr-ui-font', 'https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;500;600;700&display=swap', array(), null ); // phpcs:ignore
+	wp_enqueue_style( 'blrui', BADERLR_URI . 'assets/css/blr-ui.css', array(), BADERLR_VERSION . '.' . (int) @filemtime( BADERLR_DIR . 'assets/css/blr-ui.css' ) );
 } );
 
 function baderlr_license_admin_notice() {

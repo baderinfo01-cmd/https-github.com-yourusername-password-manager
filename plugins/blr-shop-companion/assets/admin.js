@@ -9,6 +9,22 @@
     }).then(function(r){ return r.json().then(function(j){ return {ok:r.ok, data:j}; }); });
   }
 
+
+  /* ---- Test AI connection ---- */
+  var tb = document.getElementById('blrc-test');
+  if (tb){
+    var tm = document.getElementById('blrc-test-msg');
+    tb.addEventListener('click', function(){
+      tb.disabled = true; tm.className = 'blrui-test'; tm.textContent = '…';
+      post('ai-test', {}).then(function(res){
+        tb.disabled = false;
+        var ok = res.ok && res.data && res.data.ok;
+        tm.className = 'blrui-test ' + (ok ? 'ok' : 'err');
+        tm.textContent = (ok ? '✓ ' : '✗ ') + ((res.data && (res.data.message || res.data.error)) || '');
+      }).catch(function(){ tb.disabled = false; tm.className = 'blrui-test err'; tm.textContent = '✗ network'; });
+    });
+  }
+
   /* ---- AI generate ---- */
   var form = document.getElementById('blrc-ai-form');
   if (form){
