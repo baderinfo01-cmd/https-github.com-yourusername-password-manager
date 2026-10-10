@@ -1,31 +1,26 @@
 <?php
 /**
- * Main template (blog / fallback).
+ * الأرشيف (التصنيفات، الوسوم، أنواع المحتوى).
  *
- * @package BLR_Shop_Pro
+ * @package blr-shop-pro
  */
-
+if ( ! defined( 'ABSPATH' ) ) { exit; }
 get_header();
+if ( baderlr_el_location( 'archive' ) ) { get_footer(); return; }
 ?>
-<main id="main" class="blr-wrap blr-blog">
-	<?php if ( is_home() && ! is_front_page() ) : ?><h1 class="blr-title"><?php single_post_title(); ?></h1><?php endif; ?>
-	<?php if ( is_archive() ) : the_archive_title( '<h1 class="blr-title">', '</h1>' ); endif; ?>
-	<?php if ( is_search() ) : ?><h1 class="blr-title"><?php printf( esc_html__( 'نتائج البحث عن: %s', 'blr-shop-pro' ), '<span>' . esc_html( get_search_query() ) . '</span>' ); ?></h1><?php endif; ?>
-
-	<?php if ( have_posts() ) : ?>
-		<div class="blr-posts">
-			<?php
-			while ( have_posts() ) :
-				the_post();
-				get_template_part( 'template-parts/card' );
-			endwhile;
-			?>
-		</div>
-		<?php blr_pagination(); ?>
-	<?php else : ?>
-		<p class="blr-empty"><?php esc_html_e( 'لا توجد نتائج.', 'blr-shop-pro' ); ?></p>
-		<?php get_search_form(); ?>
-	<?php endif; ?>
-</main>
-<?php
-get_footer();
+<div class="blr-section">
+	<div class="blr-container">
+		<header class="blr-sec-head">
+			<?php the_archive_title( '<h1>', '</h1>' ); the_archive_description( '<p>', '</p>' ); ?>
+		</header>
+		<?php if ( have_posts() ) : ?>
+			<div class="blr-grid blr-grid--3">
+				<?php while ( have_posts() ) : the_post(); baderlr_post_card(); endwhile; ?>
+			</div>
+			<?php baderlr_pagination(); ?>
+		<?php else : ?>
+			<p style="text-align:center"><?php esc_html_e( 'لا توجد عناصر.', 'blr-shop-pro' ); ?></p>
+		<?php endif; ?>
+	</div>
+</div>
+<?php get_footer();

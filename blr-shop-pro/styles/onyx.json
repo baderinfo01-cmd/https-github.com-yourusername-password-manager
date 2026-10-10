@@ -1,0 +1,26 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 2,
+  "title": "Onyx — premium dark & gold",
+  "settings": {
+    "color": {
+      "palette": [
+        { "slug": "accent", "color": "#E8B457", "name": "Gold" },
+        { "slug": "accent-2", "color": "#F4D08A", "name": "Gold light" },
+        { "slug": "accent-dark", "color": "#C8922E", "name": "Gold dark" },
+        { "slug": "ink", "color": "#F4EFE6", "name": "Ink" },
+        { "slug": "body", "color": "#CFC6B5", "name": "Body" },
+        { "slug": "muted", "color": "#9A917E", "name": "Muted" },
+        { "slug": "bg", "color": "#0C0B09", "name": "Background" },
+        { "slug": "bg-2", "color": "#131210", "name": "Background soft" },
+        { "slug": "soft", "color": "#1B1915", "name": "Soft" },
+        { "slug": "line", "color": "#2A271F", "name": "Line" },
+        { "slug": "white", "color": "#16140F", "name": "Card" }
+      ],
+      "gradients": [
+        { "slug": "brand", "gradient": "linear-gradient(135deg,#F4D08A 0%,#E8B457 55%,#C8922E 100%)", "name": "Gold" }
+      ]
+    }
+  },
+  "styles": { "elements": { "button": { "color": { "background": "var(--wp--preset--color--accent)", "text": "#1A1206" } } } }
+}

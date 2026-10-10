@@ -1,0 +1,37 @@
+{
+    "slug": "clinic",
+    "name": "عيادة / مركز صحي",
+    "emoji": "🩺",
+    "accent": "#1386dc",
+    "variant": "aurora",
+    "desc": "موقع طبي: رئيسية، التخصّصات، الأطباء، حجز وتواصل.",
+    "front": "home",
+    "menu": [
+        "home",
+        "services",
+        "team",
+        "contact"
+    ],
+    "pages": [
+        {
+            "slug": "home",
+            "title": "الرئيسية",
+            "content": "<!-- wp:cover {\"minHeight\":480,\"gradient\":\"brand-soft\",\"align\":\"full\"} -->\n<div class=\"wp-block-cover alignfull has-brand-soft-gradient-background has-background-gradient\" style=\"min-height:480px\"><span aria-hidden=\"true\" class=\"wp-block-cover__background has-background-dim-0 has-background-dim\"></span><div class=\"wp-block-cover__inner-container\"><!-- wp:paragraph {\"align\":\"center\",\"textColor\":\"accent\"} --><p class=\"has-text-align-center has-accent-color has-text-color\">🩺 رعاية تثق بها</p><!-- /wp:paragraph -->\n<!-- wp:heading {\"textAlign\":\"center\",\"level\":1,\"fontSize\":\"xx-large\"} --><h1 class=\"wp-block-heading has-text-align-center has-xx-large-font-size\">صحتك تبدأ بموعد</h1><!-- /wp:heading -->\n<!-- wp:paragraph {\"align\":\"center\",\"textColor\":\"muted\",\"fontSize\":\"medium\"} --><p class=\"has-text-align-center has-muted-color has-text-color has-medium-font-size\">نخبة من الأطباء وأحدث التجهيزات في بيئة مريحة وآمنة.</p><!-- /wp:paragraph -->\n<!-- wp:buttons {\"layout\":{\"type\":\"flex\",\"justifyContent\":\"center\"}} --><div class=\"wp-block-buttons\"><!-- wp:button --><div class=\"wp-block-button\"><a class=\"wp-block-button__link wp-element-button\">احجز موعداً</a></div><!-- /wp:button --></div><!-- /wp:buttons --></div></div>\n<!-- /wp:cover --><!-- wp:heading {\"textAlign\":\"center\"} --><h2 class=\"wp-block-heading has-text-align-center\">تخصّصاتنا</h2><!-- /wp:heading --><!-- wp:columns {\"align\":\"wide\"} --><div class=\"wp-block-columns alignwide\"><!-- wp:column --><div class=\"wp-block-column\"><!-- wp:paragraph {\"fontSize\":\"x-large\"} --><p class=\"has-x-large-font-size\">🦷</p><!-- /wp:paragraph --><!-- wp:heading {\"level\":3} --><h3 class=\"wp-block-heading\">الأسنان</h3><!-- /wp:heading --><!-- wp:paragraph {\"textColor\":\"muted\"} --><p class=\"has-muted-color has-text-color\">علاج وتجميل بأحدث التقنيات.</p><!-- /wp:paragraph --></div><!-- /wp:column --><!-- wp:column --><div class=\"wp-block-column\"><!-- wp:paragraph {\"fontSize\":\"x-large\"} --><p class=\"has-x-large-font-size\">❤️</p><!-- /wp:paragraph --><!-- wp:heading {\"level\":3} --><h3 class=\"wp-block-heading\">القلب</h3><!-- /wp:heading --><!-- wp:paragraph {\"textColor\":\"muted\"} --><p class=\"has-muted-color has-text-color\">تشخيص ومتابعة دقيقة.</p><!-- /wp:paragraph --></div><!-- /wp:column --><!-- wp:column --><div class=\"wp-block-column\"><!-- wp:paragraph {\"fontSize\":\"x-large\"} --><p class=\"has-x-large-font-size\">👶</p><!-- /wp:paragraph --><!-- wp:heading {\"level\":3} --><h3 class=\"wp-block-heading\">الأطفال</h3><!-- /wp:heading --><!-- wp:paragraph {\"textColor\":\"muted\"} --><p class=\"has-muted-color has-text-color\">رعاية متكاملة لصغارك.</p><!-- /wp:paragraph --></div><!-- /wp:column --></div><!-- /wp:columns --><!-- wp:group {\"align\":\"wide\",\"style\":{\"spacing\":{\"padding\":{\"top\":\"56px\",\"bottom\":\"56px\",\"left\":\"36px\",\"right\":\"36px\"}},\"border\":{\"radius\":\"28px\"}},\"gradient\":\"brand\",\"layout\":{\"type\":\"constrained\"}} -->\n<div class=\"wp-block-group alignwide has-brand-gradient-background has-background\" style=\"border-radius:28px;padding:56px 36px\"><!-- wp:heading {\"textAlign\":\"center\",\"textColor\":\"white\"} --><h2 class=\"wp-block-heading has-text-align-center has-white-color has-text-color\">احجز موعدك الآن</h2><!-- /wp:heading -->\n<!-- wp:paragraph {\"align\":\"center\",\"textColor\":\"white\"} --><p class=\"has-text-align-center has-white-color has-text-color\">لا تنتظر — صحتك أولويتنا.</p><!-- /wp:paragraph -->\n<!-- wp:buttons {\"layout\":{\"type\":\"flex\",\"justifyContent\":\"center\"}} --><div class=\"wp-block-buttons\"><!-- wp:button {\"backgroundColor\":\"white\",\"textColor\":\"accent\"} --><div class=\"wp-block-button\"><a class=\"wp-block-button__link has-accent-color has-white-background-color has-text-color has-background wp-element-button\">احجز موعداً</a></div><!-- /wp:button --></div><!-- /wp:buttons --></div>\n<!-- /wp:group -->"
+        },
+        {
+            "slug": "services",
+            "title": "التخصّصات",
+            "content": "<!-- wp:heading {\"textAlign\":\"center\"} --><h2 class=\"wp-block-heading has-text-align-center\">خدماتنا الطبية</h2><!-- /wp:heading --><!-- wp:columns {\"align\":\"wide\"} --><div class=\"wp-block-columns alignwide\"><!-- wp:column --><div class=\"wp-block-column\"><!-- wp:paragraph {\"fontSize\":\"x-large\"} --><p class=\"has-x-large-font-size\">🔬</p><!-- /wp:paragraph --><!-- wp:heading {\"level\":3} --><h3 class=\"wp-block-heading\">المخبر</h3><!-- /wp:heading --><!-- wp:paragraph {\"textColor\":\"muted\"} --><p class=\"has-muted-color has-text-color\">تحاليل سريعة ودقيقة.</p><!-- /wp:paragraph --></div><!-- /wp:column --><!-- wp:column --><div class=\"wp-block-column\"><!-- wp:paragraph {\"fontSize\":\"x-large\"} --><p class=\"has-x-large-font-size\">🩻</p><!-- /wp:paragraph --><!-- wp:heading {\"level\":3} --><h3 class=\"wp-block-heading\">الأشعة</h3><!-- /wp:heading --><!-- wp:paragraph {\"textColor\":\"muted\"} --><p class=\"has-muted-color has-text-color\">تصوير متطوّر.</p><!-- /wp:paragraph --></div><!-- /wp:column --><!-- wp:column --><div class=\"wp-block-column\"><!-- wp:paragraph {\"fontSize\":\"x-large\"} --><p class=\"has-x-large-font-size\">💊</p><!-- /wp:paragraph --><!-- wp:heading {\"level\":3} --><h3 class=\"wp-block-heading\">الصيدلية</h3><!-- /wp:heading --><!-- wp:paragraph {\"textColor\":\"muted\"} --><p class=\"has-muted-color has-text-color\">أدوية متوفّرة.</p><!-- /wp:paragraph --></div><!-- /wp:column --></div><!-- /wp:columns -->"
+        },
+        {
+            "slug": "team",
+            "title": "فريقنا الطبي",
+            "content": "<!-- wp:paragraph --><p>يضمّ مركزنا نخبة من الأطباء المختصين ذوي الخبرة الطويلة.</p><!-- /wp:paragraph -->"
+        },
+        {
+            "slug": "contact",
+            "title": "حجز وتواصل",
+            "content": "<!-- wp:paragraph --><p>احجز موعدك هاتفياً أو عبر النموذج، وسيتواصل معك فريقنا للتأكيد.</p><!-- /wp:paragraph -->"
+        }
+    ]
+}

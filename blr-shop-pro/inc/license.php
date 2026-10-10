@@ -1,159 +1,250 @@
 <?php
 /**
- * License client + update checker.
+ * عميل الترخيص — متوافق مع سيرفر BaderThemesLicense الجديد (api.php + توكِن موقّع).
  *
- * يتواصل مع إضافة BLR License Server (المرفقة في plugins/blr-license-server).
+ * التفعيل يُرسل: action=activate, code, domain, instance, version, product
+ * الرد: { success, status, token }  — التوكِن = PREFIX-<b64url(json)>.<b64url(sig)>
+ * عدم التفعيل لا يُعطّل الموقع، لكنه يُظهر تنبيهاً ويعطّل الميزات المدفوعة (استيراد المواقع).
  *
- * @package BLR_Shop_Pro
+ * @package blr-shop-pro
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-function blr_license_server() {
-	$url = blr_opt( 'license_server', defined( 'BLR_LICENSE_SERVER' ) ? BLR_LICENSE_SERVER : 'https://your-domain.com/wp-json/blr-license/v1' );
-	return untrailingslashit( apply_filters( 'blr_license_server', $url ) );
+define( 'BADERLR_LICENSE_GRACE', 45 * DAY_IN_SECONDS );
+
+function baderlr_license_domain() {
+	$host = strtolower( (string) wp_parse_url( home_url(), PHP_URL_HOST ) );
+	return preg_replace( '/^www\./', '', $host );
 }
 
-function blr_license_data() {
-	$d = get_option( 'blr_license', array() );
-	return wp_parse_args(
-		is_array( $d ) ? $d : array(),
-		array( 'key' => '', 'status' => 'inactive', 'expires' => '', 'plan' => '', 'checked' => 0 )
-	);
-}
-
-function blr_license_status_label( $s ) {
-	$map = array(
-		'active'   => __( 'مفعّل', 'blr-shop-pro' ),
-		'inactive' => __( 'غير مفعّل', 'blr-shop-pro' ),
-		'expired'  => __( 'منتهي', 'blr-shop-pro' ),
-		'revoked'  => __( 'ملغى', 'blr-shop-pro' ),
-		'invalid'  => __( 'غير صالح', 'blr-shop-pro' ),
-	);
-	return isset( $map[ $s ] ) ? $map[ $s ] : $s;
-}
-
-function blr_is_licensed() {
-	if ( defined( 'BLR_DEV_LICENSE' ) && BLR_DEV_LICENSE ) {
-		return true; // لبيئات التطوير فقط.
+function baderlr_license_instance() {
+	$i = get_option( 'baderlr_instance', '' );
+	if ( ! $i ) {
+		$i = substr( hash( 'sha256', home_url() . '|' . wp_generate_password( 20, false ) ), 0, 32 );
+		update_option( 'baderlr_instance', $i );
 	}
-	$d = blr_license_data();
-	return 'active' === $d['status'];
+	return $i;
+}
+
+function baderlr_license_get() {
+	$d = get_option( 'baderlr_license', array() );
+	return is_array( $d ) ? $d : array();
+}
+function baderlr_license_save( $d ) {
+	update_option( 'baderlr_license', $d );
 }
 
 /**
- * Call the license server.
- *
- * @return array|WP_Error
+ * التحقّق من التوكِن الموقّع (Ed25519) وإرجاع الحمولة، أو false.
  */
-function blr_license_request( $action, $key ) {
-	$res = wp_remote_post(
-		blr_license_server() . '/' . $action,
-		array(
-			'timeout' => 20,
-			'body'    => array(
-				'key'     => $key,
-				'domain'  => wp_parse_url( home_url(), PHP_URL_HOST ),
-				'product' => 'blr-shop-pro',
-				'version' => BLR_VERSION,
-			),
-		)
-	);
+function baderlr_verify_token( $token ) {
+	$token = trim( preg_replace( '/\s+/', '', (string) $token ) );
+	// إزالة البادئة (مثل BT-) قبل أول شرطة.
+	if ( preg_match( '/^[A-Za-z0-9]{2,12}-/', $token ) && false !== strpos( $token, '.' ) ) {
+		$token = substr( $token, strpos( $token, '-' ) + 1 );
+	}
+	$parts = explode( '.', $token );
+	if ( 2 !== count( $parts ) || ! function_exists( 'sodium_crypto_sign_verify_detached' ) ) {
+		return false;
+	}
+	$dec = function ( $d ) {
+		$d   = strtr( $d, '-_', '+/' );
+		$pad = strlen( $d ) % 4;
+		return base64_decode( $d . ( $pad ? str_repeat( '=', 4 - $pad ) : '' ), true );
+	};
+	$msg = $dec( $parts[0] );
+	$sig = $dec( $parts[1] );
+	$pub = base64_decode( BADERLR_LICENSE_PUBKEY, true );
+	if ( false === $msg || false === $sig || false === $pub || 32 !== strlen( $pub ) || 64 !== strlen( $sig ) ) {
+		return false;
+	}
+	if ( ! sodium_crypto_sign_verify_detached( $sig, $msg, $pub ) ) {
+		return false;
+	}
+	$payload = json_decode( $msg, true );
+	return is_array( $payload ) ? $payload : false;
+}
+
+/**
+ * طلب إلى api.php بالسيرفر.
+ */
+function baderlr_license_api( $action, $args = array() ) {
+	$url = trailingslashit( BADERLR_LICENSE_SERVER ) . 'api.php';
+	$res = wp_remote_post( $url, array(
+		'timeout' => 15,
+		'body'    => array_merge( array(
+			'action'   => $action,
+			'domain'   => baderlr_license_domain(),
+			'instance' => baderlr_license_instance(),
+			'version'  => BADERLR_VERSION,
+			'product'  => BADERLR_PRODUCT,
+		), $args ),
+	) );
 	if ( is_wp_error( $res ) ) {
 		return $res;
 	}
 	$body = json_decode( wp_remote_retrieve_body( $res ), true );
-	if ( ! is_array( $body ) ) {
-		return new WP_Error( 'blr_bad_response', __( 'رد غير صالح من خادم الترخيص.', 'blr-shop-pro' ) );
-	}
-	return $body;
+	return is_array( $body ) ? $body : new WP_Error( 'baderlr_resp', __( 'ردّ غير صالح من السيرفر.', 'blr-shop-pro' ) );
 }
 
-add_action( 'wp_ajax_blr_license', 'blr_ajax_license' );
-function blr_ajax_license() {
-	check_ajax_referer( 'blr_admin', 'nonce' );
-	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_send_json_error( array( 'message' => __( 'غير مسموح.', 'blr-shop-pro' ) ), 403 );
+function baderlr_license_activate( $key ) {
+	$key  = trim( $key );
+	$resp = baderlr_license_api( 'activate', array( 'code' => $key ) );
+	if ( is_wp_error( $resp ) ) {
+		return $resp;
 	}
-	$do  = isset( $_POST['do'] ) && 'deactivate' === $_POST['do'] ? 'deactivate' : 'activate';
-	$key = isset( $_POST['key'] ) ? strtoupper( preg_replace( '/[^A-Za-z0-9\-]/', '', wp_unslash( $_POST['key'] ) ) ) : '';
-	if ( 'activate' === $do && '' === $key ) {
-		wp_send_json_error( array( 'message' => __( 'أدخل مفتاح الترخيص.', 'blr-shop-pro' ) ) );
+	if ( empty( $resp['success'] ) ) {
+		$code = isset( $resp['code'] ) ? $resp['code'] : 'invalid';
+		return new WP_Error( 'baderlr_fail', baderlr_status_message( $code ) );
 	}
-	if ( 'deactivate' === $do ) {
-		$key = blr_license_data()['key'];
+	$payload = isset( $resp['token'] ) ? baderlr_verify_token( $resp['token'] ) : false;
+	if ( false === $payload ) {
+		return new WP_Error( 'baderlr_sig', __( 'تعذّر التحقّق من توقيع السيرفر. تأكّد أن المفتاح العام في القالب يطابق لوحة السيرفر.', 'blr-shop-pro' ) );
 	}
-	$r = blr_license_request( $do, $key );
-	if ( is_wp_error( $r ) ) {
-		wp_send_json_error( array( 'message' => $r->get_error_message() ) );
+	if ( empty( $payload['domain'] ) || $payload['domain'] !== baderlr_license_domain() ) {
+		return new WP_Error( 'baderlr_domain', __( 'الدومين في الترخيص لا يطابق هذا الموقع.', 'blr-shop-pro' ) );
 	}
-	if ( empty( $r['success'] ) ) {
-		wp_send_json_error( array( 'message' => isset( $r['message'] ) ? sanitize_text_field( $r['message'] ) : __( 'فشل التفعيل.', 'blr-shop-pro' ) ) );
-	}
-	if ( 'deactivate' === $do ) {
-		delete_option( 'blr_license' );
-		wp_send_json_success( array( 'message' => __( 'تم إلغاء التفعيل.', 'blr-shop-pro' ), 'status' => 'inactive', 'label' => blr_license_status_label( 'inactive' ) ) );
-	}
-	update_option(
-		'blr_license',
-		array(
-			'key'     => $key,
-			'status'  => 'active',
-			'expires' => isset( $r['expires'] ) ? sanitize_text_field( $r['expires'] ) : '',
-			'plan'    => isset( $r['plan'] ) ? sanitize_text_field( $r['plan'] ) : '',
-			'checked' => time(),
-		),
-		false
-	);
-	wp_send_json_success( array( 'message' => __( 'تم تفعيل الترخيص بنجاح.', 'blr-shop-pro' ), 'status' => 'active', 'label' => blr_license_status_label( 'active' ) ) );
+	baderlr_license_save( array(
+		'key'        => $key,
+		'lid'        => isset( $payload['lid'] ) ? $payload['lid'] : '',
+		'status'     => isset( $resp['status'] ) ? $resp['status'] : 'active',
+		'domain'     => $payload['domain'],
+		'edition'    => isset( $payload['edition'] ) ? $payload['edition'] : '',
+		'expires_at' => ! empty( $payload['exp'] ) ? (int) $payload['exp'] : 0,
+		'checked_at' => time(),
+	) );
+	return true;
 }
 
-/* فحص دوري أسبوعي لحالة الترخيص. */
-add_action( 'init', function () {
-	if ( ! wp_next_scheduled( 'blr_license_check' ) ) {
-		wp_schedule_event( time() + HOUR_IN_SECONDS, 'weekly_blr', 'blr_license_check' );
-	}
-} );
-add_filter( 'cron_schedules', function ( $s ) {
-	$s['weekly_blr'] = array( 'interval' => WEEK_IN_SECONDS, 'display' => 'Weekly' );
-	return $s;
-} );
-add_action( 'blr_license_check', function () {
-	$d = blr_license_data();
-	if ( '' === $d['key'] ) {
+function baderlr_license_validate() {
+	$lic = baderlr_license_get();
+	if ( empty( $lic['lid'] ) ) {
 		return;
 	}
-	$r = blr_license_request( 'validate', $d['key'] );
-	if ( is_wp_error( $r ) ) {
-		return; // لا نُسقط الترخيص بسبب خطأ شبكة.
+	$resp = baderlr_license_api( 'check', array( 'lid' => $lic['lid'] ) );
+	if ( is_wp_error( $resp ) || empty( $resp['success'] ) ) {
+		return;
 	}
-	$d['status']  = ! empty( $r['success'] ) ? 'active' : ( isset( $r['status'] ) ? sanitize_key( $r['status'] ) : 'invalid' );
-	$d['expires'] = isset( $r['expires'] ) ? sanitize_text_field( $r['expires'] ) : $d['expires'];
-	$d['checked'] = time();
-	update_option( 'blr_license', $d, false );
+	$lic['status']     = isset( $resp['status'] ) ? $resp['status'] : $lic['status'];
+	$lic['checked_at'] = time();
+	if ( isset( $resp['token'] ) ) {
+		$p = baderlr_verify_token( $resp['token'] );
+		if ( is_array( $p ) && ! empty( $p['exp'] ) ) {
+			$lic['expires_at'] = (int) $p['exp'];
+		}
+	}
+	baderlr_license_save( $lic );
+}
+add_action( 'baderlr_license_cron', 'baderlr_license_validate' );
+add_action( 'wp', function () {
+	if ( ! wp_next_scheduled( 'baderlr_license_cron' ) ) {
+		wp_schedule_event( time() + HOUR_IN_SECONDS, 'daily', 'baderlr_license_cron' );
+	}
 } );
 
-/* تحديثات القالب من خادم الترخيص. */
-add_filter( 'pre_set_site_transient_update_themes', 'blr_check_update' );
-function blr_check_update( $transient ) {
-	if ( empty( $transient->checked ) || ! blr_is_licensed() ) {
-		return $transient;
-	}
-	$cache = get_transient( 'blr_update_info' );
-	if ( false === $cache ) {
-		$r     = blr_license_request( 'update', blr_license_data()['key'] );
-		$cache = ( ! is_wp_error( $r ) && ! empty( $r['success'] ) ) ? $r : array();
-		set_transient( 'blr_update_info', $cache, 12 * HOUR_IN_SECONDS );
-	}
-	if ( ! empty( $cache['version'] ) && ! empty( $cache['package'] ) && version_compare( $cache['version'], BLR_VERSION, '>' ) ) {
-		$transient->response[ get_template() ] = array(
-			'theme'       => get_template(),
-			'new_version' => sanitize_text_field( $cache['version'] ),
-			'url'         => isset( $cache['url'] ) ? esc_url_raw( $cache['url'] ) : '',
-			'package'     => esc_url_raw( $cache['package'] ),
-		);
-	}
-	return $transient;
+function baderlr_license_deactivate() {
+	delete_option( 'baderlr_license' );
 }
+
+function baderlr_licensed() {
+	$lic = baderlr_license_get();
+	if ( empty( $lic['status'] ) || 'active' !== $lic['status'] ) {
+		return false;
+	}
+	if ( empty( $lic['domain'] ) || $lic['domain'] !== baderlr_license_domain() ) {
+		return false;
+	}
+	if ( ! empty( $lic['expires_at'] ) && time() > (int) $lic['expires_at'] ) {
+		return false;
+	}
+	return ( time() - (int) ( isset( $lic['checked_at'] ) ? $lic['checked_at'] : 0 ) ) <= BADERLR_LICENSE_GRACE;
+}
+
+function baderlr_status_message( $s ) {
+	$m = array(
+		'invalid_code'  => __( 'مفتاح الترخيص غير صحيح.', 'blr-shop-pro' ),
+		'revoked'       => __( 'الترخيص ملغى. تواصل مع البائع.', 'blr-shop-pro' ),
+		'expired'       => __( 'انتهت صلاحية الترخيص.', 'blr-shop-pro' ),
+		'already_used'  => __( 'المفتاح مستعمل على موقع آخر.', 'blr-shop-pro' ),
+		'wrong_domain'  => __( 'المفتاح مخصّص لدومين آخر.', 'blr-shop-pro' ),
+		'wrong_product' => __( 'هذا المفتاح لمنتج آخر.', 'blr-shop-pro' ),
+		'trial_used'    => __( 'النسخة التجريبية استُعملت سابقاً على هذا الموقع.', 'blr-shop-pro' ),
+		'rate_limited'  => __( 'محاولات كثيرة، حاول بعد قليل.', 'blr-shop-pro' ),
+	);
+	return isset( $m[ $s ] ) ? $m[ $s ] : __( 'تعذّر التفعيل.', 'blr-shop-pro' );
+}
+
+/* ---------- صفحة الترخيص في لوحة التحكم ---------- */
+function baderlr_license_menu() {
+	add_menu_page( __( 'ترخيص BLR Shop Pro', 'blr-shop-pro' ), __( 'ترخيص القالب', 'blr-shop-pro' ), 'manage_options', 'baderlr-license', 'baderlr_license_page', 'dashicons-shield', 59 );
+}
+add_action( 'admin_menu', 'baderlr_license_menu' );
+
+function baderlr_license_page() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+	$notice = '';
+	$type   = '';
+	if ( 'POST' === $_SERVER['REQUEST_METHOD'] && check_admin_referer( 'baderlr_license' ) ) {
+		if ( isset( $_POST['baderlr_activate'] ) ) {
+			$key = isset( $_POST['baderlr_key'] ) ? sanitize_text_field( wp_unslash( $_POST['baderlr_key'] ) ) : '';
+			$r   = baderlr_license_activate( $key );
+			if ( is_wp_error( $r ) ) {
+				$notice = $r->get_error_message();
+				$type   = 'error';
+			} else {
+				$notice = __( '✓ تم تفعيل القالب بنجاح.', 'blr-shop-pro' );
+				$type   = 'success';
+			}
+		} elseif ( isset( $_POST['baderlr_deactivate'] ) ) {
+			baderlr_license_deactivate();
+			$notice = __( 'تم إلغاء التفعيل محلياً على هذا الموقع.', 'blr-shop-pro' );
+			$type   = 'success';
+		}
+	}
+	$lic    = baderlr_license_get();
+	$active = baderlr_licensed();
+	?>
+	<div class="wrap" dir="rtl" style="max-width:720px">
+		<h1><?php esc_html_e( 'ترخيص قالب BLR Shop Pro', 'blr-shop-pro' ); ?></h1>
+		<?php if ( $notice ) : ?><div class="notice notice-<?php echo 'error' === $type ? 'error' : 'success'; ?>"><p><?php echo esc_html( $notice ); ?></p></div><?php endif; ?>
+		<div class="card" style="padding:20px;margin-top:14px;max-width:none">
+			<?php if ( $active ) : ?>
+				<p style="font-size:16px;color:#1a7f37"><strong>✓ <?php esc_html_e( 'القالب مُفعَّل.', 'blr-shop-pro' ); ?></strong></p>
+				<table class="widefat striped" style="max-width:560px">
+					<tr><td><?php esc_html_e( 'الدومين', 'blr-shop-pro' ); ?></td><td dir="ltr"><?php echo esc_html( $lic['domain'] ); ?></td></tr>
+					<tr><td><?php esc_html_e( 'رقم الترخيص', 'blr-shop-pro' ); ?></td><td dir="ltr"><?php echo esc_html( isset( $lic['lid'] ) ? $lic['lid'] : '—' ); ?></td></tr>
+					<tr><td><?php esc_html_e( 'المفتاح', 'blr-shop-pro' ); ?></td><td dir="ltr"><?php echo esc_html( $lic['key'] ); ?></td></tr>
+					<tr><td><?php esc_html_e( 'ينتهي', 'blr-shop-pro' ); ?></td><td><?php echo esc_html( ! empty( $lic['expires_at'] ) ? date_i18n( 'Y-m-d', (int) $lic['expires_at'] ) : __( 'مدى الحياة', 'blr-shop-pro' ) ); ?></td></tr>
+				</table>
+				<form method="post" style="margin-top:16px"><?php wp_nonce_field( 'baderlr_license' ); ?><button name="baderlr_deactivate" class="button"><?php esc_html_e( 'إلغاء التفعيل', 'blr-shop-pro' ); ?></button></form>
+			<?php else : ?>
+				<p><?php esc_html_e( 'أدخل مفتاح الترخيص لتفعيل كل الخصائص (استيراد المواقع الجاهزة وإزالة سطر الحقوق).', 'blr-shop-pro' ); ?></p>
+				<p><strong><?php esc_html_e( 'دومين هذا الموقع:', 'blr-shop-pro' ); ?></strong> <code dir="ltr"><?php echo esc_html( baderlr_license_domain() ); ?></code></p>
+				<form method="post"><?php wp_nonce_field( 'baderlr_license' ); ?>
+					<input type="text" name="baderlr_key" class="regular-text" placeholder="BT-XXXX-XXXX-XXXX" value="<?php echo esc_attr( isset( $lic['key'] ) ? $lic['key'] : '' ); ?>" style="direction:ltr;font-family:monospace" required>
+					<p><button name="baderlr_activate" class="button button-primary button-hero"><?php esc_html_e( 'تفعيل القالب', 'blr-shop-pro' ); ?></button></p>
+				</form>
+			<?php endif; ?>
+		</div>
+	</div>
+	<?php
+}
+
+function baderlr_license_admin_notice() {
+	if ( baderlr_licensed() || ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+	$s = get_current_screen();
+	if ( $s && 'toplevel_page_baderlr-license' === $s->id ) {
+		return;
+	}
+	echo '<div class="notice notice-warning"><p><strong>BLR Shop Pro:</strong> ';
+	echo esc_html__( 'القالب غير مُفعَّل — فعّل الترخيص لإتاحة استيراد المواقع الجاهزة وإزالة سطر الحقوق.', 'blr-shop-pro' );
+	echo ' <a href="' . esc_url( admin_url( 'admin.php?page=baderlr-license' ) ) . '">' . esc_html__( 'تفعيل الآن', 'blr-shop-pro' ) . '</a></p></div>';
+}
+add_action( 'admin_notices', 'baderlr_license_admin_notice' );

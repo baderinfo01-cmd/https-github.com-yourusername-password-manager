@@ -1,87 +1,109 @@
 <?php
 /**
- * Customizer.
+ * المخصّص (Customizer): الأنماط، الألوان، الشريط العلوي، التواصل، الرأس والتذييل.
  *
- * @package BLR_Shop_Pro
+ * @package blr-shop-pro
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-add_action( 'customize_register', 'blr_customize' );
-function blr_customize( $wp ) {
-	$wp->add_panel( 'blr', array( 'title' => __( 'BLR Shop Pro', 'blr-shop-pro' ), 'priority' => 30 ) );
+function baderlr_customize( $wp ) {
 
-	$sections = array(
-		'blr_style'  => __( 'الألوان والخطوط', 'blr-shop-pro' ),
-		'blr_header' => __( 'الهيدر وشريط الإعلان', 'blr-shop-pro' ),
-		'blr_home'   => __( 'الصفحة الرئيسية', 'blr-shop-pro' ),
-		'blr_shop'   => __( 'المتجر والمنتجات', 'blr-shop-pro' ),
-		'blr_footer' => __( 'التذييل والتواصل', 'blr-shop-pro' ),
-	);
-	foreach ( $sections as $id => $title ) {
-		$wp->add_section( $id, array( 'title' => $title, 'panel' => 'blr' ) );
+	/* ===== قسم: الهوية والنمط ===== */
+	$wp->add_section( 'baderlr_style', array(
+		'title'    => __( 'BLR Shop — النمط والألوان', 'blr-shop-pro' ),
+		'priority' => 25,
+	) );
+
+	$wp->add_setting( 'baderlr_variant', array( 'default' => 'aurora', 'sanitize_callback' => 'baderlr_sanitize_variant' ) );
+	$wp->add_control( 'baderlr_variant', array(
+		'label'   => __( 'نمط التصميم', 'blr-shop-pro' ),
+		'section' => 'baderlr_style',
+		'type'    => 'select',
+		'choices' => array(
+			'aurora'  => __( 'Aurora — أزرق فاتح (الافتراضي)', 'blr-shop-pro' ),
+			'onyx'    => __( 'Onyx — داكن فخم + ذهبي', 'blr-shop-pro' ),
+			'verdant' => __( 'Verdant — أخضر زمردي', 'blr-shop-pro' ),
+		),
+	) );
+
+	$wp->add_setting( 'baderlr_accent', array( 'default' => '', 'sanitize_callback' => 'sanitize_hex_color' ) );
+	$wp->add_control( new WP_Customize_Color_Control( $wp, 'baderlr_accent', array(
+		'label'       => __( 'اللون الأساسي (يتجاوز النمط)', 'blr-shop-pro' ),
+		'description' => __( 'اتركه فارغاً لاستعمال لون النمط.', 'blr-shop-pro' ),
+		'section'     => 'baderlr_style',
+	) ) );
+
+	$wp->add_setting( 'baderlr_accent2', array( 'default' => '', 'sanitize_callback' => 'sanitize_hex_color' ) );
+	$wp->add_control( new WP_Customize_Color_Control( $wp, 'baderlr_accent2', array(
+		'label'   => __( 'اللون الثانوي (التدرّج)', 'blr-shop-pro' ),
+		'section' => 'baderlr_style',
+	) ) );
+
+	$wp->add_setting( 'baderlr_dark_default', array( 'default' => false, 'sanitize_callback' => 'baderlr_sanitize_bool' ) );
+	$wp->add_control( 'baderlr_dark_default', array(
+		'label'   => __( 'تشغيل الوضع الليلي افتراضياً', 'blr-shop-pro' ),
+		'section' => 'baderlr_style',
+		'type'    => 'checkbox',
+	) );
+
+	$wp->add_setting( 'baderlr_dark_toggle', array( 'default' => true, 'sanitize_callback' => 'baderlr_sanitize_bool' ) );
+	$wp->add_control( 'baderlr_dark_toggle', array(
+		'label'   => __( 'إظهار زر تبديل الوضع الليلي للزوّار', 'blr-shop-pro' ),
+		'section' => 'baderlr_style',
+		'type'    => 'checkbox',
+	) );
+
+	/* ===== قسم: الشريط العلوي ===== */
+	$wp->add_section( 'baderlr_topbar', array( 'title' => __( 'BLR Shop — الشريط العلوي', 'blr-shop-pro' ), 'priority' => 26 ) );
+
+	$wp->add_setting( 'baderlr_topbar_on', array( 'default' => true, 'sanitize_callback' => 'baderlr_sanitize_bool' ) );
+	$wp->add_control( 'baderlr_topbar_on', array( 'label' => __( 'تفعيل الشريط العلوي', 'blr-shop-pro' ), 'section' => 'baderlr_topbar', 'type' => 'checkbox' ) );
+
+	$wp->add_setting( 'baderlr_topbar_text', array( 'default' => '', 'sanitize_callback' => 'sanitize_text_field' ) );
+	$wp->add_control( 'baderlr_topbar_text', array( 'label' => __( 'نص الشريط', 'blr-shop-pro' ), 'section' => 'baderlr_topbar', 'type' => 'text' ) );
+
+	$wp->add_setting( 'baderlr_phone', array( 'default' => '', 'sanitize_callback' => 'sanitize_text_field' ) );
+	$wp->add_control( 'baderlr_phone', array( 'label' => __( 'رقم الهاتف', 'blr-shop-pro' ), 'section' => 'baderlr_topbar', 'type' => 'text' ) );
+
+	$wp->add_setting( 'baderlr_email', array( 'default' => '', 'sanitize_callback' => 'sanitize_email' ) );
+	$wp->add_control( 'baderlr_email', array( 'label' => __( 'البريد الإلكتروني', 'blr-shop-pro' ), 'section' => 'baderlr_topbar', 'type' => 'email' ) );
+
+	foreach ( array( 'facebook', 'instagram', 'linkedin', 'whatsapp', 'youtube' ) as $net ) {
+		$wp->add_setting( 'baderlr_social_' . $net, array( 'default' => '', 'sanitize_callback' => 'esc_url_raw' ) );
+		$wp->add_control( 'baderlr_social_' . $net, array(
+			/* translators: %s: social network name */
+			'label'   => sprintf( __( 'رابط %s', 'blr-shop-pro' ), ucfirst( $net ) ),
+			'section' => 'baderlr_topbar',
+			'type'    => 'url',
+		) );
 	}
 
-	$add = function ( $id, $section, $label, $type, $default, $san, $choices = null ) use ( $wp ) {
-		$wp->add_setting( $id, array( 'default' => $default, 'sanitize_callback' => $san, 'transport' => 'refresh' ) );
-		$args = array( 'label' => $label, 'section' => $section, 'type' => $type );
-		if ( $choices ) {
-			$args['choices'] = $choices;
-		}
-		if ( 'color' === $type ) {
-			$wp->add_control( new WP_Customize_Color_Control( $wp, $id, array( 'label' => $label, 'section' => $section ) ) );
-		} else {
-			$wp->add_control( $id, $args );
-		}
-	};
-	$bool = function ( $v ) {
-		return (bool) $v;
-	};
+	/* ===== قسم: الرأس ===== */
+	$wp->add_section( 'baderlr_header', array( 'title' => __( 'BLR Shop — الرأس', 'blr-shop-pro' ), 'priority' => 27 ) );
 
-	// Style.
-	$add( 'blr_primary', 'blr_style', __( 'اللون الأساسي', 'blr-shop-pro' ), 'color', '#4f46e5', 'sanitize_hex_color' );
-	$add( 'blr_accent', 'blr_style', __( 'لون التمييز (العروض)', 'blr-shop-pro' ), 'color', '#f59e0b', 'sanitize_hex_color' );
-	$add( 'blr_radius', 'blr_style', __( 'استدارة الزوايا (px)', 'blr-shop-pro' ), 'number', 14, 'absint' );
-	$add( 'blr_font', 'blr_style', __( 'الخط', 'blr-shop-pro' ), 'select', 'system', 'sanitize_key', array( 'system' => __( 'خط النظام (الأسرع)', 'blr-shop-pro' ), 'tajawal' => 'Tajawal (Google Fonts)' ) );
-	$add( 'blr_dark_default', 'blr_style', __( 'الوضع الافتراضي', 'blr-shop-pro' ), 'select', 'auto', 'sanitize_key', array( 'auto' => __( 'تلقائي حسب الجهاز', 'blr-shop-pro' ), 'light' => __( 'نهاري', 'blr-shop-pro' ), 'dark' => __( 'ليلي', 'blr-shop-pro' ) ) );
+	$wp->add_setting( 'baderlr_cta_text', array( 'default' => __( 'تواصل معنا', 'blr-shop-pro' ), 'sanitize_callback' => 'sanitize_text_field' ) );
+	$wp->add_control( 'baderlr_cta_text', array( 'label' => __( 'نص زر الرأس', 'blr-shop-pro' ), 'section' => 'baderlr_header', 'type' => 'text' ) );
 
-	// Header.
-	$add( 'blr_header_style', 'blr_header', __( 'شكل الهيدر', 'blr-shop-pro' ), 'select', 'classic', 'sanitize_key', array( 'classic' => __( 'كلاسيكي', 'blr-shop-pro' ), 'centered' => __( 'شعار في المنتصف', 'blr-shop-pro' ) ) );
-	$add( 'blr_sticky_header', 'blr_header', __( 'تثبيت الهيدر عند التمرير', 'blr-shop-pro' ), 'checkbox', true, $bool );
-	$add( 'blr_announce_text', 'blr_header', __( 'نص شريط الإعلان', 'blr-shop-pro' ), 'text', '🔥 خصم 20% على جميع الاشتراكات — استخدم الكود BLR20', 'sanitize_text_field' );
-	$add( 'blr_announce_link', 'blr_header', __( 'رابط الشريط', 'blr-shop-pro' ), 'url', '', 'esc_url_raw' );
+	$wp->add_setting( 'baderlr_cta_url', array( 'default' => '', 'sanitize_callback' => 'esc_url_raw' ) );
+	$wp->add_control( 'baderlr_cta_url', array( 'label' => __( 'رابط زر الرأس', 'blr-shop-pro' ), 'section' => 'baderlr_header', 'type' => 'url' ) );
 
-	// Home.
-	$home = array(
-		'blr_show_slider'    => __( 'عرض السلايدر (إضافة BLR Slider Pro)', 'blr-shop-pro' ),
-		'blr_show_trust'     => __( 'شريط الثقة', 'blr-shop-pro' ),
-		'blr_show_cats'      => __( 'تصنيفات المنتجات', 'blr-shop-pro' ),
-		'blr_show_types'     => __( 'تبويبات (رقمي / مادي / اشتراكات)', 'blr-shop-pro' ),
-		'blr_show_deals'     => __( 'عروض مع عدّاد تنازلي', 'blr-shop-pro' ),
-		'blr_show_best'      => __( 'الأكثر مبيعاً', 'blr-shop-pro' ),
-		'blr_show_posts'     => __( 'أحدث المقالات', 'blr-shop-pro' ),
-		'blr_show_newsletter' => __( 'اشتراك النشرة البريدية', 'blr-shop-pro' ),
-	);
-	foreach ( $home as $id => $label ) {
-		$add( $id, 'blr_home', $label, 'checkbox', true, $bool );
-	}
-	$add( 'blr_slider_id', 'blr_home', __( 'رقم السلايدر (ID) — اتركه فارغاً لأول سلايدر', 'blr-shop-pro' ), 'number', 0, 'absint' );
-	$add( 'blr_hero_title', 'blr_home', __( 'عنوان البانر الاحتياطي', 'blr-shop-pro' ), 'text', 'متجرك الرقمي والمادي في مكان واحد', 'sanitize_text_field' );
-	$add( 'blr_hero_text', 'blr_home', __( 'نص البانر الاحتياطي', 'blr-shop-pro' ), 'textarea', 'منتجات رقمية بتسليم فوري، منتجات مادية بشحن سريع، واشتراكات مرنة.', 'sanitize_textarea_field' );
+	/* ===== قسم: التذييل ===== */
+	$wp->add_section( 'baderlr_footer', array( 'title' => __( 'BLR Shop — التذييل', 'blr-shop-pro' ), 'priority' => 28 ) );
 
-	// Shop.
-	$add( 'blr_shop_cols', 'blr_shop', __( 'أعمدة المنتجات (2–5)', 'blr-shop-pro' ), 'number', 4, 'absint' );
-	$add( 'blr_quickview', 'blr_shop', __( 'المعاينة السريعة', 'blr-shop-pro' ), 'checkbox', true, $bool );
-	$add( 'blr_wishlist', 'blr_shop', __( 'المفضلة والمقارنة', 'blr-shop-pro' ), 'checkbox', true, $bool );
-	$add( 'blr_sticky_atc', 'blr_shop', __( 'شريط الشراء الثابت في صفحة المنتج', 'blr-shop-pro' ), 'checkbox', true, $bool );
-	$add( 'blr_free_ship', 'blr_shop', __( 'حد الشحن المجاني (0 = تعطيل)', 'blr-shop-pro' ), 'number', 0, 'absint' );
+	$wp->add_setting( 'baderlr_footer_about', array( 'default' => '', 'sanitize_callback' => 'wp_kses_post' ) );
+	$wp->add_control( 'baderlr_footer_about', array( 'label' => __( 'نبذة التذييل', 'blr-shop-pro' ), 'section' => 'baderlr_footer', 'type' => 'textarea' ) );
 
-	// Footer.
-	$add( 'blr_whatsapp', 'blr_footer', __( 'رقم واتساب (بصيغة دولية بدون +)', 'blr-shop-pro' ), 'text', '', 'sanitize_text_field' );
-	$add( 'blr_footer_text', 'blr_footer', __( 'نص حقوق النشر', 'blr-shop-pro' ), 'text', '', 'sanitize_text_field' );
-	foreach ( array( 'x' => 'X / Twitter', 'instagram' => 'Instagram', 'youtube' => 'YouTube', 'tiktok' => 'TikTok', 'telegram' => 'Telegram' ) as $k => $l ) {
-		$add( 'blr_social_' . $k, 'blr_footer', $l, 'url', '', 'esc_url_raw' );
-	}
+	$wp->add_setting( 'baderlr_copyright', array( 'default' => '', 'sanitize_callback' => 'wp_kses_post' ) );
+	$wp->add_control( 'baderlr_copyright', array( 'label' => __( 'نص الحقوق', 'blr-shop-pro' ), 'section' => 'baderlr_footer', 'type' => 'text' ) );
+}
+add_action( 'customize_register', 'baderlr_customize' );
+
+function baderlr_sanitize_variant( $v ) {
+	return in_array( $v, array( 'aurora', 'onyx', 'verdant' ), true ) ? $v : 'aurora';
+}
+function baderlr_sanitize_bool( $v ) {
+	return (bool) $v;
 }

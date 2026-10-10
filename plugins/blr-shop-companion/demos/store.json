@@ -1,0 +1,49 @@
+{
+    "slug": "store",
+    "name": "متجر BLR Shop (رقمي · مادي · اشتراكات)",
+    "emoji": "🛍️",
+    "accent": "#0E9F6E",
+    "variant": "verdant",
+    "desc": "رئيسية متجر كاملة: منتجات رقمية ومادية واشتراكات، عروض، وأسئلة شائعة، وصفحة هبوط إعلانية. يتطلب ووكومرس.",
+    "front": "home",
+    "menu": [
+        "home",
+        "shop",
+        "plans",
+        "about",
+        "contact"
+    ],
+    "pages": [
+        {
+            "slug": "home",
+            "title": "الرئيسية",
+            "content": "<!-- wp:cover {\"minHeight\":480,\"gradient\":\"brand-soft\",\"align\":\"full\"} -->\n<div class=\"wp-block-cover alignfull has-brand-soft-gradient-background has-background-gradient\" style=\"min-height:480px\"><span aria-hidden=\"true\" class=\"wp-block-cover__background has-background-dim-0 has-background-dim\"></span><div class=\"wp-block-cover__inner-container\"><!-- wp:paragraph {\"align\":\"center\",\"textColor\":\"accent\"} --><p class=\"has-text-align-center has-accent-color has-text-color\">🛍️ تشكيلة جديدة</p><!-- /wp:paragraph -->\n<!-- wp:heading {\"textAlign\":\"center\",\"level\":1,\"fontSize\":\"xx-large\"} --><h1 class=\"wp-block-heading has-text-align-center has-xx-large-font-size\">تسوّق أحدث المنتجات</h1><!-- /wp:heading -->\n<!-- wp:paragraph {\"align\":\"center\",\"textColor\":\"muted\",\"fontSize\":\"medium\"} --><p class=\"has-text-align-center has-muted-color has-text-color has-medium-font-size\">جودة عالية وأسعار تنافسية وتوصيل سريع إلى باب منزلك.</p><!-- /wp:paragraph -->\n<!-- wp:buttons {\"layout\":{\"type\":\"flex\",\"justifyContent\":\"center\"}} --><div class=\"wp-block-buttons\"><!-- wp:button --><div class=\"wp-block-button\"><a class=\"wp-block-button__link wp-element-button\">تسوّق الآن</a></div><!-- /wp:button --></div><!-- /wp:buttons --></div></div>\n<!-- /wp:cover --><!-- wp:heading {\"textAlign\":\"center\"} --><h2 class=\"wp-block-heading has-text-align-center\">لماذا نحن</h2><!-- /wp:heading --><!-- wp:columns {\"align\":\"wide\"} --><div class=\"wp-block-columns alignwide\"><!-- wp:column --><div class=\"wp-block-column\"><!-- wp:paragraph {\"fontSize\":\"x-large\"} --><p class=\"has-x-large-font-size\">🚚</p><!-- /wp:paragraph --><!-- wp:heading {\"level\":3} --><h3 class=\"wp-block-heading\">توصيل سريع</h3><!-- /wp:heading --><!-- wp:paragraph {\"textColor\":\"muted\"} --><p class=\"has-muted-color has-text-color\">لكل الولايات خلال أيام.</p><!-- /wp:paragraph --></div><!-- /wp:column --><!-- wp:column --><div class=\"wp-block-column\"><!-- wp:paragraph {\"fontSize\":\"x-large\"} --><p class=\"has-x-large-font-size\">🔄</p><!-- /wp:paragraph --><!-- wp:heading {\"level\":3} --><h3 class=\"wp-block-heading\">إرجاع سهل</h3><!-- /wp:heading --><!-- wp:paragraph {\"textColor\":\"muted\"} --><p class=\"has-muted-color has-text-color\">خلال 14 يوماً دون أسئلة.</p><!-- /wp:paragraph --></div><!-- /wp:column --><!-- wp:column --><div class=\"wp-block-column\"><!-- wp:paragraph {\"fontSize\":\"x-large\"} --><p class=\"has-x-large-font-size\">🔒</p><!-- /wp:paragraph --><!-- wp:heading {\"level\":3} --><h3 class=\"wp-block-heading\">دفع آمن</h3><!-- /wp:heading --><!-- wp:paragraph {\"textColor\":\"muted\"} --><p class=\"has-muted-color has-text-color\">عند الاستلام أو إلكترونياً.</p><!-- /wp:paragraph --></div><!-- /wp:column --></div><!-- /wp:columns --><!-- wp:group {\"align\":\"wide\",\"style\":{\"spacing\":{\"padding\":{\"top\":\"56px\",\"bottom\":\"56px\",\"left\":\"36px\",\"right\":\"36px\"}},\"border\":{\"radius\":\"28px\"}},\"gradient\":\"brand\",\"layout\":{\"type\":\"constrained\"}} -->\n<div class=\"wp-block-group alignwide has-brand-gradient-background has-background\" style=\"border-radius:28px;padding:56px 36px\"><!-- wp:heading {\"textAlign\":\"center\",\"textColor\":\"white\"} --><h2 class=\"wp-block-heading has-text-align-center has-white-color has-text-color\">عروض لا تفوّت</h2><!-- /wp:heading -->\n<!-- wp:paragraph {\"align\":\"center\",\"textColor\":\"white\"} --><p class=\"has-text-align-center has-white-color has-text-color\">اكتشف تخفيضات هذا الأسبوع قبل نفادها.</p><!-- /wp:paragraph -->\n<!-- wp:buttons {\"layout\":{\"type\":\"flex\",\"justifyContent\":\"center\"}} --><div class=\"wp-block-buttons\"><!-- wp:button {\"backgroundColor\":\"white\",\"textColor\":\"accent\"} --><div class=\"wp-block-button\"><a class=\"wp-block-button__link has-accent-color has-white-background-color has-text-color has-background wp-element-button\">اكتشف العروض</a></div><!-- /wp:button --></div><!-- /wp:buttons --></div>\n<!-- /wp:group -->\n<!-- wp:heading {\"textAlign\":\"center\"} --><h2 class=\"wp-block-heading has-text-align-center\">منتجات رقمية</h2><!-- /wp:heading --><!-- wp:shortcode -->[bshop_products type=\"digital\" limit=\"8\"]<!-- /wp:shortcode --><!-- wp:heading {\"textAlign\":\"center\"} --><h2 class=\"wp-block-heading has-text-align-center\">منتجات مادية</h2><!-- /wp:heading --><!-- wp:shortcode -->[bshop_products type=\"physical\" limit=\"8\"]<!-- /wp:shortcode --><!-- wp:heading {\"textAlign\":\"center\"} --><h2 class=\"wp-block-heading has-text-align-center\">الاشتراكات</h2><!-- /wp:heading --><!-- wp:shortcode -->[bshop_products type=\"subscription\" limit=\"4\"]<!-- /wp:shortcode -->"
+        },
+        {
+            "slug": "shop",
+            "title": "المتجر",
+            "content": "<!-- wp:shortcode -->[products limit=\"12\" columns=\"3\" paginate=\"true\"]<!-- /wp:shortcode -->"
+        },
+        {
+            "slug": "about",
+            "title": "من نحن",
+            "content": "<!-- wp:paragraph --><p>متجر يقدّم منتجات مختارة بعناية مع خدمة عملاء تهتم بأدق التفاصيل.</p><!-- /wp:paragraph -->"
+        },
+        {
+            "slug": "contact",
+            "title": "تواصل معنا",
+            "content": "<!-- wp:paragraph --><p>فريق خدمة العملاء جاهز للرد على استفساراتك.</p><!-- /wp:paragraph -->"
+        },
+        {
+            "slug": "plans",
+            "title": "الخطط والأسعار",
+            "content": "<!-- wp:heading {\"textAlign\":\"center\"} --><h2 class=\"wp-block-heading has-text-align-center\">اختر خطتك</h2><!-- /wp:heading --><!-- wp:shortcode -->[bshop_pricing category=\"plans\" limit=\"3\" highlight=\"2\"]<!-- /wp:shortcode --><!-- wp:paragraph {\"align\":\"center\"} --><p class=\"has-text-align-center\">أنشئ تصنيفاً باسم plans (الرابط اللطيف) وضع فيه منتجات الاشتراك.</p><!-- /wp:paragraph -->"
+        },
+        {
+            "slug": "landing",
+            "title": "صفحة هبوط إعلانية",
+            "template": "page-templates/tpl-ad-landing.php",
+            "content": ""
+        }
+    ]
+}

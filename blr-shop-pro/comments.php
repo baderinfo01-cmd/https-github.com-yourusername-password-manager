@@ -1,19 +1,19 @@
 <?php
 /**
- * Comments.
+ * التعليقات.
  *
- * @package BLR_Shop_Pro
+ * @package blr-shop-pro
  */
-
-if ( post_password_required() ) {
-	return;
-}
+if ( ! defined( 'ABSPATH' ) ) { exit; }
+if ( post_password_required() ) { return; }
 ?>
-<section id="comments" class="blr-comments">
+<div id="comments" class="blr-comments">
 	<?php if ( have_comments() ) : ?>
-		<h2><?php printf( esc_html( _n( 'تعليق واحد', '%d تعليقات', get_comments_number(), 'blr-shop-pro' ) ), (int) get_comments_number() ); ?></h2>
-		<ol class="blr-comment-list"><?php wp_list_comments( array( 'style' => 'ol', 'avatar_size' => 48 ) ); ?></ol>
+		<h3><?php printf( esc_html( _n( 'تعليق واحد', '%s تعليقات', get_comments_number(), 'blr-shop-pro' ) ), esc_html( number_format_i18n( get_comments_number() ) ) ); ?></h3>
+		<ol class="comment-list" style="list-style:none;padding:0">
+			<?php wp_list_comments( array( 'style' => 'ol', 'avatar_size' => 48 ) ); ?>
+		</ol>
 		<?php the_comments_pagination(); ?>
 	<?php endif; ?>
 	<?php comment_form(); ?>
-</section>
+</div>

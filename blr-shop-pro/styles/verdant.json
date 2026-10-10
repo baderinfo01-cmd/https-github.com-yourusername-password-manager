@@ -1,0 +1,25 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 2,
+  "title": "Verdant — emerald & teal",
+  "settings": {
+    "color": {
+      "palette": [
+        { "slug": "accent", "color": "#0E9F6E", "name": "Emerald" },
+        { "slug": "accent-2", "color": "#3DD9A0", "name": "Emerald light" },
+        { "slug": "accent-dark", "color": "#097A54", "name": "Emerald dark" },
+        { "slug": "ink", "color": "#07211A", "name": "Ink" },
+        { "slug": "body", "color": "#355046", "name": "Body" },
+        { "slug": "muted", "color": "#5E7A6E", "name": "Muted" },
+        { "slug": "bg", "color": "#FFFFFF", "name": "Background" },
+        { "slug": "bg-2", "color": "#ECFBF4", "name": "Background soft" },
+        { "slug": "soft", "color": "#DFF6EC", "name": "Soft" },
+        { "slug": "line", "color": "#D4EDE1", "name": "Line" },
+        { "slug": "white", "color": "#FFFFFF", "name": "White" }
+      ],
+      "gradients": [
+        { "slug": "brand", "gradient": "linear-gradient(135deg,#3DD9A0 0%,#0E9F6E 58%,#097A54 100%)", "name": "Emerald" }
+      ]
+    }
+  }
+}

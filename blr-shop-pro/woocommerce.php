@@ -1,10 +1,15 @@
 <?php
 /**
- * WooCommerce wrapper template.
+ * غلاف WooCommerce.
  *
- * @package BLR_Shop_Pro
+ * @package blr-shop-pro
  */
-
+if ( ! defined( 'ABSPATH' ) ) { exit; }
 get_header();
-woocommerce_content();
-get_footer();
+?>
+<div class="blr-section">
+	<div class="blr-container">
+		<?php woocommerce_content(); ?>
+	</div>
+</div>
+<?php get_footer();
