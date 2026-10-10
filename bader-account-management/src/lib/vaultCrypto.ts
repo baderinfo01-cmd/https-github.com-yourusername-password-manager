@@ -241,3 +241,31 @@ export const encryptedStorage = {
     wipeVaultData();
   },
 };
+
+/* ---------------- password-protected backups ---------------- */
+
+export async function encryptBackup(plain: string, password: string): Promise<string> {
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  const key = await deriveKey(password, salt, ITERATIONS);
+  const c = await encryptText(key, plain);
+  return JSON.stringify({ format: "bader-backup", v: 1, salt: b64(salt), iter: ITERATIONS, ...c });
+}
+
+export function isEncryptedBackup(text: string): boolean {
+  try {
+    return JSON.parse(text)?.format === "bader-backup";
+  } catch {
+    return false;
+  }
+}
+
+/** Returns the plain text, or null when the password is wrong / the file is damaged. */
+export async function decryptBackup(text: string, password: string): Promise<string | null> {
+  try {
+    const o = JSON.parse(text);
+    const key = await deriveKey(password, unb64(o.salt), o.iter);
+    return await decryptText(key, { iv: o.iv, ct: o.ct });
+  } catch {
+    return null;
+  }
+}

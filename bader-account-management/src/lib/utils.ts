@@ -5,9 +5,20 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export async function copyToClipboard(text: string): Promise<boolean> {
+let clipboardTimer: ReturnType<typeof setTimeout> | null = null;
+
+/** Copies text and wipes the clipboard after `clearAfterMs` (default 20 s) if it is still ours. */
+export async function copyToClipboard(text: string, clearAfterMs = 20_000): Promise<boolean> {
   try {
     await navigator.clipboard.writeText(text);
+    if (clipboardTimer) clearTimeout(clipboardTimer);
+    clipboardTimer = setTimeout(async () => {
+      try {
+        if ((await navigator.clipboard.readText()) === text) await navigator.clipboard.writeText("");
+      } catch {
+        /* clipboard may be unavailable when the window is not focused */
+      }
+    }, clearAfterMs);
     return true;
   } catch {
     return false;

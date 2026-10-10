@@ -1,5 +1,6 @@
 "use client";
 
+import ModeToggle from "@/components/ui/ModeToggle";
 import { useMemo, useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -273,6 +274,8 @@ export default function Header() {
               </div>
             )}
           </div>
+
+          <ModeToggle />
 
           {/* Theme Switcher */}
           <div className="relative">

@@ -4,6 +4,7 @@ import { useState, useEffect, type ReactNode } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import AppLayout from "@/components/layout/AppLayout";
+import { exportEncryptedBackup } from "@/lib/backup";
 import PasswordDialog from "@/components/ui/PasswordDialog";
 import { wipeVaultData } from "@/lib/vaultCrypto";
 import { useStore } from "@/store/useStore";
@@ -87,9 +88,9 @@ const resetFirstSetup = () => {
     setTimeout(() => setShowSavedMessage(false), 1500);
   };
 
-  const handleExport = () => {
+  const handleExport = async () => {
     const data = {
-      version: "2.0.0",
+      version: "3.0.0",
       exportDate: new Date().toISOString(),
       accounts,
       subscriptions,
@@ -98,18 +99,8 @@ const resetFirstSetup = () => {
       contacts,
       settings: { theme, backupFrequency, exportFormat },
     };
-
-    const content = JSON.stringify(data, null, 2);
-    const blob = new Blob([content], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `bader-export-${Date.now()}.json`;
-    a.click();
-
-    URL.revokeObjectURL(url);
-    showMessage();
+    // backups always leave the app encrypted
+    if (await exportEncryptedBackup(JSON.stringify(data), "bader-export")) showMessage();
   };
 
   const themes = [

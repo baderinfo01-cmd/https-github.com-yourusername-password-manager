@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { El_Messiri } from "next/font/google";
 import { routing } from "@/i18n/routing";
 import "../globals.css";
+import ThemeInit from "@/components/ui/ThemeInit";
 
 const elMessiri = El_Messiri({
   subsets: ["arabic", "latin"],
@@ -52,6 +53,7 @@ export default async function LocaleLayout({
         suppressHydrationWarning
       >
         <NextIntlClientProvider messages={messages} locale={locale}>
+          <ThemeInit />
           {children}
         </NextIntlClientProvider>
       </body>

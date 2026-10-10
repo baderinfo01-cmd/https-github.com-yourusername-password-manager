@@ -14,6 +14,7 @@ const SYSTEM = {
 };
 
 function registerAi(ipcMain) {
+  registerBreach(ipcMain);
   ipcMain.handle("bader-ai:ask", async (_event, payload) => {
     try {
       const { apiKey, question, summary, locale } = payload || {};
@@ -61,4 +62,23 @@ function registerAi(ipcMain) {
   });
 }
 
-module.exports = { registerAi };
+// Have-I-Been-Pwned "range" API: only the first 5 chars of a SHA-1 hash ever leave the device.
+function registerBreach(ipcMain) {
+  ipcMain.handle("bader-ai:breach-range", async (_event, prefix) => {
+    try {
+      if (typeof prefix !== "string" || !/^[0-9A-F]{5}$/.test(prefix)) {
+        return { ok: false, error: "invalid-prefix" };
+      }
+      const res = await fetch(`https://api.pwnedpasswords.com/range/${prefix}`, {
+        headers: { "Add-Padding": "true" },
+        signal: AbortSignal.timeout(15000),
+      });
+      if (!res.ok) return { ok: false, error: `HTTP ${res.status}` };
+      return { ok: true, text: await res.text() };
+    } catch (e) {
+      return { ok: false, error: e && e.message ? e.message : "network-error" };
+    }
+  });
+}
+
+module.exports = { registerAi, registerBreach };

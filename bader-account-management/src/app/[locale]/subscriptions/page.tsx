@@ -4,6 +4,7 @@ import { useState, useMemo, useEffect } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import AppLayout from "@/components/layout/AppLayout";
 import { useStore } from "@/store/useStore";
+import { exportEncryptedBackup, pickBackupFile } from "@/lib/backup";
 import { CATEGORIES, type Subscription } from "@/types";
 import {
   Plus,
@@ -155,42 +156,18 @@ export default function SubscriptionsPage() {
     .filter((s) => s.status === "active" || s.status === "expired")
     .reduce((sum, s) => sum + s.price, 0);
 
-  const handleExport = () => {
-    const data = exportAllData();
-    const blob = new Blob([data], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `bader-subscriptions-${Date.now()}.json`;
-    a.click();
-
-    URL.revokeObjectURL(url);
+  const handleExport = async () => {
+    await exportEncryptedBackup(exportAllData(), "bader-subscriptions");
   };
 
-  const handleImport = () => {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = ".json";
-
-    input.onchange = (e: any) => {
-      const file = e.target.files?.[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-
-      reader.onload = (event: any) => {
-        if (importAllData(event.target.result)) {
-          alert(t("alerts.importSuccess"));
-        } else {
-          alert(t("alerts.invalidFile"));
-        }
-      };
-
-      reader.readAsText(file);
-    };
-
-    input.click();
+  const handleImport = async () => {
+    const text = await pickBackupFile();
+    if (text === null) return;
+    if (importAllData(text)) {
+      alert(t("alerts.importSuccess"));
+    } else {
+      alert(t("alerts.invalidFile"));
+    }
   };
 
   return (

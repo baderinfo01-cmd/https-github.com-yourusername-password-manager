@@ -69,3 +69,11 @@ test("weak master passwords are refused; legacy data is migrated and wiped", asy
   assert.equal(data.state.masterPassword, undefined);
   assert.equal(data.state.accounts.length, 1);
 });
+
+test("encrypted backups: wrong password fails, right one restores, nothing readable in file", async () => {
+  const blob = await v.encryptBackup(JSON.stringify({ accounts: [{ password: "p@ss-visible?" }] }), "Backup2024x");
+  assert.ok(!blob.includes("p@ss-visible"));
+  assert.equal(v.isEncryptedBackup(blob), true);
+  assert.equal(await v.decryptBackup(blob, "wrong"), null);
+  assert.deepEqual(JSON.parse((await v.decryptBackup(blob, "Backup2024x"))!), { accounts: [{ password: "p@ss-visible?" }] });
+});

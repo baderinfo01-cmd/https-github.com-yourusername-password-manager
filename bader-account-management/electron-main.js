@@ -1,14 +1,13 @@
-const { app, ipcMain, BrowserWindow } = require("electron");
+const { app, ipcMain, BrowserWindow, powerMonitor, protocol } = require("electron");
 const path = require("path");
 const fs = require("fs");
-const http = require("http");
 
 const { guardApp } = require("./bader-license/guard");
 const { registerAi } = require("./electron-ai");
 
-let staticServer = null;
-
 const isDev = !app.isPackaged;
+// BADER_USE_BUILD=1 lets you test the built site (out/) without packaging
+const useBuild = app.isPackaged || process.env.BADER_USE_BUILD === "1";
 
 function getMimeType(filePath) {
   const ext = path.extname(filePath).toLowerCase();
@@ -18,6 +17,10 @@ function getMimeType(filePath) {
     ".js": "application/javascript; charset=utf-8",
     ".css": "text/css; charset=utf-8",
     ".json": "application/json; charset=utf-8",
+    // Next.js static-export navigation payloads: without this type Next falls back to a full page reload
+    ".txt": "text/x-component",
+    ".webp": "image/webp",
+    ".woff2": "font/woff2",
     ".png": "image/png",
     ".jpg": "image/jpeg",
     ".jpeg": "image/jpeg",
@@ -32,71 +35,50 @@ function getMimeType(filePath) {
   return types[ext] || "application/octet-stream";
 }
 
-function startStaticServer() {
-  return new Promise((resolve, reject) => {
-    const outDir = path.resolve(__dirname, "out");
+// The built site is served through a private "app://" scheme instead of a localhost web server.
+// 1) the origin is the SAME on every launch, so the encrypted vault in localStorage persists
+//    (a random localhost port would give a new, empty storage each time);
+// 2) no network port is opened, so nothing else on the machine can reach the app's files.
+const APP_ORIGIN = "app://bader";
+const OUT_DIR = path.resolve(__dirname, "out");
 
-    if (!fs.existsSync(outDir)) {
-      reject(
-        new Error(
-          "The out directory was not found. Run npm run build before starting Electron."
-        )
-      );
-      return;
-    }
+const CSP =
+  "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; object-src 'none'; frame-ancestors 'none'";
 
-    staticServer = http.createServer((req, res) => {
-      try {
-        const requestUrl = decodeURIComponent(req.url.split("?")[0]);
+protocol.registerSchemesAsPrivileged([
+  { scheme: "app", privileges: { standard: true, secure: true, supportFetchAPI: true } }
+]);
 
-        let filePath = path.resolve(outDir, "." + path.posix.normalize("/" + requestUrl));
+function registerAppProtocol() {
+  protocol.handle("app", (request) => {
+    try {
+      const url = new URL(request.url);
+      let rel = decodeURIComponent(url.pathname);
+      let filePath = path.resolve(OUT_DIR, "." + path.posix.normalize("/" + rel));
 
-        // never serve anything outside the build folder
-        if (filePath !== outDir && !filePath.startsWith(outDir + path.sep)) {
-          res.writeHead(403);
-          res.end("Forbidden");
-          return;
-        }
-
-        if (requestUrl === "/" || requestUrl === "") {
-          filePath = path.join(outDir, "ar", "index.html");
-        }
-
-        if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
-          filePath = path.join(filePath, "index.html");
-        }
-
-        if (!fs.existsSync(filePath)) {
-          const cleanUrl = requestUrl.replace(/^\/+/, "");
-          const possibleIndex = path.join(outDir, cleanUrl, "index.html");
-
-          if (fs.existsSync(possibleIndex)) {
-            filePath = possibleIndex;
-          } else {
-            filePath = path.join(outDir, "ar", "index.html");
-          }
-        }
-
-        const content = fs.readFileSync(filePath);
-        res.writeHead(200, {
+      // never serve anything outside the build folder
+      if (filePath !== OUT_DIR && !filePath.startsWith(OUT_DIR + path.sep)) {
+        return new Response("Forbidden", { status: 403 });
+      }
+      if (rel === "/" || rel === "") filePath = path.join(OUT_DIR, "ar", "index.html");
+      if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
+        filePath = path.join(filePath, "index.html");
+      }
+      if (!fs.existsSync(filePath)) {
+        const asHtml = path.join(OUT_DIR, rel.replace(/^\/+/, ""), "index.html");
+        filePath = fs.existsSync(asHtml) ? asHtml : path.join(OUT_DIR, "ar", "index.html");
+      }
+      return new Response(fs.readFileSync(filePath), {
+        status: 200,
+        headers: {
           "Content-Type": getMimeType(filePath),
           "X-Content-Type-Options": "nosniff",
-          "Content-Security-Policy":
-            "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; object-src 'none'; frame-ancestors 'none'"
-        });
-        res.end(content);
-      } catch (error) {
-        res.writeHead(500);
-        res.end("Internal server error");
-      }
-    });
-
-    staticServer.listen(0, "127.0.0.1", () => {
-      const address = staticServer.address();
-      resolve(`http://127.0.0.1:${address.port}`);
-    });
-
-    staticServer.on("error", reject);
+          "Content-Security-Policy": CSP
+        }
+      });
+    } catch (error) {
+      return new Response("Internal server error", { status: 500 });
+    }
   });
 }
 
@@ -118,39 +100,68 @@ async function createWindow() {
   // block pop-ups and navigation away from the app
   win.webContents.setWindowOpenHandler(() => ({ action: "deny" }));
   win.webContents.on("will-navigate", (event, url) => {
-    if (!/^http:\/\/(127\.0\.0\.1|localhost):\d+/.test(url)) event.preventDefault();
+    if (!url.startsWith(APP_ORIGIN + "/") && !/^http:\/\/localhost:3000\//.test(url)) event.preventDefault();
   });
 
-  if (isDev) {
+  // hide the window contents from screenshots / screen sharing in the packaged app
+  if (!isDev) win.setContentProtection(true);
+
+  const lockUi = () => {
+    if (!win.isDestroyed()) win.webContents.send("bader-app:lock");
+  };
+  win.on("minimize", lockUi);
+  powerMonitor.on("lock-screen", lockUi);
+  powerMonitor.on("suspend", lockUi);
+
+  if (!useBuild) {
     await win.loadURL("http://localhost:3000/ar");
     win.webContents.openDevTools();
   } else {
-    const serverUrl = await startStaticServer();
-    await win.loadURL(`${serverUrl}/ar/`);
+    // no developer tools in the shipped app
+    win.webContents.on("devtools-opened", () => win.webContents.closeDevTools());
+    win.webContents.on("before-input-event", (event, input) => {
+      const k = (input.key || "").toLowerCase();
+      if (k === "f12" || (input.control && input.shift && ["i", "j", "c"].includes(k))) {
+        event.preventDefault();
+      }
+    });
+    await win.loadURL(`${APP_ORIGIN}/ar/`);
   }
 }
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
+  registerAppProtocol();
   registerAi(ipcMain);
-  guardApp({
+  const license = await guardApp({
     ipcMain,
     BrowserWindow,
     createWindow
   });
+
+  // While the app runs, re-verify the license regularly. If it is revoked,
+  // expired or cannot be verified any more, restart into the activation window.
+  if (app.isPackaged && license) {
+    setInterval(async () => {
+      try {
+        const s = await license.status();
+        if (!s.valid) {
+          app.relaunch();
+          app.exit(0);
+        }
+      } catch (e) {
+        /* keep running; the next tick will retry */
+      }
+    }, 30 * 60 * 1000);
+  }
 });
+
+// a single running copy only
+if (!app.requestSingleInstanceLock()) {
+  app.quit();
+}
 
 app.on("window-all-closed", () => {
-  if (staticServer) {
-    staticServer.close();
-  }
-
   if (process.platform !== "darwin") {
     app.quit();
-  }
-});
-
-app.on("before-quit", () => {
-  if (staticServer) {
-    staticServer.close();
   }
 });
