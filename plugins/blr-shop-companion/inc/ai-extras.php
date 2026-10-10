@@ -169,7 +169,7 @@ function baderlr_draft_rest( WP_REST_Request $req ) {
 	// تحويل Markdown بسيط (## عنوان، - نقطة) إلى HTML آمن.
 	$html = '';
 	$list = false;
-	foreach ( preg_split( '/\R/', $text ) as $line ) {
+	foreach ( preg_split( '/\r\n|\r|\n/', $text ) as $line ) {
 		$line = trim( $line );
 		if ( preg_match( '/^[-*•]\s+(.+)$/u', $line, $m ) ) {
 			$html .= ( $list ? '' : '<ul>' ) . '<li>' . esc_html( $m[1] ) . '</li>';
