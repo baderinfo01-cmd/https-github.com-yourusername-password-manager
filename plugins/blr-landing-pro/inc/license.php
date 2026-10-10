@@ -12,13 +12,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 define( 'BLRLP_GRACE', 45 * DAY_IN_SECONDS );
 
-/** إعدادات السيرفر: الخيار المحفوظ يتجاوز الثوابت. */
+/** إعدادات السيرفر: ثوابت داخلية فقط (يمكن تعريفها في wp-config.php قبل تحميل الإضافة). */
 function blrlp_lic_cfg( $key ) {
-	$o = get_option( 'blrlp_license_cfg', array() );
-	$o = is_array( $o ) ? $o : array();
-	if ( ! empty( $o[ $key ] ) ) {
-		return $o[ $key ];
-	}
 	$map = array( 'server' => 'BLRLP_LICENSE_SERVER', 'pubkey' => 'BLRLP_LICENSE_PUBKEY', 'product' => 'BLRLP_PRODUCT' );
 	return defined( $map[ $key ] ) ? constant( $map[ $key ] ) : '';
 }
@@ -110,7 +105,7 @@ function blrlp_license_activate( $key ) {
 	$resp = blrlp_license_api( 'activate', array( 'code' => $key ) );
 	if ( is_wp_error( $resp ) ) {
 		/* translators: %s: error message */
-		return new WP_Error( 'blrlp_net', sprintf( __( 'تعذّر الاتصال بسيرفر الترخيص (%s). تحقّق من رابط السيرفر.', 'blr-landing-pro' ), $resp->get_error_message() ) );
+		return new WP_Error( 'blrlp_net', sprintf( __( 'تعذّر الاتصال بسيرفر الترخيص (%s). تحقّق من اتصال موقعك بالإنترنت وحاول لاحقاً.', 'blr-landing-pro' ), $resp->get_error_message() ) );
 	}
 	if ( empty( $resp['success'] ) ) {
 		return new WP_Error( 'blrlp_fail', blrlp_status_message( isset( $resp['code'] ) ? $resp['code'] : 'invalid' ) );
@@ -119,16 +114,30 @@ function blrlp_license_activate( $key ) {
 		return new WP_Error( 'blrlp_sodium', __( 'امتداد PHP Sodium غير مفعّل على الخادم.', 'blr-landing-pro' ) );
 	}
 	if ( ! blrlp_pubkey_ok() ) {
-		return new WP_Error( 'blrlp_pubkey', __( 'المفتاح العام غير مضبوط. الصقه في حقل «المفتاح العام» أدناه.', 'blr-landing-pro' ) );
+		return new WP_Error( 'blrlp_pubkey', __( 'تعذّر التحقق من الترخيص. تواصل مع الدعم الفني.', 'blr-landing-pro' ) );
 	}
 	$payload = isset( $resp['token'] ) ? blrlp_verify_token( $resp['token'] ) : false;
 	if ( false === $payload ) {
-		return new WP_Error( 'blrlp_sig', __( 'تعذّر التحقّق من توقيع السيرفر. تأكّد أن المفتاح العام يطابق لوحة السيرفر.', 'blr-landing-pro' ) );
+		return new WP_Error( 'blrlp_sig', __( 'تعذّر التحقّق من توقيع الترخيص. تواصل مع الدعم الفني.', 'blr-landing-pro' ) );
 	}
 	if ( empty( $payload['domain'] ) || $payload['domain'] !== blrlp_license_domain() ) {
 		return new WP_Error( 'blrlp_domain', __( 'الدومين في الترخيص لا يطابق هذا الموقع.', 'blr-landing-pro' ) );
 	}
+	$pick = function () use ( $resp, $payload ) {
+		foreach ( func_get_args() as $k ) {
+			foreach ( array( $resp, $payload ) as $src ) {
+				if ( is_array( $src ) && ! empty( $src[ $k ] ) && is_scalar( $src[ $k ] ) ) {
+					return sanitize_text_field( (string) $src[ $k ] );
+				}
+			}
+		}
+		return '';
+	};
 	update_option( 'blrlp_license', array(
+		'holder'       => $pick( 'name', 'customer', 'client', 'holder' ),
+		'company'      => $pick( 'company', 'org', 'organization', 'business' ),
+		'issued_at'    => (int) $pick( 'iat', 'issued', 'issued_at', 'start' ),
+		'activated_at' => time(),
 		'key'        => $key,
 		'lid'        => isset( $payload['lid'] ) ? $payload['lid'] : '',
 		'status'     => isset( $resp['status'] ) ? $resp['status'] : 'active',

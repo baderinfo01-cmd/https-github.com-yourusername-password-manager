@@ -27,12 +27,15 @@ define( 'BLRLP_FILE', __FILE__ );
 define( 'BLRLP_DIR', trailingslashit( plugin_dir_path( __FILE__ ) ) );
 define( 'BLRLP_URL', trailingslashit( plugin_dir_url( __FILE__ ) ) );
 
-/* إعدادات الترخيص الافتراضية — تُعدَّل من «BLR Landing ← الترخيص» دون لمس الكود. */
+/* إعدادات سيرفر الترخيص — داخلية، لا تظهر في لوحة التحكم. */
 if ( ! defined( 'BLRLP_LICENSE_SERVER' ) ) {
 	define( 'BLRLP_LICENSE_SERVER', 'https://baderinfo.com/themes-license/' );
 }
 if ( ! defined( 'BLRLP_LICENSE_PUBKEY' ) ) {
-	define( 'BLRLP_LICENSE_PUBKEY', '' );
+	define( 'BLRLP_LICENSE_PUBKEY', '8e6G9g431dSU5rcykYca6b+7AfZcFcDpCr/+hrkj61I=' );
+}
+if ( ! defined( 'BLRLP_BUY_URL' ) ) {
+	define( 'BLRLP_BUY_URL', 'https://baderinfo.com/blr-landing-pro' );
 }
 if ( ! defined( 'BLRLP_PRODUCT' ) ) {
 	define( 'BLRLP_PRODUCT', 'blr-landing-pro' );

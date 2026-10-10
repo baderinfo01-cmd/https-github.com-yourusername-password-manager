@@ -168,14 +168,7 @@ add_action( 'admin_post_blrlp_license_do', function () {
 	$do  = sanitize_key( $_POST['do'] ?? '' );
 	$msg = '';
 	$ok  = true;
-	if ( 'cfg' === $do ) {
-		update_option( 'blrlp_license_cfg', array(
-			'server'  => esc_url_raw( wp_unslash( $_POST['cfg_server'] ?? '' ) ),
-			'pubkey'  => preg_replace( '/\s+/', '', sanitize_text_field( wp_unslash( $_POST['cfg_pubkey'] ?? '' ) ) ),
-			'product' => sanitize_key( wp_unslash( $_POST['cfg_product'] ?? '' ) ),
-		) );
-		$msg = __( 'تم حفظ إعدادات السيرفر.', 'blr-landing-pro' );
-	} elseif ( 'activate' === $do ) {
+	if ( 'activate' === $do ) {
 		$r = blrlp_license_activate( sanitize_text_field( wp_unslash( $_POST['key'] ?? '' ) ) );
 		if ( is_wp_error( $r ) ) {
 			$msg = $r->get_error_message();
@@ -192,12 +185,70 @@ add_action( 'admin_post_blrlp_license_do', function () {
 	exit;
 } );
 
+
+/** بطاقة الترخيص: شهادة عند التفعيل، وصفحة تفعيل جذّابة قبله. */
+function blrlp_license_card( $notice = null ) {
+	$lic  = blrlp_license_get();
+	$pro  = blrlp_is_pro();
+	$seal = '<svg viewBox="0 0 120 120" aria-hidden="true"><defs><linearGradient id="blrlg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22C3F0"/><stop offset="1" stop-color="#2F5BFF"/></linearGradient></defs><circle cx="60" cy="60" r="56" fill="none" stroke="url(#blrlg)" stroke-width="3" stroke-dasharray="2 5"/><circle cx="60" cy="60" r="47" fill="url(#blrlg)"/><path d="M60 30l22 8v16c0 14-9 25-22 30-13-5-22-16-22-30V38z" fill="rgba(255,255,255,.18)" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/><path d="M50 60l8 8 14-16" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+	echo '<div class="blrl">';
+	if ( $notice ) {
+		echo '<div class="blrl-msg ' . ( $notice[0] ? 'ok' : 'err' ) . '">' . esc_html( $notice[1] ) . '</div>';
+	}
+	if ( $pro ) {
+		$from = ! empty( $lic['issued_at'] ) ? (int) $lic['issued_at'] : ( ! empty( $lic['activated_at'] ) ? (int) $lic['activated_at'] : 0 );
+		$to   = ! empty( $lic['expires_at'] ) ? date_i18n( 'd-m-Y', (int) $lic['expires_at'] ) : '';
+		$valid = $to ? ( $from ? sprintf( /* translators: 1: from 2: to */ __( 'من %1$s إلى %2$s', 'blr-landing-pro' ), date_i18n( 'd-m-Y', $from ), $to ) : $to ) : __( 'مدى الحياة', 'blr-landing-pro' );
+		$edition = ! empty( $lic['edition'] ) ? $lic['edition'] : 'Pro';
+		$lid     = ! empty( $lic['lid'] ) ? $lic['lid'] : '—';
+		$key     = ! empty( $lic['key'] ) ? substr( $lic['key'], 0, 7 ) . '••••••••' . substr( $lic['key'], -4 ) : '—';
+		$days    = ! empty( $lic['expires_at'] ) ? (int) floor( ( (int) $lic['expires_at'] - time() ) / DAY_IN_SECONDS ) : null;
+		echo '<div class="blrl-card blrl-cert"><div>';
+		echo '<span class="blrl-badge">✓ ' . esc_html__( 'ترخيص Pro مفعّل', 'blr-landing-pro' ) . '</span>';
+		echo '<h2>' . esc_html( ! empty( $lic['holder'] ) ? $lic['holder'] : get_bloginfo( 'name' ) ) . '</h2>';
+		if ( ! empty( $lic['company'] ) ) {
+			echo '<p>' . esc_html( $lic['company'] ) . '</p>';
+		}
+		echo '<dl class="blrl-dl">';
+		$rows = array(
+			array( __( 'رقم الترخيص', 'blr-landing-pro' ), $lid, true ),
+			array( __( 'الخطة', 'blr-landing-pro' ), $edition, false ),
+			array( __( 'النطاق', 'blr-landing-pro' ), ! empty( $lic['domain'] ) ? $lic['domain'] : blrlp_license_domain(), true ),
+			array( __( 'الصلاحية', 'blr-landing-pro' ), $valid, false ),
+			array( __( 'المفتاح', 'blr-landing-pro' ), $key, true ),
+		);
+		foreach ( $rows as $r ) {
+			echo '<div><dt>' . esc_html( $r[0] ) . '</dt><dd' . ( $r[2] ? ' dir="ltr" style="text-align:end"' : '' ) . '>' . esc_html( $r[1] ) . '</dd></div>';
+		}
+		echo '</dl>';
+		if ( null !== $days && $days <= 30 ) {
+			echo '<div class="blrl-note">' . esc_html( $days >= 0 ? sprintf( /* translators: %d: days */ _n( 'ينتهي ترخيصك خلال %d يوم — جدّده لتبقى ميزات Pro فعّالة.', 'ينتهي ترخيصك خلال %d يوماً — جدّده لتبقى ميزات Pro فعّالة.', $days, 'blr-landing-pro' ), $days ) : __( 'انتهى ترخيصك.', 'blr-landing-pro' ) ) . '</div>';
+		}
+		echo '<form class="blrl-actions" method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" onsubmit="return confirm(\'' . esc_js( __( 'إلغاء تفعيل الترخيص على هذا الموقع؟', 'blr-landing-pro' ) ) . '\')">';
+		wp_nonce_field( 'blrlp_license' );
+		echo '<input type="hidden" name="action" value="blrlp_license_do"><input type="hidden" name="do" value="deactivate"><button class="blrl-btn is-ghost">' . esc_html__( 'إلغاء التفعيل', 'blr-landing-pro' ) . '</button></form>';
+		echo '</div><div class="blrl-seal">' . $seal . '<div class="blrl-stamp"><b>' . esc_html__( 'ترخيص أصلي', 'blr-landing-pro' ) . '</b><small>' . esc_html( strtoupper( $edition ) ) . '</small><small>' . esc_html( $lid ) . '</small></div></div></div>'; // phpcs:ignore WordPress.Security.EscapeOutput
+	} else {
+		echo '<div class="blrl-card blrl-hero"><div class="blrl-ic"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div><div>';
+		echo '<h2>' . esc_html__( 'فعّل BLR Landing Pro', 'blr-landing-pro' ) . '</h2><p>' . esc_html__( 'أدخل مفتاح الترخيص لفتح كل الميزات الاحترافية على موقعك.', 'blr-landing-pro' ) . '</p>';
+		echo '<ul class="blrl-feat"><li>' . esc_html__( 'توليد الصفحات بالذكاء الاصطناعي', 'blr-landing-pro' ) . '</li><li>' . esc_html__( 'اختبار A/B', 'blr-landing-pro' ) . '</li><li>' . esc_html__( 'كل القوالب الجاهزة', 'blr-landing-pro' ) . '</li><li>' . esc_html__( 'Webhook وتصدير العملاء', 'blr-landing-pro' ) . '</li><li>' . esc_html__( 'إزالة شارة «صُنعت بواسطة»', 'blr-landing-pro' ) . '</li><li>' . esc_html__( 'دعم فني بأولوية', 'blr-landing-pro' ) . '</li></ul>';
+		echo '<div class="blrl-domain">' . esc_html__( 'دومين موقعك', 'blr-landing-pro' ) . ' <code dir="ltr">' . esc_html( blrlp_license_domain() ) . '</code></div>';
+		echo '<form class="blrl-form" method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
+		wp_nonce_field( 'blrlp_license' );
+		echo '<input type="hidden" name="action" value="blrlp_license_do"><input type="hidden" name="do" value="activate"><input type="text" name="key" placeholder="BT-XXXX-XXXX-XXXX" autocomplete="off" required value="' . esc_attr( isset( $lic['key'] ) ? $lic['key'] : '' ) . '"><button class="blrl-btn">' . esc_html__( 'تفعيل الترخيص', 'blr-landing-pro' ) . '</button></form>';
+		echo '<p class="blrl-help">' . esc_html__( 'لا تملك ترخيصاً؟', 'blr-landing-pro' ) . ' <a href="' . esc_url( BLRLP_BUY_URL ) . '" target="_blank" rel="noopener">' . esc_html__( 'احصل على BLR Landing Pro', 'blr-landing-pro' ) . '</a></p>';
+		if ( ! function_exists( 'sodium_crypto_sign_verify_detached' ) ) {
+			echo '<div class="blrl-msg err">' . esc_html__( 'امتداد Sodium غير متوفر في PHP على استضافتك — فعّله ثم أعد المحاولة.', 'blr-landing-pro' ) . '</div>';
+		}
+		echo '</div></div>';
+	}
+	echo '</div>';
+}
+
 function blrlp_settings_page() {
 	if ( ! current_user_can( 'manage_options' ) ) {
 		return;
 	}
-	$lic    = blrlp_license_get();
-	$pro    = blrlp_is_pro();
 	$notice = get_transient( 'blrlp_notice_' . get_current_user_id() );
 	if ( $notice ) {
 		delete_transient( 'blrlp_notice_' . get_current_user_id() );
@@ -206,38 +257,10 @@ function blrlp_settings_page() {
 	?>
 	<div class="wrap blrlp-admin">
 		<?php blrlp_admin_header( __( 'الإعدادات والترخيص', 'blr-landing-pro' ) ); ?>
-		<?php if ( $notice ) : ?><div class="notice notice-<?php echo $notice[0] ? 'success' : 'error'; ?>"><p><?php echo esc_html( $notice[1] ); ?></p></div><?php endif; ?>
 
-		<div class="blrlp-grid2">
-			<div class="blrlp-panel">
-				<h2><?php esc_html_e( 'الترخيص', 'blr-landing-pro' ); ?></h2>
-				<?php if ( $pro ) : ?>
-					<p class="blrlp-ok">✓ <?php esc_html_e( 'Pro مفعّل', 'blr-landing-pro' ); ?></p>
-					<table class="widefat striped">
-						<tr><td><?php esc_html_e( 'الدومين', 'blr-landing-pro' ); ?></td><td dir="ltr"><?php echo esc_html( $lic['domain'] ); ?></td></tr>
-						<tr><td><?php esc_html_e( 'المفتاح', 'blr-landing-pro' ); ?></td><td dir="ltr"><?php echo esc_html( $lic['key'] ); ?></td></tr>
-						<tr><td><?php esc_html_e( 'ينتهي', 'blr-landing-pro' ); ?></td><td><?php echo esc_html( ! empty( $lic['expires_at'] ) ? date_i18n( 'Y-m-d', (int) $lic['expires_at'] ) : __( 'مدى الحياة', 'blr-landing-pro' ) ); ?></td></tr>
-					</table>
-					<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="margin-top:14px"><?php wp_nonce_field( 'blrlp_license' ); ?><input type="hidden" name="action" value="blrlp_license_do"><input type="hidden" name="do" value="deactivate"><button class="button"><?php esc_html_e( 'إلغاء التفعيل', 'blr-landing-pro' ); ?></button></form>
-				<?php else : ?>
-					<p><?php esc_html_e( 'أدخل مفتاح الترخيص لفتح ميزات Pro. دومين موقعك:', 'blr-landing-pro' ); ?> <code dir="ltr"><?php echo esc_html( blrlp_license_domain() ); ?></code></p>
-					<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>"><?php wp_nonce_field( 'blrlp_license' ); ?><input type="hidden" name="action" value="blrlp_license_do"><input type="hidden" name="do" value="activate">
-						<input type="text" name="key" class="regular-text" dir="ltr" placeholder="BT-XXXX-XXXX-XXXX" value="<?php echo esc_attr( isset( $lic['key'] ) ? $lic['key'] : '' ); ?>" required>
-						<p><button class="button button-primary button-hero"><?php esc_html_e( 'تفعيل Pro', 'blr-landing-pro' ); ?></button></p>
-					</form>
-				<?php endif; ?>
+		<?php blrlp_license_card( $notice ); ?>
 
-				<h3><?php esc_html_e( 'إعدادات سيرفر الترخيص', 'blr-landing-pro' ); ?></h3>
-				<?php if ( ! blrlp_pubkey_ok() ) : ?><div class="notice notice-error inline"><p><strong><?php esc_html_e( 'المفتاح العام غير مضبوط — لن ينجح التفعيل قبل إدخاله.', 'blr-landing-pro' ); ?></strong></p></div><?php endif; ?>
-				<?php if ( ! function_exists( 'sodium_crypto_sign_verify_detached' ) ) : ?><div class="notice notice-error inline"><p><?php esc_html_e( 'امتداد Sodium غير متوفر في PHP.', 'blr-landing-pro' ); ?></p></div><?php endif; ?>
-				<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>"><?php wp_nonce_field( 'blrlp_license' ); ?><input type="hidden" name="action" value="blrlp_license_do"><input type="hidden" name="do" value="cfg">
-					<p><label><?php esc_html_e( 'رابط السيرفر (مجلد api.php)', 'blr-landing-pro' ); ?><br><input type="url" name="cfg_server" class="large-text" dir="ltr" value="<?php echo esc_attr( blrlp_lic_cfg( 'server' ) ); ?>"></label></p>
-					<p><label><?php esc_html_e( 'المفتاح العام (base64)', 'blr-landing-pro' ); ?><br><input type="text" name="cfg_pubkey" class="large-text" dir="ltr" style="font-family:monospace" value="<?php echo esc_attr( blrlp_pubkey_ok() ? blrlp_lic_cfg( 'pubkey' ) : '' ); ?>"></label></p>
-					<p><label><?php esc_html_e( 'معرّف المنتج في السيرفر', 'blr-landing-pro' ); ?><br><input type="text" name="cfg_product" class="regular-text" dir="ltr" value="<?php echo esc_attr( blrlp_lic_cfg( 'product' ) ); ?>"></label></p>
-					<button class="button"><?php esc_html_e( 'حفظ إعدادات السيرفر', 'blr-landing-pro' ); ?></button>
-				</form>
-			</div>
-
+		<div class="blrlp-grid1">
 			<div class="blrlp-panel">
 				<h2><?php esc_html_e( 'الإعدادات العامة والذكاء الاصطناعي', 'blr-landing-pro' ); ?></h2>
 				<form method="post" action="options.php"><?php settings_fields( 'blrlp_settings_group' ); ?>

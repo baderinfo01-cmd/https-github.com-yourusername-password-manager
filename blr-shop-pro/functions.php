@@ -26,7 +26,7 @@ if ( ! defined( 'BADERLR_LICENSE_SERVER' ) ) {
 	define( 'BADERLR_LICENSE_SERVER', 'https://baderinfo.com/themes-license/' );
 }
 if ( ! defined( 'BADERLR_LICENSE_PUBKEY' ) ) {
-	define( 'BADERLR_LICENSE_PUBKEY', 'ضع-هنا-المفتاح-العام-من-لوحة-السيرفر' );
+	define( 'BADERLR_LICENSE_PUBKEY', '8e6G9g431dSU5rcykYca6b+7AfZcFcDpCr/+hrkj61I=' );
 }
 if ( ! defined( 'BADERLR_PRODUCT' ) ) {
 	define( 'BADERLR_PRODUCT', 'blr-wp' );
