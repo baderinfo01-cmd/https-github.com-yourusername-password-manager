@@ -1,7 +1,15 @@
 /**
  * Bader License — settings of YOUR program.
- * Fill product_id from the dashboard (Products page). The other values are ready.
  * You may edit this file; do NOT edit device-id.js or license.js.
+ *
+ * ╔════════════════════════════════════════════════════════════════════════════╗
+ * ║  THE THREE LINES BELOW MUST MATCH THE DASHBOARD THAT GENERATED THE CODES.   ║
+ * ║  If they do not, activation says "invalid code" even for a valid code.      ║
+ * ║  After editing run:  npm run license:doctor                                 ║
+ * ╚════════════════════════════════════════════════════════════════════════════╝
+ *   1) server_url  : dashboard > "Technical info" > activation address (ends with /api.php)
+ *   2) public_key  : dashboard > Settings > signing key > "Copy public key"
+ *   3) product_id  : dashboard > Products > the product id used when generating codes
  */
 module.exports = {
     // Activation API of the software license dashboard

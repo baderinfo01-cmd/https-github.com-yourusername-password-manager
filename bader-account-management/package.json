@@ -13,7 +13,8 @@
     "dist": "npm run build && electron-builder --win --x64",
     "typecheck": "tsc --noEmit",
     "test": "node --experimental-strip-types --test tests/vault.test.mts tests/license.test.cjs",
-    "dist:dir": "npm run build && electron-builder --dir"
+    "dist:dir": "npm run build && electron-builder --dir",
+    "license:doctor": "node tools/license-doctor.cjs"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
