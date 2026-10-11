@@ -263,7 +263,7 @@ export function printElement(elementId: string, title?: string) {
       </head>
       <body>
         <div class="print-header">
-          <div class="logo">Bader Account Management</div>
+          <div class="logo" style="display:flex;align-items:center;gap:10px"><img src="${new URL("/brand/app-icon.png", location.origin).href}" style="width:34px;height:34px;border-radius:9px" alt=""> Bader Account Management</div>
           <div class="date">${currentDate}</div>
         </div>
         <div style="display:flex;gap:24px;margin:-10px 0 18px;font-size:13px;color:#334155">

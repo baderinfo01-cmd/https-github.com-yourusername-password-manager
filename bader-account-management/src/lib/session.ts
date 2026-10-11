@@ -4,12 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useStore } from "@/store/useStore";
 import { isUnlocked, lockVault } from "@/lib/vaultCrypto";
-
-declare global {
-  interface Window {
-    baderApp?: { onLock: (cb: () => void) => () => void };
-  }
-}
+import "@/lib/security"; // Window.baderApp typings
 
 /** Forget the key and reload so decrypted data disappears from memory. */
 export function lockApp(locale: string) {
@@ -40,7 +35,7 @@ export function useRequireUnlock(): boolean {
   // the desktop shell asks us to lock on minimize / screen lock / sleep
   useEffect(() => {
     if (!ok) return;
-    return window.baderApp?.onLock(() => lockApp(locale));
+    return window.baderApp?.onLock?.(() => lockApp(locale));
   }, [ok, locale]);
 
   useEffect(() => {

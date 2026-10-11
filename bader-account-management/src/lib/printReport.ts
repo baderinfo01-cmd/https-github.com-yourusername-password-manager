@@ -82,6 +82,8 @@ export function printReport(o: ReportOptions) {
     .map((s) => `<div class="chip"><span>${esc(s.label)}</span><b>${esc(s.value)}</b></div>`)
     .join("");
 
+  const logoUrl = typeof location !== "undefined" ? new URL("/brand/app-icon.png", location.origin).href : "";
+
   const html = `<!DOCTYPE html>
 <html lang="${esc(o.locale)}" dir="${rtl ? "rtl" : "ltr"}">
 <head>
@@ -93,7 +95,7 @@ export function printReport(o: ReportOptions) {
   body { margin: 0; font-family: "Segoe UI", Tahoma, "Noto Naskh Arabic", Arial, sans-serif; color: #0f172a; font-size: 11px; line-height: 1.5; background: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .top { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-bottom: 10px; border-bottom: 3px solid #0ea5e9; }
   .brand { display: flex; align-items: center; gap: 10px; }
-  .logo { width: 34px; height: 34px; border-radius: 10px; background: #0ea5e9; color: #fff; display: grid; place-items: center; font-weight: 800; font-size: 18px; }
+  .logo { width: 38px; height: 38px; border-radius: 10px; }
   .brand b { font-size: 15px; display: block; }
   .brand small { color: #64748b; font-size: 10px; }
   .meta { text-align: ${rtl ? "left" : "right"}; font-size: 10.5px; color: #475569; }
@@ -122,7 +124,7 @@ export function printReport(o: ReportOptions) {
 </head>
 <body>
   <div class="top">
-    <div class="brand"><div class="logo">b</div><div><b>Bader Account Management</b><small>baderinfo.com</small></div></div>
+    <div class="brand"><img class="logo" src="${esc(logoUrl)}" alt=""><div><b>Bader Account Management</b><small>baderinfo.com</small></div></div>
     <div class="meta"><div>${esc(L.date)}: <b>${esc(now)}</b></div><div class="conf">${esc(L.confidential)}</div></div>
   </div>
   <h1>${esc(o.title)}</h1>

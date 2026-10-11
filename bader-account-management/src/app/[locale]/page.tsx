@@ -12,8 +12,11 @@ import {
   hasLegacyData,
   passwordProblem,
   MIN_PASSWORD_LENGTH,
+  appendLoginEvent,
+  updateLoginEvent,
   type VaultState,
 } from "@/lib/vaultCrypto";
+import { getSessionInfo } from "@/lib/security";
 
 export default function LoginPage() {
   const t = useTranslations();
@@ -37,7 +40,19 @@ export default function LoginPage() {
     setLegacy(hasLegacyData());
   }, []);
 
+  /** Logs a failed / blocked attempt in the background (place lookup may take a few seconds). */
+  const logFailure = (result: "failed" | "locked") => {
+    const ev = appendLoginEvent({ t: Date.now(), result, device: "…", os: "", app: "", source: "desktop" });
+    if (!ev) return;
+    void getSessionInfo().then((info) => updateLoginEvent(ev.id, info));
+  };
+
   const enter = async () => {
+    try {
+      sessionStorage.setItem("bader-login-pending", "1");
+    } catch {
+      /* ignore */
+    }
     // the vault key is now in memory: load the decrypted data, then open the app
     await useStore.persist.rehydrate();
     router.push(`/${locale}/dashboard`);
@@ -67,8 +82,10 @@ export default function LoginPage() {
         await enter();
       } else if (res.waitMs) {
         setError(`wait:${Math.ceil(res.waitMs / 1000)}`);
+        logFailure("locked");
       } else {
         setError("wrongPassword");
+        logFailure("failed");
       }
     } finally {
       setLoading(false);
@@ -171,14 +188,12 @@ export default function LoginPage() {
                 className="absolute inset-0 rounded-3xl blur-2xl opacity-50 animate-pulse"
                 style={{ backgroundColor: themeColors[theme] }}
               ></div>
-              <div
-                className="relative inline-flex p-5 rounded-3xl shadow-2xl"
-                style={{
-                  background: `linear-gradient(135deg, ${themeColors[theme]}, ${themeColors[theme]}dd)`,
-                }}
-              >
-                <Lock className="w-10 h-10 md:w-12 md:h-12 text-white" strokeWidth={2.5} />
-              </div>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/brand/app-icon.png"
+                alt="Bader Account Management"
+                className="relative w-24 h-24 md:w-28 md:h-28 rounded-3xl shadow-2xl"
+              />
             </div>
           </div>
 

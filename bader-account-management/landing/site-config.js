@@ -24,9 +24,9 @@ window.SITE_CONFIG = {
 
   // ---------- معلومات الاتصال / Contact ----------
   contact: {
-    email: "contact@baderinfo.com",
-    phone: "",                               // مثال: +213 555 00 00 00
-    whatsapp: "",                            // أرقام فقط مع رمز الدولة، مثال: 213555000000
+    email: "baderinfo12@gmail.com",
+    phone: "0550896115",                     // مثال: +213 555 00 00 00
+    whatsapp: "213550896115",                // أرقام فقط مع رمز الدولة (الرقم نفسه واتساب)
     telegram: "",                            // اسم المستخدم بدون @
     website: "https://baderinfo.com",
     address: { ar: "", en: "", fr: "" },     // اختياري

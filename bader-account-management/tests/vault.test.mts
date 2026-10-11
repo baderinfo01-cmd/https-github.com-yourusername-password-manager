@@ -77,3 +77,20 @@ test("encrypted backups: wrong password fails, right one restores, nothing reada
   assert.equal(await v.decryptBackup(blob, "wrong"), null);
   assert.deepEqual(JSON.parse((await v.decryptBackup(blob, "Backup2024x"))!), { accounts: [{ password: "p@ss-visible?" }] });
 });
+
+test("sign-in log: records events, summarizes failures since last success, survives password change", async () => {
+  store.clear();
+  await v.createVault("Correct123");
+  v.appendLoginEvent({ t: 1000, result: "success", device: "PC", os: "Windows", app: "3.0.0", source: "desktop" });
+  v.appendLoginEvent({ t: 2000, result: "failed", device: "PC", os: "Windows", app: "3.0.0", source: "desktop" });
+  const bad = v.appendLoginEvent({ t: 3000, result: "failed", device: "…", os: "", app: "", source: "desktop" })!;
+  v.updateLoginEvent(bad.id, { device: "Unknown-PC", city: "Algiers", country: "Algeria", ip: "1.2.3.4" });
+  const s = v.loginSummary();
+  assert.equal(s.lastSuccess?.t, 1000);
+  assert.equal(s.failedSince.length, 2);
+  assert.equal(v.readLoginLog().find((e) => e.id === bad.id)?.city, "Algiers");
+  assert.equal(await v.changeMasterPassword("Correct123", "Newpass456"), true);
+  assert.equal(v.readLoginLog().length, 3, "log must survive a password change");
+  v.clearLoginLog();
+  assert.equal(v.readLoginLog().length, 0);
+});

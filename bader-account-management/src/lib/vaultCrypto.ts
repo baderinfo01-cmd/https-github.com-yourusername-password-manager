@@ -18,6 +18,23 @@ interface Cipher {
   ct: string;
 }
 
+export interface LoginEvent {
+  id: string;
+  /** epoch ms */
+  t: number;
+  result: "success" | "failed" | "locked";
+  device: string;
+  os: string;
+  app: string;
+  ip?: string;
+  city?: string;
+  region?: string;
+  country?: string;
+  source: "desktop" | "web" | "phone";
+}
+
+const MAX_LOG = 200;
+
 interface VaultBlob {
   v: 3;
   salt: string;
@@ -26,6 +43,8 @@ interface VaultBlob {
   data?: Cipher;
   fails?: number;
   lockUntil?: number;
+  /** sign-in history. Holds no secrets (time, device, place), so it stays readable while the vault is locked. */
+  log?: LoginEvent[];
 }
 
 let sessionKey: CryptoKey | null = null;
@@ -201,9 +220,58 @@ export async function changeMasterPassword(current: string, next: string): Promi
     check: await encryptText(key, CHECK_TEXT),
   };
   if (plain !== null) out.data = await encryptText(key, plain);
+  if (blob.log) out.log = blob.log;
   writeBlob(out);
   sessionKey = key;
   return true;
+}
+
+/* ---------------- sign-in history ---------------- */
+
+export function readLoginLog(): LoginEvent[] {
+  return readBlob()?.log ?? [];
+}
+
+export function appendLoginEvent(e: Omit<LoginEvent, "id">): LoginEvent | null {
+  const blob = readBlob();
+  if (!blob) return null;
+  const ev: LoginEvent = { id: Date.now().toString(36) + Math.random().toString(36).slice(2, 7), ...e };
+  blob.log = [ev, ...(blob.log ?? [])].slice(0, MAX_LOG);
+  writeBlob(blob);
+  return ev;
+}
+
+/** Updates an event after the slower lookups (IP / place) finished. */
+export function updateLoginEvent(id: string, patch: Partial<LoginEvent>) {
+  const blob = readBlob();
+  if (!blob?.log) return;
+  blob.log = blob.log.map((x) => (x.id === id ? { ...x, ...patch } : x));
+  writeBlob(blob);
+}
+
+export function mergeRemoteLoginEvents(events: LoginEvent[]) {
+  const blob = readBlob();
+  if (!blob) return;
+  const have = new Set((blob.log ?? []).map((x) => x.id));
+  const fresh = events.filter((x) => !have.has(x.id));
+  if (!fresh.length) return;
+  blob.log = [...(blob.log ?? []), ...fresh].sort((a, b) => b.t - a.t).slice(0, MAX_LOG);
+  writeBlob(blob);
+}
+
+export function clearLoginLog() {
+  const blob = readBlob();
+  if (!blob) return;
+  blob.log = [];
+  writeBlob(blob);
+}
+
+/** What happened since the previous successful sign-in (call BEFORE logging the new one). */
+export function loginSummary() {
+  const log = readLoginLog();
+  const lastSuccess = log.find((x) => x.result === "success") ?? null;
+  const failedSince = log.filter((x) => x.result !== "success" && (!lastSuccess || x.t > lastSuccess.t));
+  return { lastSuccess, failedSince };
 }
 
 /** Forget the key. Callers should also reload the page to wipe decrypted data from memory. */

@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 import { useRequireUnlock } from "@/lib/session";
+import LoginNotice from "@/components/ui/LoginNotice";
 
 const FIRST_SETUP_KEY = "bader-first-setup-completed-v1";
 
@@ -51,6 +52,7 @@ export default function AppLayout({
 
   return (
     <div className="flex min-h-screen">
+      <LoginNotice />
       <Sidebar />
       <div className="flex-1 flex flex-col min-w-0">
         <Header />

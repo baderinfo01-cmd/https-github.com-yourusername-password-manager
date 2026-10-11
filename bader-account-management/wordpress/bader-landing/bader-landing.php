@@ -36,9 +36,9 @@ function bal_defaults() {
 		'trial_url'      => '',
 		'buy_url'        => 'https://baderinfo.com/',
 		'download_url'   => '',
-		'email'          => 'contact@baderinfo.com',
-		'phone'          => '',
-		'whatsapp'       => '',
+		'email'          => 'baderinfo12@gmail.com',
+		'phone'          => '0550896115',
+		'whatsapp'       => '213550896115',
 		'telegram'       => '',
 		'website'        => 'https://baderinfo.com',
 		'address_ar'     => '',
@@ -394,7 +394,7 @@ function bal_shortcode( $atts ) {
 
 	<header class="bal-bar">
 		<div class="bal-wrap bal-bar__in">
-			<a class="bal-logo" href="#bal-top"><i>b</i><span>Bader Account Management</span></a>
+			<a class="bal-logo" href="#bal-top"><img src="<?php echo esc_url( BAL_URL . 'assets/logo.png' ); ?>" alt="" width="34" height="34"><span>Bader Account Management</span></a>
 			<nav class="bal-nav" aria-label="Sections">
 				<?php foreach ( array( 'features', 'security', 'ai', 'pricing', 'faq', 'contact' ) as $n ) : ?>
 					<a href="#bal-<?php echo esc_attr( $n ); ?>" data-i="nav.<?php echo esc_attr( $n ); ?>"><?php echo esc_html( $t( 'nav.' . $n ) ); ?></a>

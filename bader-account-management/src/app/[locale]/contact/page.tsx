@@ -3,6 +3,7 @@
 import { useMemo, useState, type FormEvent, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import AppLayout from "@/components/layout/AppLayout";
+import { branding, whatsappLink } from "@/config/branding";
 import {
   Mail,
   MessageSquare,
@@ -42,8 +43,8 @@ export default function ContactPage() {
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [error, setError] = useState("");
 
-  const contactEmail = "contact@baderinfo.com";
-  const websiteUrl = "https://baderinfo.com";
+  const contactEmail = branding.developer.email;
+  const websiteUrl = branding.developer.website;
 
   const categories = [
     {
@@ -220,7 +221,24 @@ ${formData.message}
         </div>
 
         {/* Contact Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+          <a
+            href={whatsappLink()}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="glass rounded-2xl p-6 text-center card-hover group"
+          >
+            <div className="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 mx-auto mb-4 flex items-center justify-center group-hover:scale-110 transition-transform">
+              <MessageCircle className="w-7 h-7" />
+            </div>
+            <h3 className="font-bold mb-1">WhatsApp</h3>
+            <p className="text-sm text-gray-600 mb-3" dir="ltr">{branding.developer.phone}</p>
+            <span className="inline-flex items-center gap-1 text-xs text-emerald-600 font-medium">
+              {branding.developer.name}
+              <ExternalLink className="w-3 h-3" />
+            </span>
+          </a>
+
           <a
             href={websiteUrl}
             target="_blank"
@@ -477,6 +495,8 @@ ${formData.message}
 
               <div className="space-y-3 text-sm">
                 <InfoRow label={t("info.email")} value={contactEmail} dir="ltr" />
+                <InfoRow label="WhatsApp / Tel" value={branding.developer.phone} dir="ltr" />
+                <InfoRow label="Developer" value={branding.developer.name} dir="ltr" />
                 <InfoRow label={t("info.website")} value="baderinfo.com" dir="ltr" />
                 <InfoRow label={t("info.support")} value={t("info.supportValue")} />
                 <InfoRow label={t("info.response")} value={t("info.responseValue")} />

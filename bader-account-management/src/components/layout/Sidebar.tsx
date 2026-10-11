@@ -26,6 +26,7 @@ import {
   ChevronRight,
   BadgeCheck,
   Bot,
+  ShieldCheck,
 } from "lucide-react";
 
 export default function Sidebar() {
@@ -68,6 +69,7 @@ const initials = username
     { href: "/ai", icon: Bot, key: "ai" },
     { href: "/generator", icon: Wand2, key: "generator" },
     { href: "/analytics", icon: BarChart3, key: "analytics" },
+    { href: "/security", icon: ShieldCheck, key: "security" },
     { href: "/settings", icon: Settings, key: "settings" },
     { href: "/contact", icon: Mail, key: "contact" },
     { href: "/developer", icon: Code, key: "developer" },
@@ -80,6 +82,17 @@ const initials = username
         collapsed ? "w-20" : "w-72"
       } transition-all duration-300 glass h-screen sticky top-0 flex flex-col border-l border-border`}
     >
+      <div className={`px-5 pt-5 pb-1 flex items-center gap-3 ${collapsed ? "justify-center" : ""}`}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={branding.assets.logo} alt="" className="w-10 h-10 rounded-xl shadow-md flex-shrink-0" />
+        {!collapsed && (
+          <div className="min-w-0 leading-tight">
+            <div className="font-bold text-sm truncate">{branding.appName}</div>
+            <div className="text-[11px] text-gray-500">Baderinfo</div>
+          </div>
+        )}
+      </div>
+
       <div className="p-6 flex items-center justify-between border-b border-border">
         {!collapsed && (
           <div className="flex items-center gap-3 min-w-0">

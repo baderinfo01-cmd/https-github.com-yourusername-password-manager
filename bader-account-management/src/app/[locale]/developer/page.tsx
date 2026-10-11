@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import AppLayout from "@/components/layout/AppLayout";
+import { branding, whatsappLink } from "@/config/branding";
 import {
   Mail,
   Globe,
@@ -18,12 +19,13 @@ import {
   MessageCircle,
   Info,
   Layers,
+  Phone,
 } from "lucide-react";
 
 export default function DeveloperPage() {
   const t = useTranslations("developer");
 
-  const appVersion = "v2.0.0";
+  const appVersion = branding.version;
   const releaseYear = "2026";
 
   const specifications = [
@@ -77,15 +79,12 @@ export default function DeveloperPage() {
           <div className="absolute -bottom-16 -right-16 w-40 h-40 rounded-full bg-primary/20 blur-3xl" />
 
           <div className="relative text-center">
-            <div
-              className="w-28 h-28 rounded-[2rem] mx-auto mb-5 flex items-center justify-center text-white font-bold text-6xl shadow-2xl"
-              style={{
-                background:
-                  "linear-gradient(135deg, rgb(var(--color-primary)), rgb(var(--color-primary) / 0.55))",
-              }}
-            >
-              b
-            </div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={branding.assets.logo}
+              alt="Bader Account Management"
+              className="w-28 h-28 rounded-[2rem] mx-auto mb-5 shadow-2xl"
+            />
 
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 border border-border text-sm text-gray-600 mb-4">
               <Sparkles className="w-4 h-4 text-primary" />
@@ -104,13 +103,12 @@ export default function DeveloperPage() {
         <div className="glass rounded-3xl p-8">
           <div className="grid grid-cols-1 md:grid-cols-[180px_1fr] gap-6 items-center">
             <div className="text-center">
-              <div className="w-32 h-32 rounded-3xl bg-white border border-border mx-auto flex items-center justify-center shadow-sm">
-                <User className="w-14 h-14 text-primary" />
-              </div>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={branding.assets.seal} alt="Baderinfo" className="w-40 h-40 mx-auto drop-shadow-md" />
             </div>
 
             <div>
-              <h2 className="text-2xl font-bold mb-2">Bader</h2>
+              <h2 className="text-2xl font-bold mb-2" dir="ltr">{branding.developer.name}</h2>
 
               <p className="text-primary font-medium mb-3">
                 {t("developer.role")}
@@ -122,7 +120,7 @@ export default function DeveloperPage() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-5">
                 <a
-                  href="https://baderinfo.com"
+                  href={branding.developer.website}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-4 bg-white rounded-xl hover:bg-gray-50 transition-colors flex items-center justify-center gap-2 border border-border"
@@ -132,11 +130,29 @@ export default function DeveloperPage() {
                 </a>
 
                 <a
-                  href="mailto:contact@baderinfo.com"
+                  href={`mailto:${branding.developer.email}`}
                   className="p-4 bg-white rounded-xl hover:bg-gray-50 transition-colors flex items-center justify-center gap-2 border border-border"
                 >
                   <Mail className="w-5 h-5 text-primary" />
-                  <span>{t("contact.email")}</span>
+                  <span dir="ltr">{branding.developer.email}</span>
+                </a>
+
+                <a
+                  href={whatsappLink()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-4 bg-white rounded-xl hover:bg-gray-50 transition-colors flex items-center justify-center gap-2 border border-border"
+                >
+                  <MessageCircle className="w-5 h-5 text-green-600" />
+                  <span dir="ltr">WhatsApp {branding.developer.phone}</span>
+                </a>
+
+                <a
+                  href={`tel:${branding.developer.phoneIntl}`}
+                  className="p-4 bg-white rounded-xl hover:bg-gray-50 transition-colors flex items-center justify-center gap-2 border border-border"
+                >
+                  <Phone className="w-5 h-5 text-primary" />
+                  <span dir="ltr">{branding.developer.phone}</span>
                 </a>
               </div>
             </div>
@@ -230,11 +246,17 @@ export default function DeveloperPage() {
               </p>
 
               <a
-                href="mailto:contact@baderinfo.com"
+                href={`mailto:${branding.developer.email}`}
                 className="text-primary font-medium text-sm hover:underline"
+                dir="ltr"
               >
-                contact@baderinfo.com
+                {branding.developer.email}
               </a>
+              <div className="mt-3 text-sm text-gray-600" dir="ltr">
+                <a href={whatsappLink()} target="_blank" rel="noopener noreferrer" className="hover:underline">
+                  📱 WhatsApp / {branding.developer.phone}
+                </a>
+              </div>
             </div>
 
             <div className="bg-white rounded-2xl p-5 border border-border">
@@ -251,7 +273,7 @@ export default function DeveloperPage() {
               </p>
 
               <a
-                href="https://baderinfo.com"
+                href={branding.developer.website}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-primary font-medium text-sm hover:underline"

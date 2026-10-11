@@ -1,4 +1,5 @@
 const { app, ipcMain, BrowserWindow, powerMonitor, protocol, shell } = require("electron");
+const os = require("os");
 const path = require("path");
 const fs = require("fs");
 
@@ -132,6 +133,33 @@ async function createWindow() {
     await win.loadURL(`${APP_ORIGIN}/ar/`);
   }
 }
+
+// ---- sign-in information (device + optional approximate place by IP) ----
+let geoCache = { at: 0, data: {} };
+async function lookupGeo() {
+  if (Date.now() - geoCache.at < 10 * 60 * 1000) return geoCache.data;
+  try {
+    const r = await fetch("https://ipwho.is/", { signal: AbortSignal.timeout(5000) });
+    const j = await r.json();
+    if (j && j.success !== false && j.ip) {
+      geoCache = { at: Date.now(), data: { ip: j.ip, city: j.city, region: j.region, country: j.country } };
+    }
+  } catch (e) {
+    /* offline: the event is logged without a place */
+  }
+  return geoCache.data;
+}
+
+ipcMain.handle("bader-app:session", async (_e, opts) => {
+  const info = {
+    device: os.hostname(),
+    os: `${process.platform === "win32" ? "Windows" : process.platform === "darwin" ? "macOS" : "Linux"} ${os.release()} (${os.arch()})`,
+    app: app.getVersion(),
+    source: "desktop"
+  };
+  if (opts && opts.geo) Object.assign(info, await lookupGeo());
+  return info;
+});
 
 app.whenReady().then(async () => {
   registerAppProtocol();

@@ -2,7 +2,7 @@
   "name": "bader-account-management",
   "version": "3.0.0",
   "description": "Bader Account Management desktop application",
-  "author": "Baderinfo",
+  "author": "Bader Eddine Hamidane (Baderinfo)",
   "private": true,
   "main": "electron-main.js",
   "scripts": {
@@ -83,5 +83,6 @@
     "asar": true,
     "publish": null
   },
-  "dependencies": {}
+  "dependencies": {},
+  "homepage": "https://baderinfo.com"
 }
