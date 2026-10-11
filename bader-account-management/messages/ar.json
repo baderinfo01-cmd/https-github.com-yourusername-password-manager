@@ -1,0 +1,1889 @@
+{
+  "common": {
+    "appName": "Bader Account Management",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "edit": "تعديل",
+    "delete": "حذف",
+    "search": "بحث...",
+    "add": "إضافة",
+    "loading": "جاري التحميل...",
+    "yes": "نعم",
+    "no": "لا",
+    "copy": "نسخ",
+    "copied": "تم النسخ",
+    "show": "إظهار",
+    "hide": "إخفاء",
+    "print": "طباعة",
+    "export": "تصدير",
+    "back": "رجوع",
+    "done": "تم",
+    "all": "الكل",
+    "favorite": "المفضلة",
+    "weak": "الضعيفة",
+    "duplicate": "المكررة",
+    "categories": "التصنيفات"
+  },
+  "nav": {
+    "dashboard": "لوحة التحكم",
+    "myAccount": "حسابي",
+    "accounts": "حساباتي",
+    "subscriptions": "الاشتراكات",
+    "myInfo": "معلوماتي",
+    "cards": "البطاقات",
+    "documents": "الوثائق",
+    "contacts": "بيانات الاتصال",
+    "generator": "مولد كلمات المرور",
+    "analytics": "التحاليل والبيانات",
+    "settings": "الإعدادات",
+    "developer": "معلومات المطور",
+    "contact": "اتصل بنا",
+    "logout": "قفل البرنامج",
+    "license": "معلومات الترخيص",
+    "ai": "المساعد الذكي",
+    "security": "سجل الأمان"
+  },
+  "auth": {
+    "welcome": "مرحباً بعودتك",
+    "enterPassword": "أدخل كلمة المرور الرئيسية لفتح الخزنة",
+    "unlock": "فتح",
+    "wrongPassword": "كلمة المرور غير صحيحة",
+    "createTitle": "أنشئ كلمة المرور الرئيسية",
+    "createDescription": "ستحمي هذه الكلمة كل بياناتك. لا يمكن استرجاعها إن نُسيت.",
+    "confirmPassword": "أعد كتابة كلمة المرور",
+    "create": "إنشاء الخزنة وفتحها",
+    "passwordsMismatch": "كلمتا المرور غير متطابقتين",
+    "passwordTooShort": "يجب ألا تقل كلمة المرور عن {min} أحرف",
+    "passwordWeak": "يجب أن تحتوي على حروف وأرقام",
+    "tooManyAttempts": "محاولات كثيرة خاطئة. انتظر {seconds} ثانية",
+    "noRecoveryWarning": "⚠️ لا يوجد استرجاع لكلمة المرور: إن فقدتها تفقد البيانات.",
+    "legacyNotice": "تم العثور على بيانات من نسخة سابقة بدون حماية. سيتم تشفيرها بكلمة المرور الجديدة.",
+    "lock": "قفل البرنامج"
+  },
+  "license": {
+    "titleAr": "تفعيل",
+    "titleEn": "Bader Account Management",
+    "subtitle": "اختر نوع الترخيص المناسب لاحتياجاتك",
+    "personal": "شخصي",
+    "professional": "احترافي",
+    "enterprise": "مؤسسات",
+    "mostPopular": "الأكثر طلباً",
+    "devicesCount": "أجهزة",
+    "unlimited": "غير محدود",
+    "contactUs": "تواصل معنا",
+    "haveKey": "لدي كود وتفعيل",
+    "noKey": "ليس لديك كود؟",
+    "buyFrom": "اشترِ من",
+    "deviceId": "معرف الجهاز",
+    "howItWorks": "كيف تعمل العملية؟",
+    "steps": {
+      "1": {
+        "title": "اختر الخطة",
+        "desc": "حدد نوع الترخيص المناسب"
+      },
+      "2": {
+        "title": "احصل على الكود",
+        "desc": "من baderinfo.com"
+      },
+      "3": {
+        "title": "فعّل",
+        "desc": "أدخل الكود في البرنامج"
+      },
+      "4": {
+        "title": "استمتع",
+        "desc": "استخدم البرنامج بكل ميزاته"
+      }
+    },
+    "features": {
+      "device1": "جهاز واحد",
+      "device3": "3 أجهزة",
+      "basicFeatures": "جميع الميزات الأساسية",
+      "allFeatures": "جميع الميزات",
+      "updates1y": "تحديثات لمدة سنة",
+      "lifetimeUpdates": "تحديثات مدى الحياة",
+      "emailSupport": "دعم بريدي",
+      "prioritySupport": "دعم أولوية",
+      "cloudSync": "مزامنة سحابية",
+      "unlimitedDevices": "عدد غير محدود من الأجهزة",
+      "customization": "تخصيص كامل",
+      "dedicatedSupport": "دعم فني مخصص",
+      "teamTraining": "تدريب فريق العمل",
+      "customAPI": "API مخصص"
+    },
+    "back": "العودة",
+    "enterKey": "أدخل كود التفعيل",
+    "keyHint": "أدخل الكود الذي حصلت عليه من baderinfo.com",
+    "key": "كود التفعيل",
+    "activating": "جاري التفعيل...",
+    "activate": "تفعيل",
+    "successTitle": "تم التفعيل بنجاح!",
+    "welcomeMsg": "مرحباً بك في Bader Account Management",
+    "type": "نوع الترخيص",
+    "activatedAt": "تاريخ التفعيل",
+    "expiresAt": "تاريخ الانتهاء",
+    "status": "الحالة",
+    "active": "نشط",
+    "enterApp": "الدخول إلى البرنامج",
+    "deactivate": "إلغاء التفعيل",
+    "confirmDeactivate": "هل أنت متأكد من إلغاء تفعيل الترخيص على هذا الجهاز؟",
+    "errors": {
+      "emptyKey": "الرجاء إدخال كود التفعيل",
+      "invalidKey": "كود التفعيل غير صحيح",
+      "invalidFormat": "كود التفعيل غير صحيح. تأكد من إدخاله بشكل صحيح. الكود يجب أن يبدأ بـ BADER-"
+    }
+  },
+  "dashboard": {
+    "welcome": {
+      "title": "مرحباً بك!",
+      "summary": "لديك <accountsStrong>{accounts}</accountsStrong> حساب، <subscriptionsStrong>{subscriptions}</subscriptionsStrong> اشتراك نشط"
+    },
+    "stats": {
+      "accounts": "الحسابات",
+      "activeSubscriptions": "الاشتراكات النشطة",
+      "cardsAndDocuments": "البطاقات والوثائق",
+      "totalSpending": "إجمالي الإنفاق",
+      "contacts": "جهات الاتصال",
+      "favorites": "المفضلة",
+      "todayActions": "عمليات اليوم",
+      "monthlySpending": "إنفاق الشهر",
+      "thisWeek": "هذا الأسبوع",
+      "expiringSoon": "تنتهي قريباً"
+    },
+    "sections": {
+      "mostUsedCategories": "أكثر التصنيفات استخداماً",
+      "weeklyActivity": "نشاط الأسبوع",
+      "recentActivity": "آخر النشاطات"
+    },
+    "messages": {
+      "noData": "لا توجد بيانات",
+      "noActivities": "لا توجد نشاطات بعد"
+    },
+    "expiring": {
+      "title": "تنبيهات الانتهاء",
+      "today": "اليوم!",
+      "tomorrow": "غداً",
+      "afterDays": "بعد {days} يوم"
+    },
+    "quickActions": {
+      "title": "إجراءات سريعة",
+      "accounts": "الحسابات",
+      "subscriptions": "الاشتراكات",
+      "analytics": "التحاليل",
+      "settings": "الإعدادات"
+    },
+    "empty": {
+      "title": "مرحباً بك!",
+      "description": "ابدأ بإضافة أول حساب أو اشتراك لتجربة البرنامج",
+      "addAccount": "إضافة حساب",
+      "addSubscription": "إضافة اشتراك"
+    },
+    "currency": {
+      "dzd": "دج"
+    },
+    "days": {
+      "sunday": "الأحد",
+      "monday": "الإثنين",
+      "tuesday": "الثلاثاء",
+      "wednesday": "الأربعاء",
+      "thursday": "الخميس",
+      "friday": "الجمعة",
+      "saturday": "السبت"
+    },
+    "activity": {
+      "actions": {
+        "add": "إضافة",
+        "delete": "حذف",
+        "edit": "تعديل",
+        "other": "عملية"
+      },
+      "itemTypes": {
+        "account": "حساب",
+        "subscription": "اشتراك",
+        "card": "بطاقة",
+        "document": "وثيقة",
+        "contact": "جهة اتصال",
+        "info": "معلومة"
+      }
+    },
+    "categories": {
+      "general": "عام",
+      "services": "خدمات",
+      "social": "تواصل اجتماعي",
+      "work": "عمل",
+      "finance": "مالية",
+      "banking": "بنوك",
+      "shopping": "تسوق",
+      "entertainment": "ترفيه",
+      "education": "تعليم",
+      "health": "صحة",
+      "travel": "سفر",
+      "gaming": "ألعاب",
+      "streaming": "مشاهدة",
+      "email": "بريد إلكتروني",
+      "cloud": "تخزين سحابي",
+      "government": "حكومي",
+      "business": "أعمال",
+      "personal": "شخصي",
+      "other": "أخرى"
+    }
+  },
+  "accounts": {
+    "title": "حساباتي",
+    "subtitle": "إدارة كل حساباتك في مكان واحد",
+    "searchPlaceholder": "ابحث بالاسم أو البريد أو المستخدم...",
+    "confirmDelete": "هل أنت متأكد من حذف هذا الحساب؟",
+    "actions": {
+      "export": "تصدير",
+      "import": "استيراد",
+      "preview": "معاينة",
+      "print": "طباعة",
+      "addAccount": "إضافة حساب",
+      "edit": "تعديل",
+      "delete": "حذف",
+      "copy": "نسخ",
+      "favorite": "المفضلة",
+      "showPassword": "إظهار كلمة المرور",
+      "hidePassword": "إخفاء كلمة المرور"
+    },
+    "view": {
+      "list": "قائمة",
+      "grid": "شبكة"
+    },
+    "stats": {
+      "total": "إجمالي الحسابات",
+      "favorites": "المفضلة",
+      "weakPasswords": "كلمات مرور ضعيفة",
+      "duplicatePasswords": "كلمات مرور مكررة"
+    },
+    "filters": {
+      "allCategories": "كل التصنيفات"
+    },
+    "sort": {
+      "recent": "الأحدث",
+      "updated": "آخر تعديل",
+      "name": "الاسم"
+    },
+    "empty": {
+      "title": "لا توجد حسابات",
+      "description": "ابدأ بإضافة أول حساب لك"
+    },
+    "warnings": {
+      "oldPassword": "كلمة مرور قديمة",
+      "weak": "ضعيفة",
+      "duplicate": "مكررة"
+    },
+    "fields": {
+      "username": "المستخدم",
+      "password": "كلمة المرور",
+      "emails": "الإيميلات",
+      "url": "الرابط",
+      "recoveryEmail": "بريد الاسترداد",
+      "notes": "ملاحظات"
+    },
+    "alerts": {
+      "importSuccess": "✅ تم استيراد البيانات بنجاح",
+      "invalidFile": "❌ ملف غير صالح"
+    },
+    "preview": {
+      "title": "حساباتي",
+      "date": "التاريخ",
+      "total": "إجمالي",
+      "favorites": "مفضلة",
+      "weak": "ضعيفة",
+      "duplicate": "مكررة",
+      "generatedBy": "تم إنشاء هذا التقرير بواسطة Bader Account Management v2.0.0"
+    },
+    "table": {
+      "siteName": "اسم الموقع",
+      "category": "التصنيف",
+      "username": "اسم المستخدم",
+      "password": "كلمة المرور",
+      "url": "الرابط"
+    },
+    "passwordStrength": {
+      "red": "ضعيفة جدًا",
+      "orange": "ضعيفة",
+      "yellow": "متوسطة",
+      "green": "قوية"
+    },
+    "modal": {
+      "addTitle": "إضافة حساب جديد",
+      "editTitle": "تعديل الحساب",
+      "siteName": "اسم الموقع",
+      "siteNamePlaceholder": "مثال: Facebook",
+      "category": "التصنيف",
+      "siteUrl": "رابط الموقع",
+      "username": "اسم المستخدم",
+      "usernamePlaceholder": "اسم المستخدم",
+      "password": "كلمة المرور",
+      "extraEmails": "إيميلات إضافية",
+      "addEmail": "إضافة إيميل",
+      "recoveryEmail": "بريد الاسترداد",
+      "notes": "ملاحظات",
+      "notesPlaceholder": "أي معلومات إضافية...",
+      "addToFavorites": "إضافة إلى المفضلة",
+      "save": "حفظ",
+      "cancel": "إلغاء"
+    },
+    "categories": {
+      "general": "عام",
+      "social": "تواصل اجتماعي",
+      "work": "عمل",
+      "finance": "مالية",
+      "banking": "بنوك",
+      "shopping": "تسوق",
+      "entertainment": "ترفيه",
+      "education": "تعليم",
+      "health": "صحة",
+      "travel": "سفر",
+      "gaming": "ألعاب",
+      "streaming": "مشاهدة",
+      "email": "بريد إلكتروني",
+      "cloud": "تخزين سحابي",
+      "government": "حكومي",
+      "business": "أعمال",
+      "personal": "شخصي",
+      "other": "أخرى"
+    }
+  },
+  "subscriptions": {
+    "title": "الاشتراكات",
+    "subtitle": "إدارة كل اشتراكاتك بسهولة",
+    "searchPlaceholder": "ابحث بالاسم، البريد أو المستخدم...",
+    "confirmDelete": "هل أنت متأكد من حذف هذا الاشتراك؟",
+    "actions": {
+      "export": "تصدير",
+      "import": "استيراد",
+      "preview": "معاينة",
+      "print": "طباعة",
+      "addSubscription": "إضافة اشتراك",
+      "edit": "تعديل",
+      "delete": "حذف",
+      "copy": "نسخ",
+      "favorite": "المفضلة",
+      "showPassword": "إظهار كلمة المرور",
+      "hidePassword": "إخفاء كلمة المرور"
+    },
+    "view": {
+      "list": "قائمة",
+      "grid": "شبكة"
+    },
+    "stats": {
+      "total": "إجمالي الاشتراكات",
+      "active": "نشطة",
+      "expiring": "تنتهي قريباً",
+      "totalSpent": "إجمالي الإنفاق"
+    },
+    "sort": {
+      "recent": "الأحدث",
+      "expiry": "تاريخ الانتهاء",
+      "name": "الاسم",
+      "price": "السعر"
+    },
+    "empty": {
+      "title": "لا توجد اشتراكات",
+      "description": "ابدأ بإضافة أول اشتراك"
+    },
+    "status": {
+      "active": "نشط",
+      "expired": "منتهي",
+      "frozen": "مجمد"
+    },
+    "remaining": {
+      "today": "اليوم",
+      "tomorrow": "غداً",
+      "afterDays": "بعد {days} يوم"
+    },
+    "fields": {
+      "from": "من",
+      "to": "إلى",
+      "price": "السعر",
+      "url": "الرابط",
+      "username": "المستخدم",
+      "email": "البريد",
+      "phone": "الهاتف",
+      "password": "كلمة المرور",
+      "notes": "ملاحظات"
+    },
+    "alerts": {
+      "importSuccess": "✅ تم استيراد البيانات بنجاح",
+      "invalidFile": "❌ ملف غير صالح"
+    },
+    "preview": {
+      "title": "الاشتراكات",
+      "date": "التاريخ",
+      "generatedBy": "تم إنشاء هذا التقرير بواسطة Bader Account Management v2.0.0"
+    },
+    "table": {
+      "name": "الاسم",
+      "category": "التصنيف",
+      "username": "المستخدم",
+      "email": "البريد",
+      "from": "من",
+      "to": "إلى",
+      "price": "السعر",
+      "status": "الحالة"
+    },
+    "modal": {
+      "addTitle": "إضافة اشتراك جديد",
+      "editTitle": "تعديل الاشتراك",
+      "sections": {
+        "basic": "المعلومات الأساسية",
+        "login": "معلومات الدخول",
+        "duration": "المدة والتاريخ",
+        "priceStatus": "السعر والحالة"
+      },
+      "name": "اسم الاشتراك",
+      "namePlaceholder": "مثال: Netflix",
+      "customerName": "اسم العميل",
+      "customerNamePlaceholder": "اسم العميل",
+      "category": "التصنيف",
+      "siteUrl": "رابط الموقع",
+      "username": "اسم المستخدم",
+      "usernamePlaceholder": "اسم المستخدم",
+      "password": "كلمة المرور",
+      "email": "البريد الإلكتروني",
+      "phone": "رقم الهاتف",
+      "duration": "مدة الاشتراك",
+      "autoEndDateHint": "سيتم حساب تاريخ الانتهاء تلقائياً",
+      "startDate": "تاريخ البداية",
+      "endDate": "تاريخ الانتهاء",
+      "daysCount": "المدة بالأيام",
+      "daysValue": "{days} يوم",
+      "invalidDuration": "غير صالح",
+      "selectedDuration": "المدة المختارة: {days} يوم - يمكنك تعديل التاريخ يدوياً للتحويل إلى مخصص",
+      "price": "السعر",
+      "currency": "العملة",
+      "status": "الحالة",
+      "notes": "ملاحظات",
+      "notesPlaceholder": "أي معلومات إضافية...",
+      "addToFavorites": "إضافة إلى المفضلة",
+      "save": "حفظ",
+      "cancel": "إلغاء",
+      "durations": {
+        "week": "أسبوع (7 أيام)",
+        "month": "شهر (30 يوم)",
+        "threeMonths": "3 أشهر (90 يوم)",
+        "sixMonths": "6 أشهر (180 يوم)",
+        "year": "سنة (365 يوم)",
+        "twoYears": "سنتين (730 يوم)",
+        "fiveYears": "5 سنوات (1825 يوم)",
+        "custom": "مخصص"
+      },
+      "currencies": {
+        "dzd": "دج (دينار جزائري)",
+        "sar": "ر.س (ريال سعودي)",
+        "aed": "د.إ (درهم إماراتي)",
+        "usd": "$ (دولار)",
+        "eur": "€ (يورو)"
+      }
+    },
+    "categories": {
+      "general": "عام",
+      "services": "خدمات",
+      "social": "تواصل اجتماعي",
+      "work": "عمل",
+      "finance": "مالية",
+      "banking": "بنوك",
+      "shopping": "تسوق",
+      "entertainment": "ترفيه",
+      "education": "تعليم",
+      "health": "صحة",
+      "travel": "سفر",
+      "gaming": "ألعاب",
+      "streaming": "مشاهدة",
+      "email": "بريد إلكتروني",
+      "cloud": "تخزين سحابي",
+      "government": "حكومي",
+      "business": "أعمال",
+      "personal": "شخصي",
+      "other": "أخرى"
+    }
+  },
+  "myInfo": {
+    "title": "معلوماتي",
+    "subtitle": "بياناتك الحساسة والشخصية",
+    "actions": {
+      "edit": "تعديل",
+      "save": "حفظ",
+      "cancel": "إلغاء",
+      "add": "إضافة",
+      "delete": "حذف",
+      "call": "اتصال",
+      "loading": "جاري...",
+      "changeImage": "تغيير الصورة"
+    },
+    "alerts": {
+      "saved": "✅ تم الحفظ بنجاح",
+      "imageTooLarge": "❌ حجم الصورة كبير جداً",
+      "locationSuccess": "✅ تم تحديد الموقع",
+      "locationError": "❌ تعذر الحصول على الموقع"
+    },
+    "fallback": {
+      "firstName": "الاسم",
+      "lastName": "واللقب"
+    },
+    "tabs": {
+      "personal": "شخصي",
+      "emails": "الإيميلات",
+      "phones": "الهواتف",
+      "addresses": "العناوين",
+      "secrets": "الأسرار",
+      "experience": "الخبرات",
+      "education": "التعليم",
+      "certifications": "الشهادات",
+      "achievements": "الأعمال"
+    },
+    "fields": {
+      "password": "كلمة المرور",
+      "startDate": "تاريخ البداية",
+      "endDate": "تاريخ النهاية",
+      "untilNow": "حتى الآن"
+    },
+    "personal": {
+      "title": "المعلومات الشخصية",
+      "firstName": "الاسم",
+      "lastName": "اللقب",
+      "username": "اسم المستخدم",
+      "nationality": "الجنسية",
+      "birthDate": "تاريخ الميلاد",
+      "gender": "الجنس",
+      "choose": "اختر...",
+      "male": "ذكر",
+      "female": "أنثى",
+      "bio": "نبذة شخصية"
+    },
+    "emails": {
+      "title": "الإيميلات",
+      "empty": "لا توجد إيميلات بعد"
+    },
+    "phones": {
+      "title": "أرقام الهاتف",
+      "empty": "لا توجد أرقام هاتف بعد"
+    },
+    "addresses": {
+      "title": "العناوين",
+      "empty": "لا توجد عناوين بعد",
+      "gps": "الموقع الجغرافي GPS",
+      "labelPlaceholder": "تسمية مثل المنزل أو العمل",
+      "country": "الدولة",
+      "state": "الولاية",
+      "city": "المدينة",
+      "municipality": "البلدية",
+      "postalCode": "الرمز البريدي",
+      "fullAddress": "العنوان الكامل...",
+      "primary": "عنوان رئيسي",
+      "primaryShort": "رئيسي"
+    },
+    "secrets": {
+      "title": "الأرقام السرية",
+      "empty": "لا توجد أرقام سرية بعد",
+      "labelPlaceholder": "اسم السري مثل PIN1",
+      "valuePlaceholder": "القيمة"
+    },
+    "experience": {
+      "title": "الخبرات المهنية",
+      "empty": "لا توجد خبرات بعد",
+      "positionPlaceholder": "المنصب مثل مطور ويب",
+      "companyPlaceholder": "اسم الشركة",
+      "companyLocation": "موقع الشركة",
+      "current": "أعمل حالياً في هذه الشركة",
+      "description": "وصف المهام",
+      "descriptionPlaceholder": "ماذا كنت تفعل في هذا المنصب...",
+      "skills": "المهارات",
+      "addSkill": "أضف مهارة...",
+      "referenceName": "اسم المرجع",
+      "referenceContact": "تواصل المرجع",
+      "types": {
+        "fullTime": "دوام كامل",
+        "partTime": "دوام جزئي",
+        "contract": "عقد",
+        "freelance": "عمل حر",
+        "internship": "تدريب",
+        "remote": "عن بعد"
+      }
+    },
+    "education": {
+      "title": "التعليم",
+      "empty": "لا توجد شهادات بعد",
+      "degree": "الدرجة العلمية",
+      "institution": "اسم المؤسسة",
+      "fieldOfStudy": "التخصص",
+      "graduationDate": "تاريخ التخرج",
+      "current": "أدرس حالياً",
+      "description": "وصف الدراسة..."
+    },
+    "certifications": {
+      "title": "الشهادات والدبلومات",
+      "empty": "لا توجد شهادات بعد",
+      "name": "اسم الشهادة",
+      "issuer": "الجهة المانحة",
+      "issueDate": "تاريخ الإصدار",
+      "expiryDate": "تاريخ الانتهاء",
+      "credentialId": "رقم الاعتماد",
+      "description": "وصف الشهادة..."
+    },
+    "achievements": {
+      "title": "الأعمال المنجزة",
+      "empty": "لا توجد أعمال بعد",
+      "titlePlaceholder": "عنوان الإنجاز",
+      "description": "وصف الإنجاز..."
+    }
+  },
+  "cards": {
+    "title": "البطاقات",
+    "subtitle": "إدارة بطاقاتك بكل أمان",
+    "searchPlaceholder": "ابحث بالاسم، الرقم أو البنك...",
+    "confirmDelete": "هل أنت متأكد من حذف هذه البطاقة؟",
+    "actions": {
+      "export": "تصدير",
+      "import": "استيراد",
+      "preview": "معاينة",
+      "print": "طباعة",
+      "addCard": "إضافة بطاقة",
+      "edit": "تعديل",
+      "delete": "حذف",
+      "copy": "نسخ",
+      "favorite": "المفضلة",
+      "show": "إظهار",
+      "hide": "إخفاء",
+      "open": "فتح"
+    },
+    "alerts": {
+      "importSuccess": "✅ تم استيراد البيانات بنجاح",
+      "invalidFile": "❌ ملف غير صالح"
+    },
+    "stats": {
+      "total": "إجمالي البطاقات",
+      "bank": "بطاقات بنكية",
+      "membership": "بطاقات عضوية",
+      "favorites": "المفضلة"
+    },
+    "filters": {
+      "allCategories": "كل التصنيفات"
+    },
+    "empty": {
+      "title": "لا توجد بطاقات",
+      "description": "ابدأ بإضافة بطاقتك الأولى"
+    },
+    "cardVisual": {
+      "holder": "حامل البطاقة",
+      "expiry": "انتهاء"
+    },
+    "onlineInfo": {
+      "title": "معلومات الجهة عبر الإنترنت",
+      "accountLink": "رابط الحساب"
+    },
+    "preview": {
+      "title": "البطاقات",
+      "date": "التاريخ",
+      "total": "إجمالي",
+      "bank": "بنكية",
+      "membership": "عضوية",
+      "favorites": "مفضلة",
+      "generatedBy": "تم إنشاء هذا التقرير بواسطة Bader Account Management v2.0.0"
+    },
+    "table": {
+      "type": "النوع",
+      "holder": "حامل البطاقة",
+      "cardNumber": "رقم البطاقة",
+      "bank": "البنك",
+      "expiry": "الانتهاء"
+    },
+    "categories": {
+      "bank": "بطاقة بنكية",
+      "membership": "بطاقة عضوية",
+      "shopping": "بطاقة شراء",
+      "gaming": "بطاقة ألعاب",
+      "loyalty": "بطاقة ولاء",
+      "transport": "بطاقة نقل",
+      "student": "بطاقة طالب",
+      "insurance": "بطاقة تأمين",
+      "health": "بطاقة صحية",
+      "work": "بطاقة عمل",
+      "gift": "بطاقة هدية",
+      "other": "أخرى"
+    },
+    "modal": {
+      "addTitle": "إضافة بطاقة جديدة",
+      "editTitle": "تعديل البطاقة",
+      "holderPlaceholder": "الاسم الكامل",
+      "cardCategory": "تصنيف البطاقة",
+      "new": "جديد",
+      "customTypePlaceholder": "اكتب اسم التصنيف...",
+      "issuerBank": "اسم البنك / الجهة",
+      "cardNumber": "رقم البطاقة",
+      "holderName": "اسم حامل البطاقة",
+      "expiryDate": "الانتهاء",
+      "websiteUrl": "رابط الموقع",
+      "accountUrl": "رابط الحساب",
+      "email": "البريد الإلكتروني",
+      "phone": "الهاتف",
+      "accountUsername": "اسم المستخدم للحساب",
+      "accountPassword": "الرقم السري للحساب",
+      "accountNotes": "ملاحظات الجهة",
+      "accountNotesPlaceholder": "أي ملاحظات خاصة بهذا الحساب...",
+      "generalNotes": "ملاحظات عامة",
+      "generalNotesPlaceholder": "أي ملاحظات إضافية...",
+      "addToFavorites": "إضافة إلى المفضلة",
+      "save": "حفظ",
+      "cancel": "إلغاء",
+      "addCategoryTitle": "إضافة تصنيف جديد",
+      "categoryName": "اسم التصنيف",
+      "categoryNamePlaceholder": "بطاقة ولاء",
+      "categoryNameArPlaceholder": "اسم التصنيف بالعربية",
+      "categoryNameEnPlaceholder": "Category name in English",
+      "categoryNameFrPlaceholder": "Nom de la catégorie en français",
+      "emoji": "الإيموجي",
+      "color": "اللون",
+      "addCategory": "إضافة التصنيف",
+      "categoryAlerts": {
+        "enterName": "الرجاء إدخال اسم التصنيف",
+        "exists": "هذا التصنيف موجود بالفعل",
+        "added": "✅ تم إضافة التصنيف بنجاح"
+      },
+      "colors": {
+        "blue": "أزرق",
+        "green": "أخضر",
+        "orange": "برتقالي",
+        "purple": "بنفسجي",
+        "yellow": "أصفر",
+        "cyan": "سماوي",
+        "pink": "وردي",
+        "red": "أحمر"
+      }
+    }
+  },
+  "documents": {
+    "title": "الوثائق",
+    "subtitle": "إدارة وثائقك الرسمية بأمان",
+    "searchPlaceholder": "ابحث بالاسم، رقم الوثيقة، رقم الهوية أو الجنسية...",
+    "confirmDelete": "هل أنت متأكد من حذف هذه الوثيقة؟",
+    "actions": {
+      "export": "تصدير",
+      "import": "استيراد",
+      "preview": "معاينة",
+      "print": "طباعة",
+      "addDocument": "إضافة وثيقة",
+      "edit": "تعديل",
+      "delete": "حذف",
+      "copy": "نسخ",
+      "favorite": "المفضلة",
+      "show": "إظهار",
+      "hide": "إخفاء"
+    },
+    "alerts": {
+      "importSuccess": "✅ تم استيراد البيانات بنجاح",
+      "invalidFile": "❌ ملف غير صالح"
+    },
+    "stats": {
+      "total": "إجمالي الوثائق",
+      "nationalId": "بطاقة الهوية",
+      "passport": "جوازات السفر",
+      "favorites": "المفضلة"
+    },
+    "filters": {
+      "allTypes": "كل الأنواع"
+    },
+    "empty": {
+      "title": "لا توجد وثائق",
+      "description": "ابدأ بإضافة أول وثيقة"
+    },
+    "preview": {
+      "title": "الوثائق",
+      "date": "التاريخ",
+      "generatedBy": "تم إنشاء هذا التقرير بواسطة Bader Account Management v2.0.0"
+    },
+    "table": {
+      "type": "النوع",
+      "name": "الاسم",
+      "documentNumber": "رقم الوثيقة",
+      "nationalId": "رقم الهوية",
+      "nationality": "الجنسية"
+    },
+    "card": {
+      "republic": "الجمهورية",
+      "name": "الاسم / Name",
+      "birth": "الميلاد / DOB",
+      "number": "الرقم / No.",
+      "documentNumber": "رقم الوثيقة",
+      "nationalId": "رقم التعريف الوطني",
+      "nationality": "الجنسية",
+      "birthDate": "الميلاد",
+      "expiryDate": "الانتهاء",
+      "address": "العنوان",
+      "birthPlace": "مكان الميلاد",
+      "gender": "الجنس",
+      "bloodType": "فصيلة الدم",
+      "notes": "ملاحظات"
+    },
+    "gender": {
+      "male": "ذكر",
+      "female": "أنثى"
+    },
+    "categories": {
+      "national_id": "بطاقة التعريف الوطنية",
+      "passport": "جواز السفر",
+      "driver_license": "رخصة السياقة",
+      "driving_license": "رخصة السياقة",
+      "residence": "الإقامة",
+      "residence_card": "بطاقة الإقامة",
+      "birth_certificate": "شهادة الميلاد",
+      "family_book": "دفتر عائلي",
+      "health_card": "بطاقة الشفاء",
+      "work_permit": "تصريح عمل",
+      "work_card": "بطاقة العمل",
+      "diploma": "شهادة دراسية",
+      "student_card": "بطاقة الطالب",
+      "vehicle_registration": "البطاقة الرمادية",
+      "tax_card": "البطاقة الجبائية",
+      "military": "وثيقة عسكرية",
+      "military_card": "بطاقة الخدمة الوطنية",
+      "custom": "أخرى",
+      "other": "أخرى"
+    },
+    "modal": {
+      "addTitle": "إضافة وثيقة جديدة",
+      "editTitle": "تعديل الوثيقة",
+      "documentPreview": "معاينة الوثيقة",
+      "changeImage": "تغيير الصورة",
+      "uploadImage": "رفع الصورة الشخصية",
+      "addCategoryButton": "إضافة تصنيف جديد",
+      "documentType": "نوع الوثيقة",
+      "documentNumber": "رقم الوثيقة",
+      "nationalIdNumber": "رقم التعريف الوطني NIN",
+      "customDocumentName": "اسم الوثيقة المخصصة",
+      "customDocumentPlaceholder": "رخصة تجارية",
+      "arabicName": "الاسم بالعربية",
+      "latinName": "الاسم باللاتينية",
+      "firstName": "الاسم",
+      "lastName": "اللقب",
+      "firstNamePlaceholder": "محمد",
+      "lastNamePlaceholder": "العربي",
+      "nationality": "الجنسية",
+      "nationalityPlaceholder": "جزائرية",
+      "gender": "الجنس",
+      "choose": "اختر...",
+      "birthDate": "تاريخ الميلاد",
+      "birthPlace": "مكان الميلاد",
+      "bloodType": "فصيلة الدم",
+      "postalCode": "الرمز البريدي",
+      "fullAddress": "العنوان الكامل",
+      "issueDate": "تاريخ الإصدار",
+      "expiryDate": "تاريخ الانتهاء",
+      "issuePlace": "مكان الإصدار",
+      "issuePlacePlaceholder": "السلطة المصدرة",
+      "notes": "ملاحظات",
+      "addToFavorites": "إضافة إلى المفضلة",
+      "save": "حفظ",
+      "cancel": "إلغاء",
+      "addCategoryTitle": "إضافة تصنيف جديد",
+      "categoryName": "اسم التصنيف",
+      "categoryNamePlaceholder": "بطاقة ولاء",
+      "categoryNameArPlaceholder": "اسم التصنيف بالعربية",
+      "categoryNameEnPlaceholder": "Category name in English",
+      "categoryNameFrPlaceholder": "Nom de la catégorie en français",
+      "emoji": "الإيموجي",
+      "color": "اللون",
+      "addCategory": "إضافة التصنيف",
+      "alerts": {
+        "imageTooLarge": "❌ حجم الصورة كبير جداً، الحد الأقصى 5MB"
+      },
+      "categoryAlerts": {
+        "enterName": "الرجاء إدخال اسم التصنيف",
+        "exists": "هذا التصنيف موجود بالفعل",
+        "added": "✅ تم إضافة التصنيف بنجاح"
+      },
+      "colors": {
+        "blue": "أزرق",
+        "green": "أخضر",
+        "orange": "برتقالي",
+        "purple": "بنفسجي",
+        "red": "أحمر",
+        "teal": "تركوازي",
+        "yellow": "أصفر",
+        "gray": "رمادي"
+      }
+    }
+  },
+  "contacts": {
+    "title": "جهات الاتصال",
+    "subtitle": "إدارة جهات الاتصال بسهولة",
+    "searchPlaceholder": "ابحث بالاسم أو الرقم...",
+    "confirmDelete": "هل أنت متأكد من حذف جهة الاتصال؟",
+    "actions": {
+      "export": "تصدير",
+      "import": "استيراد",
+      "preview": "معاينة",
+      "print": "طباعة",
+      "addContact": "إضافة جهة",
+      "edit": "تعديل",
+      "delete": "حذف",
+      "copy": "نسخ",
+      "favorite": "المفضلة",
+      "call": "اتصال",
+      "send": "إرسال"
+    },
+    "view": {
+      "list": "قائمة",
+      "grid": "شبكة"
+    },
+    "alerts": {
+      "importSuccess": "✅ تم استيراد البيانات بنجاح",
+      "invalidFile": "❌ ملف غير صالح"
+    },
+    "stats": {
+      "total": "إجمالي الجهات",
+      "favorites": "المفضلة"
+    },
+    "filters": {
+      "allCategories": "كل التصنيفات"
+    },
+    "empty": {
+      "title": "لا توجد جهات اتصال",
+      "description": "ابدأ بإضافة أول شخص"
+    },
+    "preview": {
+      "title": "جهات الاتصال",
+      "date": "التاريخ",
+      "generatedBy": "تم إنشاء هذا التقرير بواسطة Bader Account Management v2.0.0"
+    },
+    "table": {
+      "name": "الاسم",
+      "category": "التصنيف",
+      "phone": "الهاتف",
+      "email": "البريد",
+      "city": "المدينة"
+    },
+    "categories": {
+      "family": "الأهل",
+      "relatives": "الأقارب",
+      "friends": "الأصدقاء",
+      "work": "العمل",
+      "business": "الأعمال",
+      "school": "الدراسة",
+      "health": "الصحة",
+      "important": "مهم",
+      "personal": "الخاصة",
+      "companies": "مؤسسات",
+      "other": "أخرى"
+    },
+    "modal": {
+      "addTitle": "إضافة جهة اتصال جديدة",
+      "editTitle": "تعديل جهة الاتصال",
+      "firstName": "الاسم",
+      "lastName": "اللقب",
+      "firstNamePlaceholder": "أحمد",
+      "lastNamePlaceholder": "محمد",
+      "category": "التصنيف",
+      "new": "جديد",
+      "phone1": "الهاتف 1",
+      "phone2": "الهاتف 2",
+      "email": "البريد الإلكتروني",
+      "state": "الولاية",
+      "statePlaceholder": "الجزائر العاصمة",
+      "city": "المدينة/البلدية",
+      "cityPlaceholder": "باب الزوار",
+      "notes": "ملاحظات",
+      "notesPlaceholder": "أي ملاحظات...",
+      "addToFavorites": "إضافة إلى المفضلة",
+      "save": "حفظ",
+      "cancel": "إلغاء",
+      "addCategoryTitle": "إضافة تصنيف جديد",
+      "categoryName": "اسم التصنيف",
+      "categoryNamePlaceholder": "زملاء الدراسة",
+      "categoryNameArPlaceholder": "اسم التصنيف بالعربية",
+      "categoryNameEnPlaceholder": "Category name in English",
+      "categoryNameFrPlaceholder": "Nom de la catégorie en français",
+      "emoji": "الإيموجي",
+      "color": "اللون",
+      "addCategory": "إضافة التصنيف",
+      "categoryAlerts": {
+        "enterName": "الرجاء إدخال اسم التصنيف",
+        "exists": "هذا التصنيف موجود بالفعل",
+        "added": "✅ تم إضافة التصنيف بنجاح"
+      },
+      "colors": {
+        "red": "أحمر",
+        "orange": "برتقالي",
+        "yellow": "أصفر",
+        "green": "أخضر",
+        "blue": "أزرق",
+        "purple": "بنفسجي",
+        "pink": "وردي",
+        "gray": "رمادي"
+      }
+    }
+  },
+  "generator": {
+    "title": "مولد كلمات المرور",
+    "subtitle": "أنشئ كلمات مرور قوية وآمنة",
+    "actions": {
+      "export": "تصدير",
+      "print": "طباعة",
+      "copy": "نسخ",
+      "delete": "حذف",
+      "clearAll": "حذف الكل",
+      "show": "إظهار",
+      "hide": "إخفاء",
+      "done": "تم"
+    },
+    "alerts": {
+      "selectOneType": "اختر على الأقل نوع واحد من الأحرف",
+      "copied": "✅ تم نسخ كلمة المرور"
+    },
+    "generate": {
+      "title": "توليد كلمة مرور جديدة",
+      "placeholder": "اضغط توليد لإنشاء كلمة مرور...",
+      "strength": "قوة كلمة المرور",
+      "button": "توليد كلمة مرور جديدة"
+    },
+    "settings": {
+      "title": "الإعدادات",
+      "length": "طول كلمة المرور"
+    },
+    "options": {
+      "uppercase": "أحرف كبيرة A-Z",
+      "lowercase": "أحرف صغيرة a-z",
+      "numbers": "أرقام 0-9",
+      "symbols": "رموز !@#$",
+      "excludeSimilar": "تجنب المتشابه",
+      "excludeAmbiguous": "تجنب الغامض"
+    },
+    "strength": {
+      "veryWeak": "ضعيفة جداً",
+      "weak": "ضعيفة",
+      "medium": "متوسطة",
+      "strong": "قوية",
+      "veryStrong": "قوية جداً"
+    },
+    "filters": {
+      "all": "كل المستويات"
+    },
+    "history": {
+      "title": "السجل",
+      "confirmClear": "هل أنت متأكد من حذف كل كلمات المرور المحفوظة؟",
+      "searchPlaceholder": "ابحث في كلمات المرور...",
+      "empty": "لا توجد كلمات مرور محفوظة بعد",
+      "noResults": "لا توجد نتائج للبحث",
+      "hint": "اضغط توليد كلمة مرور جديدة لإنشاء واحدة",
+      "lengthChars": "{length} حرف"
+    },
+    "tips": {
+      "title": "نصائح لكلمات مرور آمنة",
+      "useLongPassword": "استخدم 16 حرفاً على الأقل لحساباتك المهمة",
+      "mixCharacters": "ادمج بين أحرف كبيرة وصغيرة وأرقام ورموز",
+      "uniquePassword": "لا تستخدم نفس كلمة المرور لأكثر من حساب",
+      "changeRegularly": "غيّر كلمات المرور كل 3-6 أشهر",
+      "noPersonalInfo": "لا تستخدم معلومات شخصية مثل اسمك أو تاريخ ميلادك",
+      "doNotShare": "لا تشارك كلمات المرور مع أي شخص"
+    }
+  },
+  "analytics": {
+    "title": "التحاليل والبيانات",
+    "subtitle": "رسوم بيانية وتقارير تفصيلية لكل صفحة",
+    "actions": {
+      "printReport": "طباعة التقرير"
+    },
+    "tabs": {
+      "overview": "نظرة شاملة",
+      "accounts": "الحسابات",
+      "subscriptions": "الاشتراكات",
+      "cards": "البطاقات",
+      "documents": "الوثائق",
+      "contacts": "جهات الاتصال"
+    },
+    "common": {
+      "total": "إجمالي",
+      "active": "نشطة",
+      "favorites": "مفضلة",
+      "thisMonth": "هذا الشهر"
+    },
+    "labels": {
+      "accounts": "الحسابات",
+      "subscriptions": "الاشتراكات",
+      "activeSubscriptions": "الاشتراكات النشطة",
+      "cards": "البطاقات",
+      "documents": "الوثائق",
+      "contacts": "جهات الاتصال"
+    },
+    "overview": {
+      "totalDistribution": "التوزيع الإجمالي",
+      "monthlyActivity": "النشاط الشهري آخر 30 يوم"
+    },
+    "accounts": {
+      "total": "إجمالي الحسابات",
+      "duplicates": "مكررة",
+      "byCategory": "الحسابات حسب التصنيف",
+      "distributionByCategory": "التوزيع حسب التصنيف",
+      "barByCategory": "الحسابات حسب التصنيف"
+    },
+    "subscriptions": {
+      "statusTitle": "حالة الاشتراكات",
+      "byCategory": "الاشتراكات حسب التصنيف",
+      "expiringSoon": "تنتهي قريباً"
+    },
+    "cards": {
+      "normal": "عادية",
+      "byType": "توزيع البطاقات حسب النوع"
+    },
+    "documents": {
+      "distribution": "توزيع الوثائق",
+      "gender": "الجنس"
+    },
+    "contacts": {
+      "byCategory": "جهات الاتصال حسب التصنيف"
+    },
+    "status": {
+      "active": "نشطة",
+      "expired": "منتهية",
+      "frozen": "مجمدة"
+    },
+    "gender": {
+      "male": "ذكر",
+      "female": "أنثى"
+    },
+    "quick": {
+      "mostUsedCategory": "أكثر تصنيف استخداماً",
+      "expiringSubscriptions": "اشتراكات تنتهي قريباً",
+      "totalActivity": "إجمالي النشاط"
+    },
+    "units": {
+      "subscriptionsCount": "{count} اشتراك",
+      "itemsCount": "{count} عنصر"
+    },
+    "messages": {
+      "noData": "لا توجد بيانات",
+      "noActivity": "لا يوجد نشاط",
+      "noAccounts": "لا توجد حسابات",
+      "noSubscriptions": "لا توجد اشتراكات",
+      "none": "لا يوجد"
+    },
+    "footer": {
+      "user": "المستخدم",
+      "storage": "التخزين",
+      "local": "محلي",
+      "protection": "الحماية",
+      "enabled": "مفعلة",
+      "version": "الإصدار",
+      "rights": "جميع الحقوق محفوظة"
+    },
+    "categories": {
+      "general": "عام",
+      "services": "خدمات",
+      "social": "تواصل اجتماعي",
+      "work": "عمل",
+      "finance": "مالية",
+      "banking": "بنوك",
+      "shopping": "تسوق",
+      "entertainment": "ترفيه",
+      "education": "تعليم",
+      "health": "صحة",
+      "travel": "سفر",
+      "gaming": "ألعاب",
+      "streaming": "مشاهدة",
+      "email": "بريد إلكتروني",
+      "cloud": "تخزين سحابي",
+      "government": "حكومي",
+      "business": "أعمال",
+      "personal": "شخصي",
+      "other": "أخرى"
+    },
+    "cardTypes": {
+      "bank": "بطاقة بنكية",
+      "membership": "بطاقة عضوية",
+      "shopping": "بطاقة شراء",
+      "gaming": "بطاقة ألعاب",
+      "loyalty": "بطاقة ولاء",
+      "gift": "بطاقة هدية",
+      "transport": "بطاقة نقل",
+      "student": "بطاقة طالب",
+      "insurance": "بطاقة تأمين",
+      "health": "بطاقة صحية",
+      "work": "بطاقة عمل",
+      "other": "أخرى"
+    },
+    "documentTypes": {
+      "national_id": "بطاقة الهوية",
+      "passport": "جواز السفر",
+      "driver_license": "رخصة السياقة",
+      "driving_license": "رخصة السياقة",
+      "residence": "الإقامة",
+      "residence_card": "بطاقة الإقامة",
+      "birth_certificate": "شهادة الميلاد",
+      "family_book": "دفتر عائلي",
+      "health_card": "بطاقة صحية",
+      "work_permit": "تصريح عمل",
+      "work_card": "بطاقة العمل",
+      "diploma": "شهادة دراسية",
+      "student_card": "بطاقة الطالب",
+      "vehicle_registration": "بطاقة مركبة",
+      "tax_card": "بطاقة ضريبية",
+      "military": "وثيقة عسكرية",
+      "military_card": "بطاقة الخدمة الوطنية",
+      "custom": "مخصص",
+      "other": "أخرى"
+    },
+    "contactCategories": {
+      "family": "العائلة",
+      "relatives": "الأقارب",
+      "friends": "الأصدقاء",
+      "work": "العمل",
+      "business": "الأعمال",
+      "school": "الدراسة",
+      "health": "الصحة",
+      "important": "مهم",
+      "personal": "الخاصة",
+      "companies": "مؤسسات",
+      "other": "أخرى"
+    }
+  },
+  "settings": {
+    "title": "الإعدادات",
+    "subtitle": "تخصيص البرنامج وإدارة الأمان",
+    "saveSettings": "حفظ الإعدادات",
+    "savedSuccess": "✅ تم حفظ الإعدادات بنجاح",
+    "appearance": {
+      "title": "المظهر",
+      "currentTheme": "لون التصميم الحالي",
+      "currentFontSize": "حجم الخط الحالي",
+      "themes": {
+        "blue": "أزرق",
+        "purple": "بنفسجي",
+        "green": "أخضر",
+        "pink": "وردي",
+        "brown": "بني"
+      },
+      "font": {
+        "small": "صغير",
+        "medium": "متوسط",
+        "large": "كبير"
+      }
+    },
+    "security": {
+      "title": "الأمان",
+      "autoLockCurrent": "القفل التلقائي بعد الحالي: {minutes} دقيقة",
+      "minutes": "{minutes} دقيقة",
+      "hour": "ساعة",
+      "sessionTimeout": "مهلة الجلسة بالدقائق",
+      "encryptionTitle": "تشفير قوي AES-256",
+      "encryptionDescription": "حماية كاملة لكل البيانات",
+      "changeMainPassword": "تغيير كلمة المرور الرئيسية",
+      "changePasswordPrompt": "أدخل كلمة المرور الجديدة 4 أحرف على الأقل:",
+      "changePasswordSuccess": "✅ تم تغيير كلمة المرور وإعادة تشفير البيانات",
+      "passwordTooShort": "❌ يجب ألا تقل عن 8 أحرف وتحتوي على حروف وأرقام",
+      "changePasswordTitle": "تغيير كلمة المرور الرئيسية",
+      "currentPassword": "كلمة المرور الحالية",
+      "newPassword": "كلمة المرور الجديدة",
+      "wrongCurrent": "❌ كلمة المرور الحالية غير صحيحة",
+      "save": "حفظ",
+      "cancel": "إلغاء",
+      "confirmWithPassword": "أدخل كلمة المرور الرئيسية لتأكيد هذا الإجراء",
+      "confirmFailed": "❌ كلمة المرور غير صحيحة"
+    },
+    "backup": {
+      "title": "النسخ الاحتياطي",
+      "frequencyCurrent": "تكرار النسخ الاحتياطي الحالي",
+      "formatCurrent": "صيغة التصدير الحالية",
+      "frequencies": {
+        "daily": "يومي",
+        "weekly": "أسبوعي",
+        "monthly": "شهري",
+        "never": "إيقاف"
+      },
+      "formats": {
+        "json": "منظم",
+        "csv": "Excel",
+        "encryptedLabel": "مشفر",
+        "encrypted": "محمي"
+      },
+      "autoUpdate": "التحديث التلقائي",
+      "autoUpdateDescription": "تحديث البرنامج تلقائياً",
+      "stats": {
+        "accounts": "حسابات",
+        "subscriptions": "اشتراكات",
+        "cards": "بطاقات"
+      },
+      "exportButton": "تصدير {format}",
+      "importData": "استيراد البيانات"
+    },
+    "advanced": {
+      "title": "متقدم",
+      "systemSounds": "أصوات النظام",
+      "systemSoundsDescription": "مؤثرات صوتية عند الإجراءات"
+    },
+    "system": {
+      "title": "معلومات النظام",
+      "version": "الإصدار",
+      "releaseDate": "تاريخ الإصدار",
+      "totalItems": "عدد العناصر",
+      "dataSize": "حجم البيانات",
+      "encryption": "التشفير",
+      "storage": "التخزين",
+      "lastUpdate": "آخر تحديث",
+      "status": "الحالة",
+      "local": "محلي",
+      "now": "الآن",
+      "active": "نشط ✓"
+    },
+    "danger": {
+      "title": "منطقة الخطر",
+      "description": "هذه الإجراءات لا يمكن التراجع عنها. يرجى توخي الحذر.",
+      "confirmDeleteAll": "هل أنت متأكد من حذف كل البيانات؟ لا يمكن التراجع!",
+      "deleteAll": "حذف كل البيانات وإعادة تعيين البرنامج",
+      "confirmRestore": "هل تريد استعادة الإعدادات الافتراضية؟",
+      "restoreDefaults": "استعادة الإعدادات الافتراضية"
+    },
+    "footer": {
+      "rights": "جميع الحقوق محفوظة"
+    }
+  },
+  "developer": {
+    "title": "معلومات المطور",
+    "hero": {
+      "badge": "برنامج إدارة الحسابات والمعلومات الخاصة",
+      "description": "صفحة تعريفية بالمطور والبرنامج، تعرض وصفًا مختصرًا للمشروع ومواصفاته ومميزاته ومعلومات التواصل والإصدار."
+    },
+    "developer": {
+      "role": "مطور ومؤسس Baderinfo",
+      "description": "مطور يهتم ببناء حلول عملية تساعد المستخدم على تنظيم بياناته وإدارة معلوماته المهمة بسهولة. تم تصميم هذا البرنامج ليكون بسيطًا في الاستخدام، واضحًا في العرض، ومناسبًا للاعتماد اليومي في حفظ الحسابات والاشتراكات والوثائق والبيانات الشخصية."
+    },
+    "contact": {
+      "officialWebsite": "الموقع الرسمي",
+      "email": "البريد الإلكتروني"
+    },
+    "programDescription": {
+      "title": "وصف البرنامج",
+      "description": "هو برنامج مخصص لإدارة المعلومات الشخصية المهمة مثل الحسابات، الاشتراكات، البطاقات، الوثائق، وبيانات الاتصال. يهدف البرنامج إلى جمع هذه البيانات داخل واجهة واحدة منظمة بدلًا من تشتتها في أماكن متعددة، مع التركيز على سهولة الاستخدام وترتيب المعلومات بطريقة واضحة وآمنة."
+    },
+    "specificationsTitle": "مواصفات البرنامج",
+    "specifications": {
+      "accounts": {
+        "title": "إدارة الحسابات",
+        "description": "تنظيم الحسابات المهمة وحفظ بياناتها بطريقة مرتبة."
+      },
+      "subscriptions": {
+        "title": "إدارة الاشتراكات",
+        "description": "متابعة الاشتراكات والخدمات النشطة وتواريخها المهمة."
+      },
+      "cardsDocuments": {
+        "title": "إدارة البطاقات والوثائق",
+        "description": "حفظ معلومات البطاقات والوثائق داخل أقسام واضحة."
+      },
+      "contacts": {
+        "title": "بيانات الاتصال",
+        "description": "تجميع بيانات الاتصال المهمة والرجوع إليها بسرعة."
+      },
+      "protection": {
+        "title": "حماية البيانات",
+        "description": "الاهتمام بحفظ البيانات الحساسة بطريقة أكثر أمانًا."
+      },
+      "interface": {
+        "title": "واجهة منظمة",
+        "description": "تصميم واضح وسهل الاستخدام للوصول السريع لكل قسم."
+      }
+    },
+    "advantagesTitle": "محاسن البرنامج",
+    "advantages": {
+      "1": "واجهة عربية واضحة ومناسبة للاستخدام اليومي.",
+      "2": "تقسيم البيانات إلى أقسام منظمة لتسهيل الوصول إليها.",
+      "3": "تصميم متجاوب ومريح بصريًا.",
+      "4": "إمكانية تصدير البيانات والاحتفاظ بنسخة احتياطية.",
+      "5": "تجربة استخدام بسيطة بدون تعقيد.",
+      "6": "مناسب لإدارة المعلومات الشخصية والحسابات المهمة في مكان واحد."
+    },
+    "contactMethod": {
+      "title": "أسلوب التواصل",
+      "emailTitle": "التواصل عبر البريد",
+      "emailDescription": "يمكن استخدام البريد الإلكتروني للاستفسارات، الملاحظات، أو طلب تطويرات إضافية على البرنامج.",
+      "websiteTitle": "الموقع الرسمي",
+      "websiteDescription": "يمكن زيارة الموقع الرسمي للاطلاع على معلومات إضافية أو متابعة أعمال وخدمات Baderinfo."
+    },
+    "version": {
+      "title": "معلومات الإصدار",
+      "appName": "اسم البرنامج",
+      "version": "الإصدار",
+      "releaseYear": "سنة الإصدار",
+      "status": "حالة البرنامج",
+      "active": "نشط"
+    },
+    "footer": {
+      "madeWith": "صُنع بـ",
+      "by": "بواسطة",
+      "rights": "جميع الحقوق محفوظة"
+    }
+  },
+  "contact": {
+    "title": "اتصل بنا",
+    "subtitle": "نحن هنا لمساعدتك في أي استفسار أو ملاحظة أو طلب تطوير متعلق ببرنامج Bader Account Management.",
+    "hero": {
+      "badge": "تواصل مباشر مع فريق Baderinfo"
+    },
+    "cards": {
+      "website": {
+        "title": "الموقع الرسمي",
+        "action": "زيارة الموقع"
+      },
+      "email": {
+        "title": "البريد الإلكتروني",
+        "copy": "نسخ البريد",
+        "copied": "تم النسخ"
+      },
+      "response": {
+        "title": "وقت الاستجابة",
+        "time": "عادة خلال 24 إلى 48 ساعة",
+        "note": "حسب نوع الطلب"
+      }
+    },
+    "categories": {
+      "general": "استفسار عام",
+      "support": "دعم فني",
+      "bug": "بلاغ عن مشكلة",
+      "suggestion": "اقتراح تطوير",
+      "security": "استفسار أمني"
+    },
+    "priorities": {
+      "low": "منخفضة",
+      "normal": "عادية",
+      "high": "عالية"
+    },
+    "form": {
+      "title": "أرسل رسالة",
+      "description": "املأ النموذج وسيتم فتح برنامج البريد لإرسال الرسالة.",
+      "success": "تم تجهيز رسالتك بنجاح. أكمل الإرسال من برنامج البريد.",
+      "name": "الاسم",
+      "namePlaceholder": "اسمك الكامل",
+      "email": "البريد الإلكتروني",
+      "category": "نوع الطلب",
+      "priority": "الأولوية",
+      "subject": "الموضوع",
+      "subjectPlaceholder": "موضوع الرسالة",
+      "message": "الرسالة",
+      "messagePlaceholder": "اكتب رسالتك هنا بالتفصيل...",
+      "noteTitle": "ملاحظة",
+      "note": "هذا النموذج يفتح برنامج البريد لديك لإرسال الرسالة إلى {email}. إذا لم يفتح البريد، يمكنك نسخ البريد الإلكتروني وإرسال الرسالة يدويًا.",
+      "submit": "تجهيز وإرسال الرسالة"
+    },
+    "validation": {
+      "nameRequired": "الرجاء إدخال الاسم.",
+      "emailRequired": "الرجاء إدخال البريد الإلكتروني.",
+      "emailInvalid": "البريد الإلكتروني غير صحيح.",
+      "subjectRequired": "الرجاء إدخال موضوع الرسالة.",
+      "messageRequired": "الرجاء كتابة الرسالة.",
+      "messageTooShort": "الرسالة قصيرة جدًا، الرجاء كتابة تفاصيل أكثر."
+    },
+    "mailBody": {
+      "name": "الاسم",
+      "email": "البريد",
+      "category": "التصنيف",
+      "priority": "الأولوية",
+      "message": "الرسالة"
+    },
+    "sidebar": {
+      "helpTitle": "كيف نساعدك؟",
+      "contactInfo": "معلومات التواصل"
+    },
+    "quickTopics": {
+      "help": {
+        "title": "طلب مساعدة",
+        "description": "إذا واجهت مشكلة في استخدام البرنامج أو حفظ البيانات."
+      },
+      "suggestion": {
+        "title": "اقتراح ميزة",
+        "description": "شاركنا فكرة قد تجعل البرنامج أفضل وأكثر فائدة."
+      },
+      "bug": {
+        "title": "بلاغ عن خطأ",
+        "description": "أخبرنا بأي خطأ يظهر في الواجهة أو أثناء الاستخدام."
+      },
+      "security": {
+        "title": "استفسار أمني",
+        "description": "لأي سؤال متعلق بحماية البيانات أو الخصوصية."
+      }
+    },
+    "info": {
+      "email": "البريد",
+      "website": "الموقع",
+      "support": "الدعم",
+      "supportValue": "متاح عبر البريد",
+      "response": "الاستجابة",
+      "responseValue": "24 - 48 ساعة"
+    },
+    "footerNote": "شكرًا لاستخدامك Bader Account Management. ملاحظاتك تساعدنا على تحسين البرنامج باستمرار."
+  },
+  "setupProfile": {
+    "side": {
+      "title": "إعداد المستخدم الأول",
+      "description": "قبل الدخول إلى البرنامج، أدخل معلومات المستخدم الأساسية. ستُستخدم هذه البيانات لتخصيص البرنامج ومعلوماتك الشخصية.",
+      "features": {
+        "user": "تخصيص اسم المستخدم والمدير",
+        "contact": "حفظ بيانات التواصل الأساسية",
+        "ready": "تجهيز البرنامج للاستخدام اليومي"
+      }
+    },
+    "badge": "خطوة واحدة فقط",
+    "formTitle": "معلومات المستخدم",
+    "formDescription": "يمكنك تعديل هذه البيانات لاحقًا من صفحة معلوماتي.",
+    "fields": {
+      "firstName": "الاسم",
+      "lastName": "اللقب",
+      "username": "اسم المستخدم",
+      "email": "البريد الإلكتروني",
+      "phone": "رقم الهاتف",
+      "nationality": "الجنسية",
+      "role": "صفة المستخدم",
+      "companyName": "اسم المؤسسة أو النشاط"
+    },
+    "placeholders": {
+      "firstName": "مثال: بدر",
+      "lastName": "مثال: حميدان",
+      "username": "مثال: baderinfo",
+      "nationality": "مثال: جزائرية",
+      "role": "مدير",
+      "companyName": "اختياري"
+    },
+    "defaults": {
+      "role": "مدير"
+    },
+    "validation": {
+      "firstNameRequired": "الرجاء إدخال الاسم.",
+      "lastNameRequired": "الرجاء إدخال اللقب.",
+      "usernameRequired": "الرجاء إدخال اسم المستخدم."
+    },
+    "saveButton": "حفظ والمتابعة إلى البرنامج",
+    "footerNote": "سيتم عرض هذه المعلومات داخل البرنامج ويمكن تعديلها لاحقًا."
+  },
+  "myAccount": {
+    "title": "حسابي",
+    "subtitle": "معلوماتك الشاملة بشكل احترافي",
+    "export": "تصدير",
+    "print": "طباعة",
+    "edit": "تعديل",
+    "save": "حفظ",
+    "add": "إضافة",
+    "delete": "حذف",
+    "call": "اتصال",
+    "saved": "✅ تم الحفظ بنجاح",
+    "imageTooLarge": "❌ حجم الصورة كبير جداً (الحد الأقصى 5MB)",
+    "locationError": "❌ تعذر الحصول على الموقع",
+    "locationSuccess": "✅ تم تحديد الموقع",
+    "latitude": "خط العرض",
+    "longitude": "خط الطول",
+    "fallbackFirstName": "الاسم",
+    "fallbackLastName": "واللقب",
+    "untilNow": "حتى الآن",
+    "tabs": {
+      "personal": "شخصي",
+      "contact": "التواصل",
+      "address": "العنوان",
+      "secrets": "الأسرار",
+      "experience": "الخبرات",
+      "education": "التعليم",
+      "certifications": "الشهادات",
+      "achievements": "الأعمال",
+      "hobbies": "الهوايات"
+    },
+    "personal": {
+      "title": "المعلومات الشخصية",
+      "firstName": "الاسم",
+      "lastName": "اللقب",
+      "username": "اسم المستخدم",
+      "birthDate": "تاريخ الميلاد",
+      "nationality": "الجنسية",
+      "gender": "الجنس",
+      "choose": "اختر...",
+      "male": "ذكر",
+      "female": "أنثى",
+      "bio": "نبذة شخصية",
+      "bioPlaceholder": "اكتب نبذة عن نفسك...",
+      "skills": "المهارات (افصل بفاصلة)",
+      "skillsPlaceholder": "JavaScript, React, التصميم...",
+      "languages": "اللغات (افصل بفاصلة)",
+      "languagesPlaceholder": "العربية، الإنجليزية، الفرنسية"
+    },
+    "contactInfo": {
+      "emails": "الإيميلات",
+      "phones": "أرقام الهاتف",
+      "password": "كلمة المرور",
+      "emailPlaceholder": "email@example.com",
+      "phonePlaceholder": "+213 XXX XXX XXX"
+    },
+    "address": {
+      "title": "العنوان",
+      "country": "الدولة",
+      "state": "الولاية",
+      "city": "المدينة",
+      "municipality": "البلدية",
+      "postalCode": "الرمز البريدي",
+      "fullAddress": "العنوان الكامل",
+      "gps": "تحديد GPS",
+      "locating": "جاري التحديد..."
+    },
+    "secrets": {
+      "title": "الأرقام السرية",
+      "labelPlaceholder": "اسم السري",
+      "valuePlaceholder": "القيمة"
+    },
+    "experience": {
+      "title": "الخبرات المهنية",
+      "positionPlaceholder": "المنصب",
+      "companyPlaceholder": "الشركة",
+      "current": "أعمل حالياً هنا",
+      "descriptionPlaceholder": "وصف المهام..."
+    },
+    "education": {
+      "title": "التعليم",
+      "degreePlaceholder": "الدرجة العلمية",
+      "institutionPlaceholder": "المؤسسة",
+      "current": "أدرس حالياً"
+    },
+    "certifications": {
+      "title": "الشهادات والدبلومات",
+      "namePlaceholder": "اسم الشهادة",
+      "issuerPlaceholder": "الجهة المانحة",
+      "credentialIdPlaceholder": "رقم الاعتماد",
+      "issueDate": "تاريخ الإصدار",
+      "expiryDate": "تاريخ الانتهاء",
+      "credentialId": "رقم الاعتماد"
+    },
+    "achievements": {
+      "title": "الأعمال المنجزة",
+      "titlePlaceholder": "عنوان الإنجاز",
+      "descriptionPlaceholder": "وصف الإنجاز..."
+    },
+    "hobbies": {
+      "title": "الهوايات والاهتمامات",
+      "iconPlaceholder": "🎨",
+      "namePlaceholder": "اسم الهواية"
+    }
+  },
+  "licenseInfo": {
+    "loading": "جاري تحميل معلومات الترخيص...",
+    "badge": "معلومات الترخيص والجهاز",
+    "title": "معلومات الترخيص",
+    "subtitle": "تابع حالة الترخيص، نوع الخطة، صاحب الترخيص، معرف الجهاز، وتواريخ التفعيل والانتهاء.",
+    "licenseStatus": "حالة الترخيص",
+    "status": {
+      "active": "مفعل",
+      "inactive": "غير مفعل",
+      "expired": "منتهي"
+    },
+    "statusDescriptions": {
+      "active": "الترخيص مفعل ويعمل على هذا الجهاز.",
+      "inactive": "لم يتم العثور على ترخيص مفعل لهذا الجهاز.",
+      "expired": "انتهت مدة الترخيص ويحتاج إلى تجديد."
+    },
+    "detailsTitle": "تفاصيل الترخيص",
+    "fields": {
+      "status": "الحالة",
+      "licenseType": "نوع الترخيص",
+      "ownerName": "اسم صاحب الترخيص",
+      "deviceId": "معرف الجهاز",
+      "activatedAt": "تاريخ التفعيل",
+      "expiresAt": "تاريخ الانتهاء",
+      "version": "الإصدار"
+    },
+    "notAvailable": "غير متوفر",
+    "whyTitle": "لماذا هذه المعلومات مهمة؟",
+    "reasons": {
+      "status": "معرفة هل الترخيص مفعل أم يحتاج إلى تفعيل.",
+      "expiry": "متابعة تاريخ انتهاء الترخيص وتجديده في الوقت المناسب.",
+      "device": "ربط الترخيص بجهاز محدد عبر معرف الجهاز.",
+      "support": "تسهيل الدعم الفني عند التواصل مع المطور."
+    },
+    "actionsTitle": "إجراءات الترخيص",
+    "copyDeviceId": "نسخ معرف الجهاز",
+    "copied": "تم النسخ",
+    "goToActivation": "الانتقال إلى صفحة التفعيل",
+    "manageActivation": "إدارة التفعيل",
+    "refresh": "تحديث المعلومات",
+    "deviceTitle": "معرف الجهاز",
+    "deviceDescription": "أرسل هذا المعرف عند طلب الترخيص أو عند التواصل مع الدعم الفني.",
+    "rights": "جميع الحقوق محفوظة"
+  },
+  "ai": {
+    "nav": "المساعد الذكي",
+    "title": "المساعد الذكي",
+    "subtitle": "تحليل أمان حساباتك محلياً، ومساعدة بالذكاء الاصطناعي",
+    "scoreTitle": "درجة أمان الخزنة",
+    "weak": "كلمات مرور ضعيفة",
+    "reused": "كلمات مرور مكررة",
+    "old": "كلمات مرور قديمة (+180 يوم)",
+    "total": "إجمالي الحسابات",
+    "issues": "ما يحتاج إلى إصلاح",
+    "noIssues": "ممتاز! لا توجد مشاكل ظاهرة.",
+    "privacy": "🔒 يُرسل إلى الذكاء الاصطناعي ملخص فقط (أسماء المواقع وقوة كلمات المرور). لا تُرسل كلمات المرور نفسها ولا بيانات البطاقات أبداً.",
+    "apiKey": "مفتاح Anthropic API",
+    "apiKeyHint": "يُحفظ مشفراً داخل الخزنة. احصل عليه من console.anthropic.com",
+    "saveKey": "حفظ المفتاح",
+    "ask": "اسأل المساعد",
+    "placeholder": "مثال: ما الحسابات التي أبدأ بتقويتها أولاً؟",
+    "send": "إرسال",
+    "thinking": "جارٍ التفكير...",
+    "quick1": "اقترح خطة لتقوية أمان حساباتي",
+    "quick2": "كيف أنظّم حساباتي بشكل أفضل؟",
+    "quick3": "ما أهم أخطائي الأمنية؟",
+    "desktopOnly": "المساعد الذكي متاح في نسخة سطح المكتب فقط. التحليل المحلي أعلاه يعمل دائماً.",
+    "noKey": "أضف مفتاح API أولاً.",
+    "error": "تعذر الاتصال بالمساعد: ",
+    "reusedFor": "مستخدمة في {count} حسابات",
+    "weakFor": "ضعيفة",
+    "oldFor": "لم تتغير منذ مدة",
+    "tabSecurity": "الأمان",
+    "tabSubs": "الاشتراكات",
+    "tabExpiry": "رادار الانتهاء",
+    "tabOrganize": "التنظيم",
+    "tabChat": "اسأل",
+    "breachTitle": "فحص التسريبات",
+    "breachDesc": "يتحقق إن كانت كلمات مرورك ظهرت في تسريبات معروفة. لا تغادر كلمة المرور جهازك: يُرسل فقط أول 5 رموز من بصمتها.",
+    "breachRun": "افحص كل الحسابات",
+    "breachRunning": "جارٍ الفحص...",
+    "breachFound": "ظهرت في {count} تسريب — غيّرها فوراً",
+    "breachClean": "لم تظهر في تسريبات",
+    "breachFail": "تعذر الفحص (تحقق من الاتصال)",
+    "analyze": "حلّل بالذكاء الاصطناعي",
+    "nothing": "لا شيء هنا الآن ✅",
+    "spend": "إنفاقك على الاشتراكات النشطة",
+    "soon": "تنتهي خلال 30 يوماً",
+    "expiredSubs": "اشتراكات منتهية",
+    "expiringItems": "بطاقات ووثائق تنتهي خلال 90 يوماً",
+    "expiredItems": "بطاقات ووثائق منتهية",
+    "daysN": "{n} يوم",
+    "pSubs": "حلّل اشتراكاتي: ما الذي يجب تجديده أو إلغاؤه لتوفير المال؟ رتب حسب الأولوية.",
+    "pExpiry": "رتب لي خطة تجديد للبطاقات والوثائق التي تنتهي قريباً مع ما يجب تحضيره لكل واحدة.",
+    "pOrganize": "اقترح تصنيفاً أفضل لحساباتي وطريقة تنظيم تسهّل الوصول والأمان.",
+    "pSecurity": "اقترح خطة مرتبة لتقوية أمان حساباتي حسب الأولوية."
+  },
+  "licenseReal": {
+    "title": "الترخيص",
+    "subtitle": "حالة ترخيص هذا البرنامج على هذا الجهاز",
+    "active": "مفعّل",
+    "inactive": "غير مفعّل",
+    "dev": "وضع التطوير",
+    "checking": "جارٍ التحقق...",
+    "customer": "الزبون",
+    "plan": "الخطة",
+    "licenseNo": "رقم الترخيص",
+    "device": "بصمة الجهاز",
+    "activated": "تاريخ التفعيل",
+    "expires": "ينتهي في",
+    "lifetime": "مدى الحياة",
+    "daysLeft": "الأيام المتبقية",
+    "checkNow": "تحقق الآن من الخادم",
+    "desktopOnly": "معلومات الترخيص متاحة في نسخة سطح المكتب فقط.",
+    "onlyOneDevice": "هذا الترخيص مرتبط بهذا الجهاز وبهذا البرنامج فقط ولا يعمل على جهاز آخر أو برنامج آخر.",
+    "copy": "نسخ",
+    "copied": "تم النسخ",
+    "version": "الإصدار",
+    "support": "للدعم أو نقل الترخيص إلى جهاز آخر تواصل معنا",
+    "genuine": "ترخيص أصلي",
+    "genuineSub": "GENUINE LICENSE",
+    "devStamp": "نسخة تطوير",
+    "devSub": "DEVELOPMENT",
+    "invalidStamp": "غير مفعّل",
+    "invalidSub": "NOT ACTIVATED",
+    "verifiedBy": "موقّع ومُتحقَّق منه",
+    "certificate": "شهادة ترخيص",
+    "issuedBy": "صادر عن",
+    "supportTitle": "الدعم ونقل الترخيص",
+    "whatsapp": "واتساب",
+    "phone": "الهاتف",
+    "email": "البريد",
+    "developer": "المطوّر",
+    "ownerOfLicense": "مالك الترخيص",
+    "signedNote": "ترخيص موقّع رقمياً (Ed25519) ومرتبط بهذا الجهاز وهذا البرنامج فقط."
+  },
+  "print": {
+    "owner": "صاحب الحساب",
+    "username": "اسم المستخدم",
+    "date": "تاريخ الطباعة",
+    "total": "العدد الإجمالي",
+    "confidential": "سري — للاستخدام الشخصي فقط",
+    "footer": "تقرير مُنشأ بواسطة Bader Account Management",
+    "empty": "لا توجد بيانات للطباعة",
+    "page": "صفحة",
+    "includeSecretsPrompt": "هل تريد إظهار كلمات المرور والأرقام السرية في الطباعة؟\n\nموافق = إظهارها\nإلغاء = إخفاؤها (موصى به)",
+    "secretsHidden": "كلمات المرور والأرقام السرية مخفية في هذه الطباعة.",
+    "secretsShown": "تنبيه: تحتوي هذه الطباعة على معلومات سرية. احفظها في مكان آمن.",
+    "status": {
+      "active": "نشط",
+      "expired": "منتهٍ",
+      "frozen": "مجمّد"
+    },
+    "col": {
+      "site": "الموقع",
+      "category": "التصنيف",
+      "username": "اسم المستخدم",
+      "email": "البريد الإلكتروني",
+      "phone": "الهاتف",
+      "password": "كلمة المرور",
+      "notes": "ملاحظات",
+      "recovery": "بريد الاسترداد",
+      "name": "الاسم",
+      "holder": "اسم صاحب البطاقة",
+      "subOwner": "صاحب الاشتراك",
+      "start": "تاريخ البداية",
+      "end": "تاريخ الانتهاء",
+      "price": "السعر",
+      "status": "الحالة",
+      "type": "النوع",
+      "cardNumber": "رقم البطاقة",
+      "bank": "البنك",
+      "expiry": "الانتهاء",
+      "iban": "IBAN",
+      "accUser": "مستخدم حساب البطاقة",
+      "accPass": "كلمة مرور الحساب",
+      "pin": "الرمز السري",
+      "docOwner": "اسم صاحب الوثيقة",
+      "docNumber": "رقم الوثيقة",
+      "issue": "تاريخ الإصدار",
+      "issuePlace": "مكان الإصدار",
+      "nationalId": "الرقم الوطني",
+      "fullName": "الاسم الكامل",
+      "phone1": "الهاتف 1",
+      "phone2": "الهاتف 2",
+      "city": "المدينة",
+      "state": "الولاية"
+    }
+  },
+  "security": {
+    "title": "سجل الأمان والدخول",
+    "subtitle": "كل عمليات فتح الخزنة ومحاولات الدخول الفاشلة: الوقت والجهاز والنظام والموقع التقريبي",
+    "loginDone": "تم تسجيل الدخول",
+    "time": "الوقت",
+    "device": "الجهاز",
+    "os": "النظام",
+    "place": "الموقع التقريبي",
+    "ip": "عنوان IP",
+    "source": "المصدر",
+    "result": "النتيجة",
+    "prevLogin": "آخر دخول سابق",
+    "noPrev": "هذا أول دخول مسجّل",
+    "failedWarn": "⚠️ {count} محاولة دخول فاشلة منذ آخر دخول لك",
+    "failedHint": "إن لم تكن أنت فغيّر كلمة المرور الرئيسية الآن.",
+    "viewLog": "عرض سجل الأمان",
+    "dismiss": "إغلاق",
+    "unknownPlace": "غير معروف (لا إنترنت أو الخدمة معطّلة)",
+    "success": "نجاح",
+    "failed": "فشل",
+    "locked": "محظور مؤقتاً",
+    "desktop": "الكمبيوتر",
+    "web": "متصفح",
+    "all": "الكل",
+    "onlyFailed": "الفاشلة فقط",
+    "empty": "لا توجد أحداث بعد.",
+    "clear": "مسح السجل",
+    "confirmClear": "مسح سجل الدخول بالكامل؟",
+    "geoTitle": "تسجيل الموقع التقريبي",
+    "geoHint": "يُحدَّد الموقع من عنوان IP عبر خدمة ipwho.is (يُرسَل إليها عنوان IP فقط). عطّله إن لم ترغب.",
+    "geoOn": "مفعّل",
+    "geoOff": "معطّل",
+    "thisDevice": "هذا الجهاز",
+    "syncedFrom": "من جهاز مرتبط",
+    "notifTitle": "⚠️ محاولات دخول فاشلة",
+    "notifBody": "{count} محاولة فاشلة منذ آخر دخول. افتح سجل الأمان.",
+    "notifLogin": "تم تسجيل الدخول إلى Bader",
+    "total": "إجمالي الأحداث",
+    "failedCount": "محاولات فاشلة"
+  }
+}
