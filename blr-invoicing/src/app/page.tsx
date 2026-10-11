@@ -16,7 +16,8 @@ export default function Dashboard() {
   const money = useMoney();
   const payLabel = usePayLabel();
   const lang = useUi((s) => s.lang);
-  const role = useUi((s) => s.user?.role);
+  const user = useUi((s) => s.user);
+  const role = user?.role;
   const { docs, expenses, payments, items, clients, settings } = useData();
   const rows = useDocRows();
   const today = todayIso();
@@ -46,6 +47,11 @@ export default function Dashboard() {
   return (
     <div className="mx-auto max-w-7xl">
       <PageHeader title={t("dashboard")} subtitle={fmtDate(today, lang)} />
+      {user && !user.hasRecovery && can(role, "*") && (
+        <Link href="/settings/" className="mb-3 flex items-center justify-between rounded-2xl border border-warn/40 bg-warn/10 px-4 py-3 text-sm text-warn hover:bg-warn/15">
+          <span>🔑 {t("recovery_banner")}</span><span className="font-semibold">{t("open_settings")} →</span>
+        </Link>
+      )}
       {welcome && can(role, "*") && (
         <Link href="/settings/" className="mb-5 flex items-center justify-between rounded-xl border border-accent/30 bg-accent/8 px-4 py-3 text-sm text-accent hover:bg-accent/12">
           <span>👋 {t("welcome_setup")}</span><span className="font-semibold">{t("open_settings")} →</span>

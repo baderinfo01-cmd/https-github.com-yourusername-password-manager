@@ -185,8 +185,25 @@ function SecurityTab({ s, upd }: TabProps) {
     try { await call(blr().auth.changePassword(o, n)); setO(""); setN(""); setN2(""); notify(t("saved")); }
     catch (e: any) { notify(e?.message === "weak-password" ? t("err_weak") : t("err_login"), "err"); }
   };
+  const user = useUi((st) => st.user);
+  const [rpw, setRpw] = useState("");
+  const renew = async () => {
+    try {
+      const r = await call<{ recoveryKey: string }>(blr().auth.newRecovery(rpw));
+      setRpw("");
+      useUi.setState((st) => ({ recoveryKey: r.recoveryKey, user: st.user ? { ...st.user, hasRecovery: true } : st.user }));
+    } catch { notify(t("err_login"), "err"); }
+  };
   return (
     <div className="space-y-5">
+      <Card title={t("recovery_key")}>
+        <p className="mb-3 text-sm text-muted">{t("recovery_explain")}</p>
+        <p className="mb-4 text-sm">{user?.hasRecovery ? <span className="text-ok">● {t("recovery_active")}</span> : <span className="text-warn">○ {t("recovery_missing")}</span>}</p>
+        <div className="flex flex-wrap items-end gap-3">
+          <Field label={t("current_password")} className="w-64"><Input type="password" value={rpw} onChange={(e) => setRpw(e.target.value)} autoComplete="current-password" /></Field>
+          <Button onClick={renew} disabled={!rpw}>{user?.hasRecovery ? t("recovery_renew") : t("recovery_create")}</Button>
+        </div>
+      </Card>
       <Card title={t("auto_lock")}>
         <Field label={t("auto_lock_min")} hint={t("auto_lock_hint")}><Select value={s.autoLockMin} onChange={(e) => upd((d) => { d.autoLockMin = Number(e.target.value); })} className="w-56">{[0, 5, 10, 15, 30, 60].map((m) => <option key={m} value={m}>{m ? `${m} ${t("minutes")}` : t("never")}</option>)}</Select></Field>
       </Card>

@@ -110,6 +110,8 @@ function registerIpc(store) {
   handle(store, "blr:auth:save-user", (u) => store.saveUser(u || {}));
   handle(store, "blr:auth:delete-user", (id) => store.deleteUser(id));
   handle(store, "blr:auth:change-password", (o, n) => store.changeOwnPassword(o, n));
+  handle(store, "blr:auth:recover", (u, k, n) => store.resetWithRecovery(u, k, n));
+  handle(store, "blr:auth:new-recovery", (pw) => store.newRecoveryKey(pw));
 
   const day = () => new Date().toISOString().slice(0, 10);
   handle(store, "blr:backup:export", async (password) => {

@@ -10,7 +10,8 @@ const mk = () => new Store(fs.mkdtempSync(path.join(os.tmpdir(), "blr-")));
 test("first admin, login, throttling and roles", () => {
   const s = mk();
   assert.equal(s.hasUsers(), false);
-  s.createFirstAdmin({ name: "Admin", username: "admin", password: "secret1" });
+  const first = s.createFirstAdmin({ name: "Admin", username: "admin", password: "secret1" });
+  assert.match(first.recoveryKey, /^[A-Z2-9]{4}(-[A-Z2-9]{4}){4}$/);
   assert.throws(() => s.createFirstAdmin({ name: "x", username: "xx1", password: "secret1" }), /already/);
   assert.equal(s.login("admin", "bad").ok, false);
   assert.equal(s.login("admin", "secret1").ok, true);
@@ -54,4 +55,22 @@ test("encrypted backup round-trip and wrong password", () => {
   s.login("admin", "secret1");
   assert.equal(s.list("clients").length, 1);
   assert.equal(s.next("x"), 2);
+});
+
+test("forgotten password: recovery key resets the password, then a fresh key is issued", () => {
+  const s = mk();
+  const { recoveryKey } = s.createFirstAdmin({ name: "A", username: "admin", password: "secret1" });
+  s.save && assert.ok(!JSON.stringify(s._publicUser(s._users()[0])).includes("recoveryHash"));
+  assert.throws(() => s.resetWithRecovery("admin", "AAAA-BBBB-CCCC-DDDD-EEEE", "newpass1"), /invalid-recovery/);
+  assert.throws(() => s.resetWithRecovery("admin", recoveryKey, "123"), /weak-password/);
+  const r = s.resetWithRecovery("admin", recoveryKey.toLowerCase().replace(/-/g, " "), "newpass1");
+  assert.notEqual(r.recoveryKey, recoveryKey);
+  assert.equal(s.login("admin", "secret1").ok, false);
+  assert.equal(s.login("admin", "newpass1").ok, true);
+  assert.throws(() => s.resetWithRecovery("admin", recoveryKey, "another1"), /invalid-recovery/); // old key is dead
+  assert.equal(typeof s.newRecoveryKey("newpass1").recoveryKey, "string");
+  assert.throws(() => s.newRecoveryKey("wrong"), /invalid/);
+  s.logout();
+  for (let i = 0; i < 5; i++) assert.throws(() => s.resetWithRecovery("admin", "BAD", "newpass2"));
+  assert.throws(() => s.resetWithRecovery("admin", r.recoveryKey, "newpass2"), /locked/);
 });

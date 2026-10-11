@@ -13,7 +13,8 @@ export interface BlrBridge {
     batch(ops: any[]): Promise<Res<any[]>>; next(name: string): Promise<Res<number>>; audit(a: string, d?: any): Promise<Res<boolean>>;
   };
   auth: {
-    hasUsers(): Promise<Res<boolean>>; setup(p: any): Promise<Res<User>>; login(u: string, p: string): Promise<Res<any>>;
+    recover(u: string, k: string, n: string): Promise<Res<{ recoveryKey: string }>>; newRecovery(pw: string): Promise<Res<{ recoveryKey: string }>>;
+    hasUsers(): Promise<Res<boolean>>; setup(p: any): Promise<Res<{ user: User; recoveryKey: string }>>; login(u: string, p: string): Promise<Res<any>>;
     logout(): Promise<Res<boolean>>; current(): Promise<Res<User | null>>; users(): Promise<Res<User[]>>;
     saveUser(u: any): Promise<Res<User>>; deleteUser(id: string): Promise<Res<boolean>>; changePassword(o: string, n: string): Promise<Res<boolean>>;
   };
@@ -41,7 +42,7 @@ function webBridge(): BlrBridge {
   const ok = <T,>(data: T): Promise<Res<T>> => Promise.resolve({ ok: true, data });
   const err = (error: string): Promise<Res<any>> => Promise.resolve({ ok: false, error });
   const sha = async (s: string) => Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s)))).map((b) => b.toString(16).padStart(2, "0")).join("");
-  const pub = (u: any) => { const { hash, salt, ...r } = u; return r; };
+  const pub = (u: any) => { const { hash, salt, recoveryHash, recoverySalt, ...r } = u; return { ...r, hasRecovery: !!recoveryHash }; };
   const put = (kind: string, doc: any) => {
     const d = { ...doc, id: doc.id || crypto.randomUUID(), updatedAt: Date.now() };
     d.createdAt ||= Date.now();
@@ -60,7 +61,9 @@ function webBridge(): BlrBridge {
     },
     auth: {
       hasUsers: () => ok(state.users!.length > 0),
-      setup: async (p) => { if (state.users!.length) return err("already-set-up"); const salt = crypto.randomUUID(); const u = { id: crypto.randomUUID(), name: p.name, username: String(p.username).toLowerCase(), role: "admin", active: true, salt, hash: await sha(salt + p.password) }; state.users!.push(u); persist(); return { ok: true, data: pub(u) }; },
+      setup: async (p) => { if (state.users!.length) return err("already-set-up"); const salt = crypto.randomUUID(); const rk = Array.from(crypto.getRandomValues(new Uint8Array(20)), (b) => "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"[b % 32]).join(""); const rs = crypto.randomUUID(); const u = { id: crypto.randomUUID(), name: p.name, username: String(p.username).toLowerCase(), role: "admin", active: true, salt, hash: await sha(salt + p.password), recoverySalt: rs, recoveryHash: await sha(rs + rk) }; state.users!.push(u); persist(); return { ok: true, data: { user: pub(u), recoveryKey: rk.match(/.{4}/g)!.join("-") } }; },
+      recover: async (un, k, np) => { const u = state.users!.find((x) => x.username === String(un).toLowerCase()); const key = String(k).toUpperCase().replace(/[^A-Z0-9]/g, ""); if (!u || !u.recoveryHash || (await sha(u.recoverySalt + key)) !== u.recoveryHash) return { ok: false, error: "invalid-recovery" }; u.salt = crypto.randomUUID(); u.hash = await sha(u.salt + np); persist(); return { ok: true, data: { recoveryKey: "WEB0-ONLY-0000-0000-0000" } }; },
+      newRecovery: async () => ({ ok: true, data: { recoveryKey: "WEB0-ONLY-0000-0000-0000" } }),
       login: async (un, pw) => { const u = state.users!.find((x) => x.username === String(un).toLowerCase()); if (!u || (await sha(u.salt + pw)) !== u.hash) return { ok: true, data: { ok: false, error: "invalid" } }; session = pub(u); return { ok: true, data: { ok: true, user: session } }; },
       logout: () => { session = null; return ok(true); },
       current: () => ok(session),

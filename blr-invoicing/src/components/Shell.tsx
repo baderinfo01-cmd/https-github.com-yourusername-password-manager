@@ -8,7 +8,9 @@ import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useMemo, useState, type ReactNode } from "react";
 import { Toast, Button, Input, Field } from "./ui";
+import { blr, call } from "@/lib/api";
 import { PrintPreviewHost } from "./PrintPreview";
+import { RecoveryKeyDialog } from "./RecoveryKeyDialog";
 import { useT } from "@/lib/i18n";
 import { can, COLORS, useUi, type Lang } from "@/store/ui";
 import { useData } from "@/store/data";
@@ -95,7 +97,7 @@ export function Shell({ children }: { children: ReactNode }) {
   }, [authState, settings.autoLockMin]);
 
   if (!hydrated || authState === "loading") return <Splash />;
-  if (authState !== "in") return <><AuthScreen mode={authState} /><Toast /></>;
+  if (authState !== "in") return <><AuthScreen mode={authState} /><RecoveryKeyDialog /><Toast /></>;
   if (!loaded || !user) return <Splash />;
   return <Suspense fallback={<Splash />}><Frame>{children}</Frame></Suspense>;
 }
@@ -169,6 +171,7 @@ function Frame({ children }: { children: ReactNode }) {
         <main className="min-h-0 flex-1 overflow-y-auto rounded-2xl px-1 pb-2 pe-2 pt-1 sm:px-2">{children}</main>
       </div>
       <PrintPreviewHost />
+      <RecoveryKeyDialog />
       <Toast />
     </div>
   );
@@ -218,11 +221,28 @@ function AuthScreen({ mode }: { mode: "setup" | "login" }) {
   const [show, setShow] = useState(false);
   const [err, setErr] = useState("");
   const [busy, setBusy] = useState(false);
+  const [recover, setRecover] = useState(false);
+  const [rkey, setRkey] = useState("");
+  const notify = useUi((s) => s.notify);
   const HEX: Record<string, string> = { green: "#0a9f63", sky: "#0284c7", purple: "#7c3aed", blue: "#2563eb", teal: "#0d9488", orange: "#ea580c", rose: "#e11d48", slate: "#475569" };
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErr("");
+    if (recover) {
+      if (password.length < 6) return setErr(t("err_weak"));
+      if (password !== again) return setErr(t("err_mismatch"));
+      setBusy(true);
+      try {
+        const r = await call<{ recoveryKey: string }>(blr().auth.recover(username, rkey, password));
+        useUi.setState({ recoveryKey: r.recoveryKey });
+        notify(t("password_reset_ok"));
+        setRecover(false); setPassword(""); setAgain(""); setRkey("");
+      } catch (e3: any) {
+        setErr(e3?.message === "locked" ? t("err_locked", { s: 60 }) : e3?.message === "weak-password" ? t("err_weak") : t("err_invalid_recovery"));
+      } finally { setBusy(false); }
+      return;
+    }
     if (mode === "setup") {
       if (password.length < 6) return setErr(t("err_weak"));
       if (password !== again) return setErr(t("err_mismatch"));
@@ -255,21 +275,23 @@ function AuthScreen({ mode }: { mode: "setup" | "login" }) {
           <span className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-line px-3 py-1 text-[11px] text-muted"><ShieldCheck size={13} />{t("secure_badge")}</span>
         </div>
         <div className="text-center">
-          <div className="text-lg font-bold">👋 {mode === "setup" ? t("welcome_new") : t("welcome_back")}</div>
-          <p className="mt-1 text-xs text-muted">{mode === "setup" ? t("setup_sub") : t("login_sub")}</p>
+          <div className="text-lg font-bold">{recover ? <>🔑 {t("recover_title")}</> : <>👋 {mode === "setup" ? t("welcome_new") : t("welcome_back")}</>}</div>
+          <p className="mt-1 text-xs text-muted">{recover ? t("recover_sub") : mode === "setup" ? t("setup_sub") : t("login_sub")}</p>
         </div>
         {mode === "setup" && <Field label={t("full_name")}><Input value={name} onChange={(e) => setName(e.target.value)} autoFocus className="h-11 rounded-xl" /></Field>}
         <Field label={t("username")}><Input value={username} onChange={(e) => setUsername(e.target.value)} autoComplete="username" autoFocus={mode === "login"} required className="h-11 rounded-xl" /></Field>
-        <Field label={t("password")}>
+        {recover && <Field label={t("recovery_key")}><Input dir="ltr" value={rkey} onChange={(e) => setRkey(e.target.value)} placeholder="XXXX-XXXX-XXXX-XXXX-XXXX" required className="num h-11 rounded-xl tracking-widest" /></Field>}
+        <Field label={recover ? t("new_password") : t("password")}>
           <div className="relative">
             <Input type={show ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} autoComplete={mode === "setup" ? "new-password" : "current-password"} required className="h-11 rounded-xl pe-10" />
             <button type="button" onClick={() => setShow((v) => !v)} className="absolute end-3 top-3 text-muted hover:text-ink" aria-label="show">{show ? <EyeOff size={17} /> : <Eye size={17} />}</button>
           </div>
         </Field>
-        {mode === "setup" && <Field label={t("password_again")}><Input type={show ? "text" : "password"} value={again} onChange={(e) => setAgain(e.target.value)} autoComplete="new-password" required className="h-11 rounded-xl" /></Field>}
+        {(mode === "setup" || recover) && <Field label={t("password_again")}><Input type={show ? "text" : "password"} value={again} onChange={(e) => setAgain(e.target.value)} autoComplete="new-password" required className="h-11 rounded-xl" /></Field>}
         {err && <p role="alert" className="rounded-xl bg-bad/10 px-3 py-2 text-xs text-bad">{err}</p>}
-        <Button type="submit" className="h-12 w-full rounded-2xl text-base" disabled={busy}><Sparkles size={17} />{mode === "setup" ? t("create_account") : t("enter")}</Button>
-        <p className="flex items-center justify-center gap-1.5 pt-1 text-center text-[11px] text-muted"><ShieldCheck size={12} />{mode === "setup" ? t("setup_note") : t("data_local")}</p>
+        <Button type="submit" className="h-12 w-full rounded-2xl text-base" disabled={busy}><Sparkles size={17} />{recover ? t("reset_password") : mode === "setup" ? t("create_account") : t("enter")}</Button>
+        {mode === "login" && <button type="button" onClick={() => { setRecover((v) => !v); setErr(""); setPassword(""); setAgain(""); }} className="block w-full text-center text-sm font-medium text-accent hover:underline">{recover ? t("back_to_login") : t("forgot_password")}</button>}
+        <p className="flex items-center justify-center gap-1.5 pt-1 text-center text-[11px] text-muted"><ShieldCheck size={12} />{mode === "setup" ? t("setup_note") : recover ? t("recover_note") : t("data_local")}</p>
       </form>
       <div className="absolute bottom-4 flex flex-col items-center gap-3">
         <span className="text-[11px] text-muted">v1.0.0 · Powered by Baderinfo</span>

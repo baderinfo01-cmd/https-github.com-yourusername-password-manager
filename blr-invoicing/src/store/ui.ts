@@ -15,6 +15,7 @@ const write = (k: string, v: unknown) => { try { localStorage.setItem(k, JSON.st
 
 interface UiState {
   lang: Lang; theme: Theme; color: Color; hydrated: boolean;
+  recoveryKey: string | null; clearRecovery(): void;
   user: User | null; authState: "loading" | "setup" | "login" | "in";
   toast: { msg: string; kind: "ok" | "err" } | null;
   hydrate(): void;
@@ -29,7 +30,7 @@ interface UiState {
 }
 
 export const useUi = create<UiState>((set, get) => ({
-  lang: "ar", theme: "light", color: "green", hydrated: false, user: null, authState: "loading", toast: null,
+  lang: "ar", theme: "light", color: "green", hydrated: false, recoveryKey: null, clearRecovery: () => set({ recoveryKey: null }), user: null, authState: "loading", toast: null,
   hydrate() {
     const lang = read<Lang>("blr-lang", "ar");
     const theme = read<Theme>("blr-theme", "light");
@@ -52,7 +53,8 @@ export const useUi = create<UiState>((set, get) => ({
     return r;
   },
   async setup(p) {
-    await call(blr().auth.setup(p));
+    const r = await call<{ recoveryKey: string }>(blr().auth.setup(p));
+    set({ recoveryKey: r.recoveryKey });
     await get().signIn(p.username, p.password);
   },
   async signOut() {

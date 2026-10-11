@@ -128,8 +128,21 @@ class Store {
     return crypto.scryptSync(String(password), salt, 64, { N: 16384, r: 8, p: 1 }).toString("hex");
   }
   _publicUser(u) {
-    const { hash, salt, ...rest } = u;
-    return rest;
+    const { hash, salt, recoveryHash, recoverySalt, ...rest } = u;
+    return { ...rest, hasRecovery: !!recoveryHash };
+  }
+  // Recovery key: 20 random characters (100 bits) shown ONCE; only a salted hash is stored.
+  _makeRecovery(u) {
+    const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+    const bytes = crypto.randomBytes(20);
+    let raw = "";
+    for (const b of bytes) raw += alphabet[b % alphabet.length];
+    u.recoverySalt = crypto.randomBytes(16).toString("hex");
+    u.recoveryHash = this._hash(raw, u.recoverySalt);
+    return raw.match(/.{4}/g).join("-");
+  }
+  _normKey(k) {
+    return String(k || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
   }
   hasUsers() {
     return this._users().length > 0;
@@ -149,11 +162,10 @@ class Store {
     const uname = username.toLowerCase();
     if (this._users().some((u) => u.username === uname)) throw new Error("username-taken");
     const salt = crypto.randomBytes(16).toString("hex");
-    const u = this._put("users", {
-      name: String(name || username).slice(0, 80), username: uname, role, active,
-      salt, hash: this._hash(password, salt),
-    });
-    return this._publicUser(u);
+    const rec = { name: String(name || username).slice(0, 80), username: uname, role, active, salt, hash: this._hash(password, salt) };
+    const recoveryKey = first ? this._makeRecovery(rec) : undefined;
+    const u = this._put("users", rec);
+    return first ? { user: this._publicUser(u), recoveryKey } : this._publicUser(u);
   }
   login(username, password) {
     const uname = String(username || "").toLowerCase();
@@ -185,6 +197,48 @@ class Store {
   }
   currentUser() {
     return this.session;
+  }
+  // Forgot-password flow: username + recovery key -> new password (and a fresh recovery key)
+  resetWithRecovery(username, key, newPassword) {
+    const uname = String(username || "").toLowerCase();
+    const fk = "recovery:" + uname;
+    const f = this.failures.get(fk) || { n: 0, until: 0 };
+    if (Date.now() < f.until) throw new Error("locked");
+    if (!this._validPassword(newPassword)) throw new Error("weak-password");
+    const u = this._users().find((x) => x.username === uname);
+    let ok = false;
+    if (u && u.recoveryHash && u.active !== false) {
+      const h = Buffer.from(this._hash(this._normKey(key), u.recoverySalt), "hex");
+      ok = crypto.timingSafeEqual(h, Buffer.from(u.recoveryHash, "hex"));
+    } else {
+      this._hash("x", "00000000000000000000000000000000");
+    }
+    if (!ok) {
+      f.n += 1;
+      if (f.n >= 5) f.until = Date.now() + Math.min(60000 * 2 ** (f.n - 5), 30 * 60000);
+      this.failures.set(fk, f);
+      this._log("recovery-failed", { username: uname });
+      throw new Error("invalid-recovery");
+    }
+    this.failures.delete(fk);
+    this.failures.delete(uname);
+    u.salt = crypto.randomBytes(16).toString("hex");
+    u.hash = this._hash(newPassword, u.salt);
+    const recoveryKey = this._makeRecovery(u);
+    this._put("users", u);
+    this._log("password-reset-recovery", {}, u);
+    return { recoveryKey };
+  }
+  // Create / renew the recovery key of the signed-in user (needs the current password)
+  newRecoveryKey(password) {
+    this._requireSession();
+    const u = this._users().find((x) => x.id === this.session.id);
+    const ok = u && crypto.timingSafeEqual(Buffer.from(this._hash(password, u.salt), "hex"), Buffer.from(u.hash, "hex"));
+    if (!ok) throw new Error("invalid");
+    const recoveryKey = this._makeRecovery(u);
+    this._put("users", u);
+    this._log("recovery-key-renewed");
+    return { recoveryKey };
   }
   listUsers() {
     if (!this._isRole("admin")) throw new Error("forbidden");

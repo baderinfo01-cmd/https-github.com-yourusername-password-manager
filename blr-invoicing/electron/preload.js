@@ -24,6 +24,8 @@ contextBridge.exposeInMainWorld("blr", {
     saveUser: (u) => inv("blr:auth:save-user", u),
     deleteUser: (id) => inv("blr:auth:delete-user", id),
     changePassword: (o, n) => inv("blr:auth:change-password", o, n),
+    recover: (u, k, n) => inv("blr:auth:recover", u, k, n),
+    newRecovery: (pw) => inv("blr:auth:new-recovery", pw),
   },
   backup: {
     export: (password) => inv("blr:backup:export", password),

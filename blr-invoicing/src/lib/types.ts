@@ -1,5 +1,5 @@
 export type Role = "admin" | "manager" | "cashier" | "accountant";
-export interface User { id: string; name: string; username: string; role: Role; active?: boolean }
+export interface User { id: string; name: string; username: string; role: Role; active?: boolean; hasRecovery?: boolean }
 
 export interface Party {
   id: string; name: string; company?: string; phone?: string; email?: string; address?: string; city?: string;
