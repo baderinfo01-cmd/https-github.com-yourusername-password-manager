@@ -2,6 +2,9 @@ name: Build BLR Fatourati (Windows installer)
 
 on:
   workflow_dispatch:
+  push:
+    branches: [claude/gifted-faraday-mwhxt8]
+    paths: ['.github/workflows/build-blr-windows.yml']
 
 permissions:
   contents: write
