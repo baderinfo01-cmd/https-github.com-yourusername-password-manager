@@ -13,7 +13,7 @@
  */
 module.exports = {
     // Activation API of the software license dashboard
-    server_url: 'https://baderinfo.com/apps-license/api.php',
+    server_url: 'https://baderinfo.com/prog-license/api.php',
 
     // Public key of the BaderProgLicense dashboard (Settings > signing key)
     public_key: 'gLhupZMQXB/CGaa7uvQ5kjE55P2JYBTSc21bJqWrURQ=',
