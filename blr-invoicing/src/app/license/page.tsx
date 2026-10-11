@@ -1,7 +1,7 @@
 "use client";
 import { BadgeCheck, CalendarDays, Clock, Copy, KeyRound, Mail, MessageCircle, Monitor, Phone, Printer, RefreshCw, ShieldCheck, User } from "lucide-react";
 import { useCallback, useEffect, useState, type ReactNode } from "react";
-import { LicenseStamp } from "@/components/LicenseStamp";
+import { LicenseSeals } from "@/components/LicenseSeals";
 import { printLicense } from "@/components/Onboarding";
 import { buildLicenseHtml } from "@/lib/licenseHtml";
 import { withFont } from "@/lib/fontEmbed";
@@ -21,7 +21,7 @@ export default function LicensePage() {
   const [busy, setBusy] = useState(false);
   const [copied, setCopied] = useState(false);
   const [version, setVersion] = useState("");
-  const fmt = (n: number) => (n ? new Date(n * 1000).toLocaleDateString(LOCALE[lang]) : "—");
+  const fmt = (n: number) => (n ? new Date(n * 1000).toLocaleDateString("en-GB") : "—");
 
   const load = useCallback(async (recheck = false) => {
     if (!window.baderLicense) return setBridge(false);
@@ -52,7 +52,6 @@ export default function LicensePage() {
             <div className="ms-auto hidden text-end text-xs opacity-90 sm:block"><div>v{version}</div><div>{t("issued_by")} Baderinfo</div></div>
           </div>
           <div className="relative p-6">
-            <img src="/brand/seal.png" alt="" aria-hidden className="pointer-events-none absolute -end-8 top-4 w-64 opacity-[0.07]" />
             <div className="relative grid items-start gap-6 md:grid-cols-[1fr_auto]">
               <div>
                 <span className={`mb-2 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-sm font-bold ${s?.dev ? "bg-warn/15 text-warn" : ok ? "bg-ok/15 text-ok" : "bg-bad/15 text-bad"}`}>
@@ -69,9 +68,8 @@ export default function LicensePage() {
                   {s.days_left !== null && row(<Clock size={15} />, t("lic_days_left"), s.days_left)}
                 </>}
               </div>
-              <div className="mx-auto flex items-center justify-center gap-3">
-                {s && <LicenseStamp tone={tone} title={s.dev ? t("stamp_dev") : ok ? t("stamp_title_ok") : t("stamp_title_bad")} subtitle={s.dev ? "DEVELOPMENT BUILD" : ok ? "GENUINE LICENSE" : "NOT ACTIVATED"} width={150} detail={`BLR FATOURATI · ${(s.plan || s.edition || "").toUpperCase() || "LICENSE"}`} footer={`ID: ${s.license_id || "—"} · BADERINFO`} />}
-                <img src="/brand/seal.png" alt="Baderinfo" className="h-[92px] w-[92px]" />
+              <div className="mx-auto flex items-center justify-center">
+                {s && <LicenseSeals tone={tone} title={s.dev ? t("stamp_dev") : ok ? t("stamp_signed") : t("stamp_title_bad")} plan={s.plan || s.edition} id={s.license_id || "—"} />}
               </div>
             </div>
             <p className="relative mt-4 flex items-center gap-1.5 text-xs text-muted"><ShieldCheck size={13} />{t("lic_signed_note")}</p>

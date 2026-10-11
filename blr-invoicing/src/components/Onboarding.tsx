@@ -1,7 +1,7 @@
 "use client";
 import { Printer, ShieldCheck } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { LicenseStamp } from "./LicenseStamp";
+import { LicenseSeals } from "./LicenseSeals";
 import { Button, Field, Input, Modal, Select } from "./ui";
 import { blr, call } from "@/lib/api";
 import { toDataUrl } from "@/lib/image";
@@ -34,7 +34,7 @@ export function LicenseStep({ onDone }: { onDone: () => void }) {
   }, []);
   const ok = !!s?.valid;
   const tone = s?.dev ? "amber" : ok ? "green" : "red";
-  const fmt = (n: number) => (n ? new Date(n * 1000).toLocaleDateString(LOCALE[lang]) : "—");
+  const fmt = (n: number) => (n ? new Date(n * 1000).toLocaleDateString("en-GB") : "—");
   const done = () => { setFlag(FLAG_LICENSE); onDone(); };
   const pdf = async () => {
     if (!s) return;
@@ -58,9 +58,8 @@ export function LicenseStep({ onDone }: { onDone: () => void }) {
                 <div key={k} className="flex justify-between gap-4 py-2.5"><dt className="text-muted">{k}</dt><dd className="font-semibold" dir="ltr">{v}</dd></div>
               ))}
             </dl>
-            <div className="mx-auto flex items-center gap-2">
-              <LicenseStamp width={140} tone={tone} title={s.dev ? t("stamp_dev") : ok ? t("stamp_title_ok") : t("stamp_title_bad")} subtitle={s.dev ? "DEVELOPMENT BUILD" : ok ? "GENUINE LICENSE" : "NOT ACTIVATED"} detail={`BLR FATOURATI · ${(s.plan || s.edition || "").toUpperCase() || "LICENSE"}`} footer={`ID: ${s.license_id || "—"} · BADERINFO`} />
-              <img src="/brand/seal.png" alt="Baderinfo" className="h-[84px] w-[84px]" />
+            <div className="mx-auto flex items-center justify-center">
+              <LicenseSeals size={170} tone={tone} title={s.dev ? t("stamp_dev") : ok ? t("stamp_signed") : t("stamp_title_bad")} plan={s.plan || s.edition} id={s.license_id || "—"} />
             </div>
           </div>
         )}
