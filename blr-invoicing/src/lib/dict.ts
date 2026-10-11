@@ -88,6 +88,9 @@ export const DICT: Record<string, [string, string, string]> = {
   calendar_hint: ["استحقاقات الفواتير وعروض الأسعار والمهام والفواتير المتكررة", "Invoice due dates, quotes, tasks and recurring invoices", "Échéances, devis, tâches et factures récurrentes"],
   cal_due: ["استحقاق فاتورة", "Invoice due", "Échéance facture"], cal_quote: ["انتهاء عرض سعر", "Quote expires", "Fin de validité du devis"], cal_task: ["مهمة", "Task", "Tâche"], cal_recurring: ["فاتورة متكررة", "Recurring invoice", "Facture récurrente"], no_events: ["لا أحداث في هذا اليوم", "No events on this day", "Aucun événement ce jour"],
   last_payment: ["تاريخ الدفع", "Paid on", "Payé le"],
+  global_search: ["بحث سريع: فاتورة، عميل، منتج…", "Quick search: invoice, client, product…", "Recherche rapide : facture, client, produit…"],
+  secure_badge: ["فوترة ذكية · بيانات محلية", "Smart invoicing · local data", "Facturation intelligente · données locales"], welcome_back: ["مرحبًا بعودتك", "Welcome back", "Bon retour"], welcome_new: ["مرحبًا بك", "Welcome", "Bienvenue"],
+  enter: ["دخول", "Sign in", "Entrer"], data_local: ["بياناتك محفوظة على جهازك فقط", "Your data stays on your device only", "Vos données restent sur votre appareil"],
   lock: ["قفل", "Lock", "Verrouiller"], logout: ["خروج", "Log out", "Déconnexion"],
   // ---- auth ----
   login: ["تسجيل الدخول", "Sign in", "Connexion"], login_sub: ["أدخل بيانات حسابك", "Enter your credentials", "Saisissez vos identifiants"],

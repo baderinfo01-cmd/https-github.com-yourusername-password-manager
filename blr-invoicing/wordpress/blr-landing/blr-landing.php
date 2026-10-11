@@ -44,7 +44,7 @@ function blr_defaults() {
 		'address_ar'     => '',
 		'address_en'     => '',
 		'address_fr'     => '',
-		'brand_color'    => '#0284c7',
+		'brand_color'    => '#0a9f63',
 		'default_lang'   => 'auto',
 		'full_width'     => '0',
 		'hero_title_ar'  => '', 'hero_title_en' => '', 'hero_title_fr' => '',

@@ -41,9 +41,9 @@ export function Field({ label, children, className, hint }: { label: string; chi
 
 export function Card({ title, actions, children, className, pad = true }: { title?: ReactNode; actions?: ReactNode; children: ReactNode; className?: string; pad?: boolean }) {
   return (
-    <section className={clsx("card-soft rounded-xl border border-line bg-surface", className)}>
+    <section className={clsx("glass rounded-2xl", className)}>
       {(title || actions) && (
-        <header className="flex items-center justify-between gap-3 border-b border-line px-4 py-3">
+        <header className="flex items-center justify-between gap-3 border-b border-line/70 px-4 py-3">
           <h2 className="text-sm font-semibold">{title}</h2>
           <div className="flex items-center gap-2">{actions}</div>
         </header>
@@ -72,12 +72,16 @@ export const Badge = ({ tone = "muted", children }: { tone?: keyof typeof TONES;
   <span className={clsx("inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold whitespace-nowrap", TONES[tone])}>{children}</span>
 );
 
+const STAT_GRAD: Record<string, string> = {
+  info: "linear-gradient(135deg, var(--accent), var(--accent-2))", ok: "linear-gradient(135deg,#34d399,#059669)",
+  warn: "linear-gradient(135deg,#fbbf24,#ea580c)", bad: "linear-gradient(135deg,#fb7185,#e11d48)",
+};
 export function Stat({ label, value, sub, tone, icon }: { label: string; value: ReactNode; sub?: ReactNode; tone?: "ok" | "bad" | "warn" | "info"; icon?: ReactNode }) {
   return (
-    <div className="card-soft rounded-xl border border-line bg-surface p-4 transition hover:-translate-y-0.5">
+    <div className="glass rounded-2xl p-4 transition hover:-translate-y-0.5">
       <div className="flex items-center justify-between text-xs text-muted">
         <span>{label}</span>
-        {icon && <span className={clsx("grid h-9 w-9 place-items-center rounded-xl shadow-sm", tone ? TONES[tone] : TONES.info)}>{icon}</span>}
+        {icon && <span className="grid h-10 w-10 place-items-center rounded-xl text-white shadow-lg" style={{ backgroundImage: STAT_GRAD[tone || "info"] }}>{icon}</span>}
       </div>
       <div className="num mt-2 text-2xl font-bold">{value}</div>
       {sub && <div className="mt-1 text-xs text-muted">{sub}</div>}

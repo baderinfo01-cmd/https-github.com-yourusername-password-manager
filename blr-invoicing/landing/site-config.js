@@ -36,7 +36,7 @@ window.SITE_CONFIG = {
   brand: {
     name: "BLR Fatourati",
     version: "1.0.0",
-    primaryColor: "#0284c7",                 // لون الصفحة الرئيسي
+    primaryColor: "#0a9f63",                 // لون الصفحة الرئيسي
   },
 
   defaultLang: "ar",                         // ar | en | fr

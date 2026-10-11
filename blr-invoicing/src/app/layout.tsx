@@ -9,7 +9,7 @@ export const metadata: Metadata = { title: "BLR Fatourati", description: "BLR Fa
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ar" dir="rtl" data-theme="sky" className={elMessiri.variable} suppressHydrationWarning>
+    <html lang="ar" dir="rtl" data-theme="green" className={elMessiri.variable} suppressHydrationWarning>
       <body className={`${elMessiri.className} antialiased`}>
         <Shell>{children}</Shell>
       </body>

@@ -132,7 +132,7 @@ export default function Reports() {
         <Stat label={t("expenses")} value={money(sum.expenses)} tone="warn" />
         <Stat label={t("net_profit")} value={money(sum.netProfit)} tone={sum.netProfit >= 0 ? "ok" : "bad"} />
       </div>
-      <div className="mb-3 flex flex-wrap gap-2">{TABS.map((k) => <button key={k} onClick={() => setTab(k)} className={`rounded-lg border px-4 py-1.5 text-sm ${tab === k ? "border-accent bg-accent text-white" : "border-line bg-surface text-muted"}`}>{t("rep_" + k)}</button>)}</div>
+      <div className="mb-3 flex flex-wrap gap-2">{TABS.map((k) => <button key={k} onClick={() => setTab(k)} className={`pill rounded-full border px-4 py-1.5 text-sm ${tab === k ? "border-accent bg-accent text-white" : "border-line bg-surface text-muted"}`}>{t("rep_" + k)}</button>)}</div>
       <Card pad={false}>
         {table.data.length === 0 ? <Empty text={t("no_data")} /> : (
           <Table head={table.head}>

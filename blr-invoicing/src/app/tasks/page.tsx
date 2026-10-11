@@ -32,7 +32,7 @@ export default function Tasks() {
       <div className="mb-5 grid gap-4 sm:grid-cols-3">
         <Stat label={t("open_tasks")} value={open.length} tone="info" /><Stat label={t("pay_overdue")} value={overdue} tone={overdue ? "bad" : "ok"} /><Stat label={t("done")} value={tasks.length - open.length} tone="ok" />
       </div>
-      <div className="mb-3 flex gap-2">{(["open", "done", "all"] as const).map((k) => <button key={k} onClick={() => setFilter(k)} className={`rounded-lg border px-4 py-1.5 text-sm ${filter === k ? "border-accent bg-accent text-white" : "border-line bg-surface text-muted"}`}>{t(k === "open" ? "open_tasks" : k === "done" ? "done" : "all")}</button>)}</div>
+      <div className="mb-3 flex gap-2">{(["open", "done", "all"] as const).map((k) => <button key={k} onClick={() => setFilter(k)} className={`pill rounded-full border px-4 py-1.5 text-sm ${filter === k ? "border-accent bg-accent text-white" : "border-line bg-surface text-muted"}`}>{t(k === "open" ? "open_tasks" : k === "done" ? "done" : "all")}</button>)}</div>
       <Card pad={false}>
         {list.length === 0 ? <Empty text={t("no_data")} /> : (
           <ul className="divide-y divide-line">

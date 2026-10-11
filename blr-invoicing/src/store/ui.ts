@@ -5,7 +5,7 @@ import type { Role, User } from "@/lib/types";
 
 export type Lang = "ar" | "en" | "fr";
 export type Theme = "light" | "dark";
-export const COLORS = ["sky", "purple", "blue", "green", "teal", "orange", "rose", "slate"] as const;
+export const COLORS = ["green", "sky", "purple", "blue", "teal", "orange", "rose", "slate"] as const;
 export type Color = (typeof COLORS)[number];
 
 const read = <T,>(k: string, d: T): T => {
@@ -29,11 +29,11 @@ interface UiState {
 }
 
 export const useUi = create<UiState>((set, get) => ({
-  lang: "ar", theme: "light", color: "sky", hydrated: false, user: null, authState: "loading", toast: null,
+  lang: "ar", theme: "light", color: "green", hydrated: false, user: null, authState: "loading", toast: null,
   hydrate() {
     const lang = read<Lang>("blr-lang", "ar");
     const theme = read<Theme>("blr-theme", "light");
-    const color = read<Color>("blr-color", "sky");
+    const color = read<Color>("blr-color", "green");
     set({ lang, theme, color, hydrated: true });
     apply(lang, theme, color);
   },

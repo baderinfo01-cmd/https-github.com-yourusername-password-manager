@@ -47,7 +47,7 @@ export default function SettingsPage() {
   return (
     <div className="mx-auto max-w-4xl pb-20">
       <PageHeader title={t("settings")} />
-      <div className="mb-5 flex flex-wrap gap-2">{TABS.map((k) => <button key={k} onClick={() => setTab(k)} className={`rounded-lg border px-4 py-1.5 text-sm ${tab === k ? "border-accent bg-accent text-white" : "border-line bg-surface text-muted"}`}>{t("set_" + k)}</button>)}</div>
+      <div className="mb-5 flex flex-wrap gap-2">{TABS.map((k) => <button key={k} onClick={() => setTab(k)} className={`pill rounded-full border px-4 py-1.5 text-sm ${tab === k ? "border-accent bg-accent text-white" : "border-line bg-surface text-muted"}`}>{t("set_" + k)}</button>)}</div>
 
       {tab === "company" && <CompanyTab s={s} upd={upd} />}
       {tab === "invoice" && <InvoiceTab s={s} upd={upd} />}

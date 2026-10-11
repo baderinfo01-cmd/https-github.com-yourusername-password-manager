@@ -45,7 +45,7 @@ export default function Stock() {
         <Stat label={t("low_stock")} value={low.length} tone={low.length ? "warn" : "ok"} />
       </div>
       <div className="mb-3 flex gap-2">
-        {(["levels", "moves"] as const).map((k) => <button key={k} onClick={() => setTab(k)} className={`rounded-lg px-4 py-1.5 text-sm ${tab === k ? "bg-accent text-white" : "bg-surface text-muted border border-line"}`}>{t(k === "levels" ? "stock_levels" : "stock_moves")}</button>)}
+        {(["levels", "moves"] as const).map((k) => <button key={k} onClick={() => setTab(k)} className={`pill rounded-full px-4 py-1.5 text-sm ${tab === k ? "bg-accent text-white" : "bg-surface text-muted border border-line"}`}>{t(k === "levels" ? "stock_levels" : "stock_moves")}</button>)}
       </div>
       <Card pad={false}>
         {tab === "levels" ? (tracked.length === 0 ? <Empty text={t("no_data")} /> : (

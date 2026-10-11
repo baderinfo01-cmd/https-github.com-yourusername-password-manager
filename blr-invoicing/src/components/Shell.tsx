@@ -1,12 +1,12 @@
 "use client";
 import clsx from "clsx";
 import {
-  BarChart3, BookUser, Boxes, Building2, ClipboardList, FileText, LayoutDashboard, CalendarDays, CheckSquare, ChevronDown, Clock3, Lock, Menu, Moon, Palette, Package,
+  BarChart3, BookUser, Boxes, Building2, ClipboardList, FileText, LayoutDashboard, CalendarDays, CheckSquare, ChevronDown, Clock3, Eye, EyeOff, Lock, Menu, Moon, Palette, Search, Package,
   Receipt, Repeat, ScanLine, Settings as Cog, ShieldCheck, ShoppingCart, Sparkles, Sun, Truck, Users, Wallet, Wrench, BadgeCheck,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState, type ReactNode } from "react";
+import { Suspense, useEffect, useMemo, useState, type ReactNode } from "react";
 import { Toast, Button, Input, Field } from "./ui";
 import { PrintPreviewHost } from "./PrintPreview";
 import { useT } from "@/lib/i18n";
@@ -101,13 +101,12 @@ export function Shell({ children }: { children: ReactNode }) {
 }
 
 function Splash() {
-  return <div className="grid h-screen place-items-center bg-bg"><img src="/brand/icon-192.png" alt="BLR Fatourati" width={80} height={80} className="animate-pulse rounded-2xl" /></div>;
+  return <div className="grid h-screen place-items-center"><img src="/brand/icon-192.png" alt="BLR Fatourati" width={80} height={80} className="animate-pulse rounded-2xl" /></div>;
 }
 
 function Frame({ children }: { children: ReactNode }) {
   const t = useT();
   const path = usePathname();
-  const router = useRouter();
   const search = useSearchParams().toString();
   const { user, theme, setTheme, lang, setLang, signOut } = useUi();
   const company = useData((s) => s.settings.company);
@@ -117,26 +116,31 @@ function Frame({ children }: { children: ReactNode }) {
     const [p, q] = href.split("?");
     return (p === "/" ? path === "/" : path.startsWith(p.replace(/\/$/, ""))) && (!q || search === q);
   };
+  const initials = (user?.name || "?").split(/\s+/).map((w) => w[0]).slice(0, 2).join("").toUpperCase();
   return (
-    <div className="flex h-screen overflow-hidden">
-      {open && <div className="fixed inset-0 z-30 bg-black/50 lg:hidden" onClick={() => setOpen(false)} />}
-      <aside className={clsx("no-print fixed inset-y-0 start-0 z-40 flex w-64 shrink-0 flex-col bg-[var(--side)] text-[var(--side-text)] transition-transform lg:static side-bg", open ? "translate-x-0" : "max-lg:ltr:-translate-x-full max-lg:rtl:translate-x-full")}>
-        <div className="flex items-center gap-3 px-5 py-5">
-          <img src="/brand/icon-192.png" alt="BLR Fatourati" width={42} height={42} className="rounded-xl shadow-lg" />
+    <div className="flex h-screen gap-3 overflow-hidden p-3">
+      {open && <div className="fixed inset-0 z-30 bg-black/40 lg:hidden" onClick={() => setOpen(false)} />}
+      <aside className={clsx("glass no-print fixed inset-y-3 start-3 z-40 flex w-64 shrink-0 flex-col rounded-3xl transition-transform lg:static", open ? "translate-x-0" : "max-lg:ltr:-translate-x-[110%] max-lg:rtl:translate-x-[110%]")}>
+        <div className="flex items-center gap-3 px-5 pb-3 pt-5">
+          <img src="/brand/icon-192.png" alt="BLR Fatourati" width={44} height={44} className="glow-ring rounded-2xl" />
           <div className="min-w-0">
-            <div className="text-lg font-bold leading-none text-white">BLR Fatourati</div>
-            <div className="mt-1.5 truncate text-[11px] text-slate-400">{company.name || t("tagline")}</div>
+            <div className="text-[17px] font-bold leading-none">BLR Fatourati</div>
+            <div className="mt-1.5 truncate text-[11px] text-muted">{company.name || t("tagline")}</div>
           </div>
         </div>
-        <nav className="flex-1 space-y-4 overflow-y-auto px-3 pb-4">
+        <div className="mx-4 mb-2 flex items-center gap-2.5 rounded-2xl border border-line/70 bg-surface2/60 px-3 py-2">
+          <span className="grid h-9 w-9 place-items-center rounded-xl text-xs font-bold text-white" style={{ backgroundImage: "linear-gradient(135deg, var(--accent), var(--accent-2))" }}>{initials}</span>
+          <div className="min-w-0 leading-tight"><div className="truncate text-sm font-semibold">{user?.name}</div><div className="text-[10px] text-muted">{t("role_" + user?.role)}</div></div>
+        </div>
+        <nav className="flex-1 space-y-3.5 overflow-y-auto px-3 pb-3 pt-1">
           {NAV.map((g) => {
             const items = g.items.filter((i) => !i.perm || can(user?.role, i.perm));
             if (!items.length) return null;
             return (
               <div key={g.group}>
-                <div className="px-3 pb-1.5 text-[10px] font-semibold uppercase tracking-wider text-slate-500">{t(g.group)}</div>
+                <div className="px-3 pb-1 text-[10px] font-bold uppercase tracking-wider text-muted/80">{t(g.group)}</div>
                 {items.map((i) => (
-                  <Link key={i.href + i.key} href={i.href} className={clsx("flex items-center gap-3 rounded-xl px-3 py-2 text-sm transition-all duration-200", active(i.href) ? "nav-active text-white" : "hover:bg-white/8 hover:text-white hover:ps-4")}>
+                  <Link key={i.href + i.key} href={i.href} className={clsx("flex items-center gap-3 rounded-xl px-3 py-2 text-sm transition-all duration-200", active(i.href) ? "nav-active font-semibold text-white" : "text-ink/80 hover:bg-accent/10 hover:text-accent")}>
                     {i.icon}<span className="truncate">{t(i.key)}</span>
                   </Link>
                 ))}
@@ -144,30 +148,25 @@ function Frame({ children }: { children: ReactNode }) {
             );
           })}
         </nav>
-        <div className="border-t border-white/10 p-3 text-[11px] text-slate-500">BLR Fatourati v1.0 · Baderinfo</div>
+        <div className="border-t border-line/70 p-3 text-center text-[11px] text-muted">BLR Fatourati v1.0 · Baderinfo</div>
       </aside>
 
-      <div className="flex min-w-0 flex-1 flex-col">
-        <header className="no-print flex h-14 shrink-0 items-center justify-between gap-3 border-b border-line bg-surface px-4">
-          <div className="flex items-center gap-2">
-            <button className="rounded-md p-2 text-muted hover:bg-surface2 lg:hidden" onClick={() => setOpen(true)} aria-label="menu"><Menu size={20} /></button>
-            <QuickCreate />
-          </div>
+      <div className="flex min-w-0 flex-1 flex-col gap-3">
+        <header className="glass no-print flex h-[60px] shrink-0 items-center gap-3 rounded-2xl px-3">
+          <button className="rounded-lg p-2 text-muted hover:bg-surface2 lg:hidden" onClick={() => setOpen(true)} aria-label="menu"><Menu size={20} /></button>
+          <QuickCreate />
+          <GlobalSearch />
           <HeaderClock />
-          <div className="flex items-center gap-1.5">
-            <select value={lang} onChange={(e) => setLang(e.target.value as Lang)} className="h-8 rounded-md border border-line bg-surface px-2 text-xs" aria-label="language">
+          <div className="flex items-center gap-1">
+            <select value={lang} onChange={(e) => setLang(e.target.value as Lang)} className="h-9 rounded-xl border border-line bg-surface px-2 text-xs" aria-label="language">
               <option value="ar">العربية</option><option value="fr">Français</option><option value="en">English</option>
             </select>
             <ColorPicker />
-            <button onClick={() => setTheme(theme === "dark" ? "light" : "dark")} className="rounded-md p-2 text-muted hover:bg-surface2" aria-label="theme">{theme === "dark" ? <Sun size={17} /> : <Moon size={17} />}</button>
-            <div className="mx-1 hidden text-end leading-tight sm:block">
-              <div className="text-xs font-semibold">{user?.name}</div>
-              <div className="text-[10px] text-muted">{t("role_" + user?.role)}</div>
-            </div>
-            <button onClick={() => signOut()} title={t("lock")} className="rounded-md p-2 text-muted hover:bg-surface2"><Lock size={17} /></button>
+            <button onClick={() => setTheme(theme === "dark" ? "light" : "dark")} className="rounded-xl p-2.5 text-muted hover:bg-surface2" aria-label="theme">{theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}</button>
+            <button onClick={() => signOut()} title={t("lock")} className="rounded-xl p-2.5 text-muted hover:bg-surface2"><Lock size={18} /></button>
           </div>
         </header>
-        <main className="min-h-0 flex-1 overflow-y-auto p-4 sm:p-6">{children}</main>
+        <main className="min-h-0 flex-1 overflow-y-auto rounded-2xl px-1 pb-2 pe-2 pt-1 sm:px-2">{children}</main>
       </div>
       <PrintPreviewHost />
       <Toast />
@@ -175,15 +174,51 @@ function Frame({ children }: { children: ReactNode }) {
   );
 }
 
+function GlobalSearch() {
+  const t = useT();
+  const router = useRouter();
+  const { docs, clients, suppliers, items } = useData();
+  const [q, setQ] = useState("");
+  const [open, setOpen] = useState(false);
+  const res = useMemo(() => {
+    const k = q.trim().toLowerCase();
+    if (k.length < 2) return [];
+    const out: { label: string; sub: string; href: string }[] = [];
+    for (const d of docs) if (d.number.toLowerCase().includes(k) || d.partyName.toLowerCase().includes(k)) out.push({ label: d.number, sub: `${t("t_" + d.type)} · ${d.partyName}`, href: `/documents/view/?id=${d.id}` });
+    for (const c of clients) if ([c.name, c.company, c.phone, c.email].some((v) => v?.toLowerCase().includes(k))) out.push({ label: c.name, sub: t("client"), href: `/parties/view/?kind=clients&id=${c.id}` });
+    for (const c of suppliers) if ([c.name, c.company, c.phone].some((v) => v?.toLowerCase().includes(k))) out.push({ label: c.name, sub: t("supplier"), href: `/parties/view/?kind=suppliers&id=${c.id}` });
+    for (const i of items) if ([i.name, i.sku, i.barcode].some((v) => v?.toLowerCase().includes(k))) out.push({ label: i.name, sub: t("product"), href: "/products/" });
+    return out.slice(0, 9);
+  }, [q, docs, clients, suppliers, items, t]);
+  return (
+    <div className="relative min-w-0 flex-1">
+      <Search size={16} className="pointer-events-none absolute start-3.5 top-3 text-muted" />
+      <input value={q} onChange={(e) => { setQ(e.target.value); setOpen(true); }} onFocus={() => setOpen(true)} onKeyDown={(e) => e.key === "Escape" && setOpen(false)} placeholder={t("global_search")} className="h-10 w-full rounded-2xl border border-line/70 bg-surface/70 ps-10 pe-3 text-sm placeholder:text-muted/70 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20" />
+      {open && res.length > 0 && (
+        <>
+          <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
+          <ul className="pop absolute inset-x-0 top-full z-50 mt-2 overflow-hidden rounded-2xl border border-line bg-surface py-1 shadow-xl">
+            {res.map((r, i) => (
+              <li key={i}><button onClick={() => { setOpen(false); setQ(""); router.push(r.href); }} className="flex w-full items-center justify-between gap-3 px-4 py-2 text-start text-sm hover:bg-accent/10"><span className="truncate font-medium">{r.label}</span><span className="truncate text-xs text-muted">{r.sub}</span></button></li>
+            ))}
+          </ul>
+        </>
+      )}
+    </div>
+  );
+}
+
 function AuthScreen({ mode }: { mode: "setup" | "login" }) {
   const t = useT();
-  const { lang, setLang, signIn, setup } = useUi();
+  const { lang, setLang, signIn, setup, color, setColor } = useUi();
   const [name, setName] = useState("");
   const [username, setUsername] = useState(mode === "setup" ? "admin" : "");
   const [password, setPassword] = useState("");
   const [again, setAgain] = useState("");
+  const [show, setShow] = useState(false);
   const [err, setErr] = useState("");
   const [busy, setBusy] = useState(false);
+  const HEX: Record<string, string> = { green: "#0a9f63", sky: "#0284c7", purple: "#7c3aed", blue: "#2563eb", teal: "#0d9488", orange: "#ea580c", rose: "#e11d48", slate: "#475569" };
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -205,26 +240,43 @@ function AuthScreen({ mode }: { mode: "setup" | "login" }) {
   };
 
   return (
-    <div className="grid min-h-screen place-items-center bg-[radial-gradient(ellipse_at_top,#1e3a8a_0%,#0b1220_60%)] p-4">
-      <form onSubmit={submit} className="pop w-full max-w-sm space-y-4 rounded-2xl border border-white/10 bg-surface p-7 shadow-2xl">
+    <div className="auth-bg relative grid min-h-screen place-items-center overflow-hidden p-4">
+      <div className="glass absolute top-5 flex gap-1 rounded-full p-1">
+        {(["ar", "en", "fr"] as Lang[]).map((l) => (
+          <button key={l} type="button" onClick={() => setLang(l)} className={clsx("pill rounded-full px-4 py-1.5 text-sm font-medium", lang === l ? "text-white shadow-md" : "text-muted hover:text-ink")} style={lang === l ? { backgroundImage: "linear-gradient(135deg, var(--accent), var(--accent-2))" } : undefined}>
+            {l === "ar" ? "العربية" : l === "en" ? "English" : "Français"}
+          </button>
+        ))}
+      </div>
+      <form onSubmit={submit} className="glass pop w-full max-w-[400px] space-y-4 rounded-[28px] p-8">
         <div className="text-center">
-          <img src="/brand/app-icon.png" alt="BLR Fatourati" width={84} height={84} className="mx-auto rounded-2xl shadow-lg" />
-          <h1 className="mt-1 text-2xl font-extrabold">BLR Fatourati</h1>
-          <p className="text-xs text-muted">{mode === "setup" ? t("setup_sub") : t("login_sub")}</p>
+          <img src="/brand/app-icon.png" alt="BLR Fatourati" width={88} height={88} className="glow-ring mx-auto rounded-[26px]" />
+          <h1 className="mt-4 text-[26px] font-bold leading-tight text-accent">BLR Fatourati</h1>
+          <span className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-line px-3 py-1 text-[11px] text-muted"><ShieldCheck size={13} />{t("secure_badge")}</span>
         </div>
-        {mode === "setup" && <Field label={t("full_name")}><Input value={name} onChange={(e) => setName(e.target.value)} autoFocus /></Field>}
-        <Field label={t("username")}><Input value={username} onChange={(e) => setUsername(e.target.value)} autoComplete="username" autoFocus={mode === "login"} required /></Field>
-        <Field label={t("password")}><Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete={mode === "setup" ? "new-password" : "current-password"} required /></Field>
-        {mode === "setup" && <Field label={t("password_again")}><Input type="password" value={again} onChange={(e) => setAgain(e.target.value)} autoComplete="new-password" required /></Field>}
-        {err && <p role="alert" className="rounded-lg bg-bad/10 px-3 py-2 text-xs text-bad">{err}</p>}
-        <Button type="submit" className="w-full" disabled={busy}>{mode === "setup" ? t("create_account") : t("login")}</Button>
-        {mode === "setup" && <p className="text-center text-[11px] text-muted">{t("setup_note")}</p>}
-        <div className="flex justify-center gap-2 pt-1">
-          {(["ar", "fr", "en"] as Lang[]).map((l) => (
-            <button key={l} type="button" onClick={() => setLang(l)} className={clsx("rounded-md px-2.5 py-1 text-xs", lang === l ? "bg-accent text-white" : "text-muted hover:bg-surface2")}>{l.toUpperCase()}</button>
-          ))}
+        <div className="text-center">
+          <div className="text-lg font-bold">👋 {mode === "setup" ? t("welcome_new") : t("welcome_back")}</div>
+          <p className="mt-1 text-xs text-muted">{mode === "setup" ? t("setup_sub") : t("login_sub")}</p>
         </div>
+        {mode === "setup" && <Field label={t("full_name")}><Input value={name} onChange={(e) => setName(e.target.value)} autoFocus className="h-11 rounded-xl" /></Field>}
+        <Field label={t("username")}><Input value={username} onChange={(e) => setUsername(e.target.value)} autoComplete="username" autoFocus={mode === "login"} required className="h-11 rounded-xl" /></Field>
+        <Field label={t("password")}>
+          <div className="relative">
+            <Input type={show ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} autoComplete={mode === "setup" ? "new-password" : "current-password"} required className="h-11 rounded-xl pe-10" />
+            <button type="button" onClick={() => setShow((v) => !v)} className="absolute end-3 top-3 text-muted hover:text-ink" aria-label="show">{show ? <EyeOff size={17} /> : <Eye size={17} />}</button>
+          </div>
+        </Field>
+        {mode === "setup" && <Field label={t("password_again")}><Input type={show ? "text" : "password"} value={again} onChange={(e) => setAgain(e.target.value)} autoComplete="new-password" required className="h-11 rounded-xl" /></Field>}
+        {err && <p role="alert" className="rounded-xl bg-bad/10 px-3 py-2 text-xs text-bad">{err}</p>}
+        <Button type="submit" className="h-12 w-full rounded-2xl text-base" disabled={busy}><Sparkles size={17} />{mode === "setup" ? t("create_account") : t("enter")}</Button>
+        <p className="flex items-center justify-center gap-1.5 pt-1 text-center text-[11px] text-muted"><ShieldCheck size={12} />{mode === "setup" ? t("setup_note") : t("data_local")}</p>
       </form>
+      <div className="absolute bottom-4 flex flex-col items-center gap-3">
+        <span className="text-[11px] text-muted">v1.0.0 · Powered by Baderinfo</span>
+        <div className="flex gap-3">
+          {COLORS.map((c) => <button key={c} type="button" onClick={() => setColor(c)} aria-label={c} className="swatch" style={{ background: HEX[c], width: 30, height: 30, outline: color === c ? `2px solid ${HEX[c]}` : "none", outlineOffset: 3 }} />)}
+        </div>
+      </div>
     </div>
   );
 }
@@ -233,7 +285,7 @@ function ColorPicker() {
   const t = useT();
   const { color, setColor } = useUi();
   const [open, setOpen] = useState(false);
-  const HEX: Record<string, string> = { sky: "#0284c7", purple: "#7c3aed", blue: "#2563eb", green: "#059669", teal: "#0d9488", orange: "#ea580c", rose: "#e11d48", slate: "#475569" };
+  const HEX: Record<string, string> = { green: "#0a9f63", sky: "#0284c7", purple: "#7c3aed", blue: "#2563eb", teal: "#0d9488", orange: "#ea580c", rose: "#e11d48", slate: "#475569" };
   return (
     <div className="relative">
       <button onClick={() => setOpen((o) => !o)} className="rounded-md p-2 text-muted hover:bg-surface2" aria-label={t("color_theme")} title={t("color_theme")}><Palette size={17} /></button>
@@ -261,7 +313,7 @@ function HeaderClock() {
   if (!now) return <div />;
   const loc = LOCALE[lang];
   return (
-    <div className="hidden items-center gap-3 rounded-xl border border-line bg-surface2 px-4 py-1.5 md:flex" dir="ltr">
+    <div className="hidden items-center gap-3 rounded-2xl border border-line/70 bg-surface/70 px-3.5 py-1 lg:flex" dir="ltr">
       <Clock3 size={18} className="text-accent" />
       <div className="leading-tight">
         <div className="num text-base font-bold tracking-wide">{now.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", second: "2-digit" })}</div>
