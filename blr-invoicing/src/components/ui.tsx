@@ -23,10 +23,11 @@ export function Button({ variant = "primary", size = "md", className, ...p }: Co
   );
 }
 
-const field = "w-full rounded-lg border border-line bg-surface px-3 text-sm text-ink placeholder:text-muted/70 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 disabled:opacity-60";
-export const Input = (p: ComponentProps<"input">) => <input {...p} className={clsx(field, "h-10", p.className)} />;
-export const Select = (p: ComponentProps<"select">) => <select {...p} className={clsx(field, "h-10", p.className)} />;
-export const Textarea = (p: ComponentProps<"textarea">) => <textarea {...p} className={clsx(field, "min-h-20 py-2", p.className)} />;
+const field = "rounded-lg border border-line bg-surface px-3 text-sm text-ink placeholder:text-muted/70 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 disabled:opacity-60";
+const wcls = (c?: string) => (c && /(^|\s)w-/.test(c) ? "" : "w-full");
+export const Input = (p: ComponentProps<"input">) => <input {...p} className={clsx(field, "h-10", wcls(p.className), p.className)} />;
+export const Select = (p: ComponentProps<"select">) => <select {...p} className={clsx(field, "h-10", wcls(p.className), p.className)} />;
+export const Textarea = (p: ComponentProps<"textarea">) => <textarea {...p} className={clsx(field, "min-h-20 py-2", wcls(p.className), p.className)} />;
 
 export function Field({ label, children, className, hint }: { label: string; children: ReactNode; className?: string; hint?: string }) {
   return (
@@ -56,7 +57,7 @@ export function PageHeader({ title, subtitle, actions }: { title: string; subtit
   return (
     <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
       <div>
-        <h1 className="text-xl font-bold">{title}</h1>
+        <h1 className="flex items-center gap-2.5 text-xl font-bold"><span className="inline-block h-6 w-1.5 rounded-full" style={{ backgroundImage: "linear-gradient(180deg, var(--accent), var(--accent-2))" }} />{title}</h1>
         {subtitle && <p className="mt-0.5 text-sm text-muted">{subtitle}</p>}
       </div>
       <div className="flex flex-wrap items-center gap-2">{actions}</div>
@@ -73,10 +74,10 @@ export const Badge = ({ tone = "muted", children }: { tone?: keyof typeof TONES;
 
 export function Stat({ label, value, sub, tone, icon }: { label: string; value: ReactNode; sub?: ReactNode; tone?: "ok" | "bad" | "warn" | "info"; icon?: ReactNode }) {
   return (
-    <div className="rounded-xl border border-line bg-surface p-4 shadow-sm">
+    <div className="card-soft rounded-xl border border-line bg-surface p-4 transition hover:-translate-y-0.5">
       <div className="flex items-center justify-between text-xs text-muted">
         <span>{label}</span>
-        {icon && <span className={clsx("grid h-8 w-8 place-items-center rounded-lg", tone ? TONES[tone] : TONES.info)}>{icon}</span>}
+        {icon && <span className={clsx("grid h-9 w-9 place-items-center rounded-xl shadow-sm", tone ? TONES[tone] : TONES.info)}>{icon}</span>}
       </div>
       <div className="num mt-2 text-2xl font-bold">{value}</div>
       {sub && <div className="mt-1 text-xs text-muted">{sub}</div>}
@@ -129,7 +130,7 @@ export function Table({ head, children, className }: { head: ReactNode[]; childr
     <div className={clsx("overflow-x-auto", className)}>
       <table className="w-full min-w-[640px] border-collapse text-sm">
         <thead>
-          <tr className="border-b border-line bg-surface2 text-xs text-muted">
+          <tr className="border-b-2 border-accent/25 bg-surface2 text-xs text-muted">
             {head.map((h, i) => <th key={i} className="px-3 py-2.5 text-start font-medium whitespace-nowrap">{h}</th>)}
           </tr>
         </thead>

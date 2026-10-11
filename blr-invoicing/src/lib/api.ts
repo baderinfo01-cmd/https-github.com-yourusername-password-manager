@@ -19,7 +19,7 @@ export interface BlrBridge {
   };
   backup: { export(pw: string): Promise<Res<any>>; restore(pw: string): Promise<Res<any>>; openFolder(): Promise<Res<any>> };
   file: { saveText(n: string, t: string): Promise<Res<any>>; saveBytes(n: string, b64: string): Promise<Res<any>>; openText(exts: string[]): Promise<Res<{ name: string; base64: string } | null>> };
-  print: { html(h: string, o?: any): Promise<Res<any>>; pdf(h: string, n: string, o?: any): Promise<Res<any>> };
+  print: { printers(): Promise<Res<{ name: string; displayName: string; isDefault: boolean }[]>>; html(h: string, o?: any): Promise<Res<any>>; pdf(h: string, n: string, o?: any): Promise<Res<any>> };
   ai: { hasKey(): Promise<Res<boolean>> | Promise<boolean>; setKey(k: string): Promise<any>; ask(p: any): Promise<any>; scan(p: any): Promise<any> };
   app: { info(): Promise<Res<any>>; openExternal(u: string): Promise<Res<boolean>> };
 }
@@ -76,6 +76,7 @@ function webBridge(): BlrBridge {
       openText: () => new Promise((resolve) => { const i = document.createElement("input"); i.type = "file"; i.onchange = () => { const f = i.files?.[0]; if (!f) return resolve({ ok: true, data: null }); const r = new FileReader(); r.onload = () => resolve({ ok: true, data: { name: f.name, base64: String(r.result).split(",")[1] } }); r.readAsDataURL(f); }; i.click(); }),
     },
     print: {
+      printers: async () => ({ ok: true as const, data: [] }),
       html: async (h) => { const w = window.open("", "_blank"); if (w) { w.document.write(h); w.document.close(); w.print(); } return { ok: true, data: { printed: !!w } }; },
       pdf: async (h) => { const w = window.open("", "_blank"); if (w) { w.document.write(h); w.document.close(); w.print(); } return { ok: true, data: { saved: !!w } }; },
     },

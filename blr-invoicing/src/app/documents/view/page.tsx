@@ -1,5 +1,5 @@
 "use client";
-import { ArrowLeft, FileDown, Mail, MessageCircle, Pencil, Printer, Receipt, Repeat, Trash2, Wallet } from "lucide-react";
+import { ArrowLeft, Mail, MessageCircle, Pencil, Printer, Receipt, Repeat, Trash2, Wallet } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
@@ -7,9 +7,11 @@ import { PaymentModal } from "@/components/PaymentModal";
 import { Badge, Button, Card, Confirm, Empty } from "@/components/ui";
 import { blr, call } from "@/lib/api";
 import { buildDocHtml } from "@/lib/invoiceHtml";
+import { buildReceiptHtml } from "@/lib/receiptHtml";
+import { openPreview } from "@/store/preview";
 import { PAY_TONE, useDocRows, useMoney, usePayLabel } from "@/lib/hooks";
 import { fmtDate, useT } from "@/lib/i18n";
-import type { DocType } from "@/lib/types";
+import type { DocType, Payment } from "@/lib/types";
 import { useData } from "@/store/data";
 import { can, useUi } from "@/store/ui";
 
@@ -57,15 +59,16 @@ function Inner() {
   const hasPay = doc.type === "invoice" || doc.type === "purchase";
   const myPayments = payments.filter((p) => p.docId === doc.id);
 
-  const doPrint = async (paper: "a4" | "thermal") => {
-    const h = await buildDocHtml(doc, { lang, settings, party, paid: row.paid, credits: row.credits, paper });
-    await call(blr().print.html(h, { paper }));
-  };
-  const doPdf = async () => {
-    const h = await buildDocHtml(doc, { lang, settings, party, paid: row.paid, credits: row.credits });
-    const r = await call<{ saved: boolean }>(blr().print.pdf(h, `${doc.number}.pdf`));
-    if (r.saved) notify(t("saved"));
-  };
+  const preview = (paper: "a4" | "thermal") =>
+    openPreview({
+      title: `${t("t_" + doc.type)} ${doc.number}`, fileName: `${doc.number}.pdf`, papers: ["a4", "thermal"], paper,
+      build: (pp) => buildDocHtml(doc, { lang, settings, party, paid: row.paid, credits: row.credits, paper: pp }),
+    });
+  const printReceipt = (p: Payment) =>
+    openPreview({
+      title: `${t("receipt_in")} ${p.number || ""}`, fileName: `${p.number || "receipt"}.pdf`, papers: ["a4", "thermal"], paper: "a4",
+      build: async (pp) => buildReceiptHtml(p, { lang, settings, party, doc, balanceAfter: row.due, paper: pp }),
+    });
   const doConvert = async (to: DocType) => {
     const c = await convert(doc.id, to);
     notify(t("created", { n: c.number }));
@@ -84,9 +87,8 @@ function Inner() {
           {row.pay ? <Badge tone={PAY_TONE[row.pay]}>{payLabel(row.pay)}</Badge> : <Badge tone="info">{t("s_" + doc.status)}</Badge>}
         </div>
         <div className="flex flex-wrap gap-2">
-          <Button variant="secondary" size="sm" onClick={() => doPrint("a4")}><Printer size={14} />{t("print")} A4</Button>
-          <Button variant="secondary" size="sm" onClick={() => doPrint("thermal")}><Receipt size={14} />{t("print_thermal")}</Button>
-          <Button variant="secondary" size="sm" onClick={doPdf}><FileDown size={14} />PDF</Button>
+          <Button size="sm" onClick={() => preview("a4")}><Printer size={14} />{t("preview_print")}</Button>
+          <Button variant="secondary" size="sm" onClick={() => preview("thermal")}><Receipt size={14} />{t("print_thermal")}</Button>
           <Button variant="secondary" size="sm" onClick={wa}><MessageCircle size={14} />WhatsApp</Button>
           <Button variant="secondary" size="sm" onClick={mail}><Mail size={14} />Email</Button>
           {can(role, perm) && <Link href={`/documents/edit/?type=${doc.type}&id=${doc.id}`}><Button variant="secondary" size="sm"><Pencil size={14} />{t("edit")}</Button></Link>}
@@ -113,7 +115,8 @@ function Inner() {
                   {myPayments.sort((a, b) => b.date.localeCompare(a.date)).map((p) => (
                     <li key={p.id} className="flex items-center justify-between py-2">
                       <span><span className="num font-medium">{money(p.amount)}</span><span className="block text-xs text-muted">{fmtDate(p.date, lang)} · {t("m_" + p.method)}</span></span>
-                      {can(role, "delete") && <button onClick={() => setDelPay(p.id)} className="rounded p-1.5 text-bad hover:bg-bad/10" aria-label={t("delete")}><Trash2 size={14} /></button>}
+                      <span className="flex"><button onClick={() => printReceipt(p)} className="rounded p-1.5 text-muted hover:bg-surface2" aria-label={t("print_receipt_btn")} title={t("print_receipt_btn")}><Printer size={14} /></button>
+                      {can(role, "delete") && <button onClick={() => setDelPay(p.id)} className="rounded p-1.5 text-bad hover:bg-bad/10" aria-label={t("delete")}><Trash2 size={14} /></button>}</span>
                     </li>
                   ))}
                 </ul>

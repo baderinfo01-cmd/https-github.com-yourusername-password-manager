@@ -6,6 +6,7 @@ import { Suspense, useEffect, useMemo, useState } from "react";
 import { ItemPicker } from "@/components/ItemPicker";
 import { Button, Card, Empty, Field, Input, Modal, Select, Textarea } from "@/components/ui";
 import { addDays, computeTotals, num, stampDuty, todayIso } from "@/lib/calc";
+import { amountInWords } from "@/lib/words";
 import { DOC_TYPES, PAYMENT_METHODS } from "@/lib/defaults";
 import { useMoney } from "@/lib/hooks";
 import { useT } from "@/lib/i18n";
@@ -28,6 +29,7 @@ function Inner() {
   const notify = useUi((s) => s.notify);
   const role = useUi((s) => s.user?.role);
   const username = useUi((s) => s.user?.username);
+  const lang = useUi((s) => s.lang);
   const { settings, items, clients, suppliers, docs, saveDoc, saveParty } = useData();
   const existing = id ? docs.find((d) => d.id === id) : undefined;
   const type = (existing?.type || (DOC_TYPES.includes(sp.get("type") as DocType) ? sp.get("type") : "invoice")) as DocType;
@@ -52,7 +54,7 @@ function Inner() {
     });
   }, [existing, id, doc, type, hasDue, settings, username]);
 
-  const totals = useMemo(() => (doc ? computeTotals(doc.lines, doc.discount, doc.discountType, doc.shipping, doc.stamp, settings.pricesIncludeTax) : null), [doc, settings.pricesIncludeTax]);
+  const totals = useMemo(() => (doc ? computeTotals(doc.lines, doc.discount, doc.discountType, doc.shipping, doc.stamp, settings.pricesIncludeTax, doc.extraTaxes || []) : null), [doc, settings.pricesIncludeTax]);
 
   if (!doc || !totals) return <Empty text={id && !existing ? t("not_found") : "…"} />;
   const perm = isPurchase ? "purchases" : "sales";
@@ -75,7 +77,7 @@ function Inner() {
     if (doc.type !== "delivery" && !doc.partyName.trim() && isPurchase) return notify(t("pick_supplier"), "err");
     setSaving(true);
     try {
-      const next = { ...doc, lines, discount: num(doc.discount), shipping: num(doc.shipping), stamp: settings.stampDuty && type === "invoice" ? (doc.paymentMethod === "cash" ? stampDuty(computeTotals(lines, doc.discount, doc.discountType, doc.shipping, 0, settings.pricesIncludeTax).total) : 0) : doc.stamp };
+      const next = { ...doc, lines, extraTaxes: (doc.extraTaxes || []).map((x) => ({ ...x, rate: num(x.rate) })), discount: num(doc.discount), shipping: num(doc.shipping), stamp: settings.stampDuty && type === "invoice" ? (doc.paymentMethod === "cash" ? stampDuty(computeTotals(lines, doc.discount, doc.discountType, doc.shipping, 0, settings.pricesIncludeTax, doc.extraTaxes || []).total) : 0) : doc.stamp };
       const saved = await saveDoc(next);
       notify(t("saved"));
       router.push(then === "view" ? `/documents/view/?id=${saved.id}` : `/documents/edit/?type=${type}&id=${saved.id}`);
@@ -114,6 +116,9 @@ function Inner() {
             <Field label={t("date")}><Input type="date" value={doc.date} onChange={(e) => patch({ date: e.target.value, dueDate: hasDue ? addDays(e.target.value, settings.dueDays) : doc.dueDate })} /></Field>
             {hasDue && <Field label={t("due_date")}><Input type="date" value={doc.dueDate || ""} onChange={(e) => patch({ dueDate: e.target.value })} /></Field>}
             <Field label={t("status")}><Select value={doc.status} onChange={(e) => patch({ status: e.target.value as DocStatus })}>{STATUSES[type].map((s) => <option key={s} value={s}>{t("s_" + s)}</option>)}</Select></Field>
+            <Field label={t("subject")} className="sm:col-span-2"><Input value={doc.subject || ""} onChange={(e) => patch({ subject: e.target.value })} /></Field>
+            {(type === "quote" || type === "proforma") && <Field label={t("valid_until")}><Input type="date" value={doc.validUntil || ""} onChange={(e) => patch({ validUntil: e.target.value })} /></Field>}
+            {(type === "invoice" || type === "quote" || type === "delivery" || type === "proforma") && <Field label={t("po_ref")}><Input value={doc.poRef || ""} onChange={(e) => patch({ poRef: e.target.value })} /></Field>}
             {type === "invoice" && <Field label={t("payment_method")}><Select value={doc.paymentMethod || "cash"} onChange={(e) => patch({ paymentMethod: e.target.value })}>{PAYMENT_METHODS.map((m) => <option key={m} value={m}>{t("m_" + m)}</option>)}</Select></Field>}
           </div>
           {party && (party.creditLimit || 0) > 0 && type === "invoice" && <p className="mt-3 flex items-center gap-2 text-xs text-warn"><AlertTriangle size={14} />{t("credit_limit")}: {money(party.creditLimit!)}</p>}
@@ -124,10 +129,12 @@ function Inner() {
             <Row k={t("subtotal")} v={money(totals.subtotal)} />
             {totals.discountAmount > 0 && <Row k={t("discount")} v={"- " + money(totals.discountAmount)} />}
             <Row k={t("tax")} v={money(totals.tax)} />
+            {totals.extra > 0 && <Row k={t("extra_taxes")} v={money(totals.extra)} />}
             {num(doc.shipping) > 0 && <Row k={t("shipping")} v={money(num(doc.shipping))} />}
             {autoStamp > 0 && <Row k={t("stamp_duty")} v={money(autoStamp)} />}
             <div className="flex items-center justify-between border-t border-line pt-3 text-lg font-bold"><span>{t("total")}</span><span className="num text-accent">{money(totals.total + autoStamp - doc.stamp)}</span></div>
           </dl>
+          <p className="mt-3 rounded-lg bg-surface2 p-2.5 text-xs leading-relaxed text-muted">{amountInWords(totals.total + autoStamp - doc.stamp, lang, settings.currency.code, settings.currency.decimals)}</p>
         </Card>
       </div>
 
@@ -171,6 +178,17 @@ function Inner() {
             <Field label={t("discount")}><div className="flex gap-1"><Input type="number" step="any" min="0" value={doc.discount} onChange={(e) => patch({ discount: e.target.value as any })} className="num" />
               <Select value={doc.discountType} onChange={(e) => patch({ discountType: e.target.value as any })} className="w-16"><option value="percent">%</option><option value="amount">{settings.currency.symbol}</option></Select></div></Field>
             <Field label={t("shipping")}><Input type="number" step="any" min="0" value={doc.shipping} onChange={(e) => patch({ shipping: e.target.value as any })} className="num" /></Field>
+          </div>
+          <div className="mt-4 space-y-2">
+            <div className="text-xs font-medium text-muted">{t("extra_taxes")}</div>
+            {(doc.extraTaxes || []).map((x) => (
+              <div key={x.id} className="grid grid-cols-[1fr_70px_30px] gap-2">
+                <Input value={x.name} onChange={(e) => patch({ extraTaxes: (doc.extraTaxes || []).map((y) => (y.id === x.id ? { ...y, name: e.target.value } : y)) })} />
+                <Input type="number" step="any" value={x.rate} onChange={(e) => patch({ extraTaxes: (doc.extraTaxes || []).map((y) => (y.id === x.id ? { ...y, rate: e.target.value as any } : y)) })} className="num" />
+                <button onClick={() => patch({ extraTaxes: (doc.extraTaxes || []).filter((y) => y.id !== x.id) })} className="text-bad"><Trash2 size={14} /></button>
+              </div>
+            ))}
+            <Button variant="secondary" size="sm" onClick={() => patch({ extraTaxes: [...(doc.extraTaxes || []), { id: crypto.randomUUID(), name: "Taxe", rate: 1 }] })}><Plus size={13} />{t("add_tax")}</Button>
           </div>
         </Card>
       </div>

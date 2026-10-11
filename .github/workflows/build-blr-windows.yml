@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches: [claude/gifted-faraday-mwhxt8]
-    paths: ['.github/workflows/build-blr-windows.yml']
+    paths: ['.github/workflows/build-blr-windows.yml', 'blr-invoicing/**']
 
 permissions:
   contents: write

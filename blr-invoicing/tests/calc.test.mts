@@ -38,3 +38,16 @@ test("period stepping", () => {
   assert.equal(addPeriod("2026-01-31", "week"), "2026-02-07");
   assert.equal(addPeriod("2026-01-15", "quarter"), "2026-04-15");
 });
+
+import { amountInWords, numberToWords } from "../src/lib/words.ts";
+test("amount in words (ar/fr/en)", () => {
+  assert.equal(numberToWords(0, "ar"), "صفر");
+  assert.equal(numberToWords(21, "ar"), "واحد وعشرون");
+  assert.equal(numberToWords(2380, "ar"), "ألفان و ثلاثمائة وثمانون".replace(" و ", " و"));
+  assert.equal(numberToWords(143228, "fr"), "cent quarante-trois mille deux cent vingt-huit");
+  assert.equal(numberToWords(80, "fr"), "quatre-vingts");
+  assert.equal(numberToWords(71, "fr"), "soixante et onze");
+  assert.equal(numberToWords(1250, "en"), "one thousand two hundred fifty");
+  assert.equal(amountInWords(17548, "fr", "DZD"), "Arrêtée à la somme de : dix-sept mille cinq cent quarante-huit dinars algériens");
+  assert.match(amountInWords(120.5, "ar", "DZD"), /^فقط مائة وعشرون دينار جزائري و.* سنتيم لا غير$/);
+});

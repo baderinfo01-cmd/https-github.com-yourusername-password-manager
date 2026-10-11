@@ -17,10 +17,12 @@ export interface Doc {
   id: string; type: DocType; number: string; date: string; dueDate?: string; partyId?: string; partyName: string;
   lines: Line[]; discount: number; discountType: "amount" | "percent"; shipping: number; stamp: number; paymentMethod?: string;
   notes?: string; terms?: string; status: DocStatus; refId?: string; refNumber?: string;
+  subject?: string; poRef?: string; validUntil?: string; extraTaxes?: { id: string; name: string; rate: number }[]; extraTax?: number;
   subtotal: number; discountAmount: number; tax: number; total: number; stockApplied?: Record<string, number>;
   createdBy?: string; createdAt?: number; updatedAt?: number;
 }
-export interface Payment { id: string; docId?: string; partyId?: string; kind: "in" | "out"; amount: number; date: string; method: string; ref?: string; note?: string }
+export interface Payment { id: string; number?: string; docId?: string; partyId?: string; kind: "in" | "out"; amount: number; date: string; method: string; ref?: string; note?: string }
+export interface Task { id: string; title: string; due?: string; done: boolean; priority: "low" | "normal" | "high"; note?: string; doneAt?: number }
 export interface Expense { id: string; date: string; category: string; description: string; amount: number; tax: number; supplierId?: string; method: string; ref?: string; attachment?: string }
 export interface StockMove { id: string; itemId: string; qty: number; reason: string; docId?: string; date: string; note?: string }
 export interface Recurring {
@@ -30,7 +32,7 @@ export interface Recurring {
 export interface TaxRate { id: string; name: string; rate: number }
 export interface Settings {
   id: "main";
-  company: { name: string; legalName?: string; address?: string; phone?: string; email?: string; website?: string; taxId?: string; rc?: string; ai?: string; nis?: string; bank?: string; logo?: string; signature?: string };
+  company: { name: string; legalName?: string; address?: string; phone?: string; email?: string; website?: string; taxId?: string; rc?: string; ai?: string; nis?: string; bank?: string; logo?: string; signature?: string; stamp?: string };
   currency: { code: string; symbol: string; position: "before" | "after"; decimals: number };
   taxes: TaxRate[]; defaultTax: number; pricesIncludeTax: boolean;
   stampDuty: boolean; // Algerian droit de timbre on cash payments

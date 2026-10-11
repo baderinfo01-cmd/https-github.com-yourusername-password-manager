@@ -2,7 +2,7 @@
 import { Download, Printer } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Button, Card, Empty, Input, PageHeader, Select, Stat, Table, Td } from "@/components/ui";
-import { blr, call } from "@/lib/api";
+import { openPreview } from "@/store/preview";
 import { inRange, netOf, summarize, taxOf } from "@/lib/analytics";
 import { round, todayIso } from "@/lib/calc";
 import { useDocRows, useMoney } from "@/lib/hooks";
@@ -109,17 +109,17 @@ export default function Reports() {
 
   const fmt = (v: string | number, col: number) => (typeof v === "number" && !table.plain.includes(col) ? money(v) : String(v));
   const exportIt = () => exportXlsx(`report-${tab}`, t("rep_" + tab), [table.head, ...table.data, ...(table.total ? [table.total] : [])]);
-  const printIt = async () => {
+  const buildReport = async () => {
     const body = [...table.data, ...(table.total ? [table.total] : [])].map((r) => `<tr>${r.map((c, i) => `<td class="${i ? "n" : ""}">${typeof c === "number" ? fmt(c, i) : c}</td>`).join("")}</tr>`).join("");
     const html = `<!doctype html><html dir="${lang === "ar" ? "rtl" : "ltr"}"><meta charset=utf-8><style>body{font-family:Segoe UI,Tahoma,Arial;padding:16mm;font-size:12px}h1{font-size:20px;margin:0}p{color:#64748b}table{width:100%;border-collapse:collapse;margin-top:14px}th{background:#f1f5f9;text-align:start}td,th{padding:7px 8px;border-bottom:1px solid #e2e8f0}.n{text-align:end;direction:ltr}tr:last-child td{font-weight:700}</style><h1>${tr(lang, "rep_" + tab)}</h1><p>${settings.company.name} · ${from || "…"} → ${to || "…"}</p><table><tr>${table.head.map((h) => `<th>${h}</th>`).join("")}</tr>${body}</table></html>`;
-    await call(blr().print.html(html));
+    return html;
   };
 
   return (
     <div className="mx-auto max-w-6xl">
       <PageHeader title={t("reports")} actions={<>
         <Button variant="secondary" size="sm" onClick={exportIt}><Download size={14} />{t("export")}</Button>
-        <Button variant="secondary" size="sm" onClick={printIt}><Printer size={14} />{t("print")}</Button>
+        <Button variant="secondary" size="sm" onClick={() => openPreview({ title: t("rep_" + tab), fileName: `report-${tab}.pdf`, build: buildReport })}><Printer size={14} />{t("print")}</Button>
       </>} />
       <div className="mb-5 flex flex-wrap items-center gap-3">
         <Select value={preset} onChange={(e) => pick(e.target.value)} className="w-48">{["month", "last_month", "quarter", "year", "last_year", "all", "custom"].map((p) => <option key={p} value={p}>{t("p_" + p)}</option>)}</Select>

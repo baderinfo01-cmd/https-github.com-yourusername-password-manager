@@ -36,6 +36,7 @@ contextBridge.exposeInMainWorld("blr", {
     openText: (exts) => inv("blr:file:open-text", exts),
   },
   print: {
+    printers: () => inv("blr:print:printers"),
     html: (html, opts) => inv("blr:print:html", html, opts),
     pdf: (html, name, opts) => inv("blr:print:pdf", html, name, opts),
   },

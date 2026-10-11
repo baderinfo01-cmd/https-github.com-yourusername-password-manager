@@ -82,6 +82,12 @@ export const DICT: Record<string, [string, string, string]> = {
   ai: ["المساعد الذكي", "AI assistant", "Assistant IA"], users: ["المستخدمون", "Users", "Utilisateurs"], settings: ["الإعدادات", "Settings", "Paramètres"],
   audit: ["سجل النشاط", "Activity log", "Journal d'activité"], license: ["الترخيص", "License", "Licence"],
   color_theme: ["لون البرنامج", "Colour theme", "Couleur du thème"],
+  nav_tools: ["أدوات", "Tools", "Outils"], calendar: ["التقويم", "Calendar", "Calendrier"], tasks: ["المهام", "Tasks", "Tâches"], new: ["جديد", "New", "Nouveau"],
+  tasks_hint: ["مهامك وتذكيراتك اليومية", "Your to-dos and reminders", "Vos tâches et rappels"], add_task: ["إضافة مهمة", "Add task", "Ajouter une tâche"], open_tasks: ["المفتوحة", "Open", "Ouvertes"], done: ["منجزة", "Done", "Terminées"],
+  task_title: ["المهمة", "Task", "Tâche"], priority: ["الأولوية", "Priority", "Priorité"], prio_high: ["عالية", "High", "Haute"], prio_normal: ["عادية", "Normal", "Normale"], prio_low: ["منخفضة", "Low", "Basse"],
+  calendar_hint: ["استحقاقات الفواتير وعروض الأسعار والمهام والفواتير المتكررة", "Invoice due dates, quotes, tasks and recurring invoices", "Échéances, devis, tâches et factures récurrentes"],
+  cal_due: ["استحقاق فاتورة", "Invoice due", "Échéance facture"], cal_quote: ["انتهاء عرض سعر", "Quote expires", "Fin de validité du devis"], cal_task: ["مهمة", "Task", "Tâche"], cal_recurring: ["فاتورة متكررة", "Recurring invoice", "Facture récurrente"], no_events: ["لا أحداث في هذا اليوم", "No events on this day", "Aucun événement ce jour"],
+  last_payment: ["تاريخ الدفع", "Paid on", "Payé le"],
   lock: ["قفل", "Lock", "Verrouiller"], logout: ["خروج", "Log out", "Déconnexion"],
   // ---- auth ----
   login: ["تسجيل الدخول", "Sign in", "Connexion"], login_sub: ["أدخل بيانات حسابك", "Enter your credentials", "Saisissez vos identifiants"],
@@ -127,7 +133,14 @@ export const DICT: Record<string, [string, string, string]> = {
   s_draft: ["مسودة", "Draft", "Brouillon"], s_sent: ["صادرة", "Issued", "Émise"], s_accepted: ["مقبول", "Accepted", "Accepté"], s_rejected: ["مرفوض", "Rejected", "Refusé"], s_void: ["ملغاة", "Void", "Annulée"], s_issued: ["صادر", "Issued", "Émis"],
   pay_paid: ["مدفوعة", "Paid", "Payée"], pay_partial: ["مدفوعة جزئيًا", "Partially paid", "Partiellement payée"], pay_unpaid: ["غير مدفوعة", "Unpaid", "Impayée"], pay_overdue: ["متأخرة", "Overdue", "En retard"], pay_void: ["ملغاة", "VOID", "ANNULÉE"], pay_draft: ["مسودة", "Draft", "Brouillon"],
   convert_to: ["تحويل إلى", "Convert to", "Convertir en"], mark_accepted: ["تحديد كمقبول", "Mark as accepted", "Marquer accepté"], from_doc: ["مأخوذ من", "From", "Issu de"],
+  print_preview: ["معاينة قبل الطباعة", "Print preview", "Aperçu avant impression"], printer: ["الطابعة", "Printer", "Imprimante"], default_printer: ["الطابعة الافتراضية", "Default printer", "Imprimante par défaut"],
+  copies: ["النسخ", "Copies", "Copies"], system_dialog: ["نافذة طباعة ويندوز", "Windows print dialog", "Boîte de dialogue Windows"], thermal_80: ["إيصال 80مم", "80mm receipt", "Ticket 80mm"],
+  sent_to_printer: ["أُرسلت إلى الطابعة ✓", "Sent to printer ✓", "Envoyé à l'imprimante ✓"], print_failed: ["تعذّرت الطباعة", "Printing failed", "Échec de l'impression"], preview_print: ["معاينة وطباعة", "Preview & print", "Aperçu et impression"],
   // ---- editor ----
+  valid_until: ["صالح حتى", "Valid until", "Valable jusqu'au"], po_ref: ["مرجع طلب الزبون", "Customer PO ref.", "Réf. commande client"], subject: ["موضوع / ملخص", "Subject / summary", "Objet / résumé"],
+  amount_in_words: ["المبلغ بالكلمات", "Amount in words", "Montant en lettres"], extra_taxes: ["ضرائب إضافية على المستند", "Extra document taxes", "Taxes supplémentaires du document"], add_tax: ["إضافة ضريبة", "Add tax", "Ajouter une taxe"],
+  receipt_in: ["إيصال دفع", "Payment receipt", "Reçu de paiement"], receipt_out: ["سند صرف", "Payment voucher", "Bon de décaissement"], received_from: ["استلمنا من", "Received from", "Reçu de"], paid_to: ["دُفع إلى", "Paid to", "Payé à"], stamp: ["الختم", "Stamp", "Cachet"],
+  print_receipt_btn: ["طباعة إيصال", "Print receipt", "Imprimer le reçu"], receipt_no: ["رقم الإيصال", "Receipt no.", "N° reçu"],
   client: ["العميل", "Client", "Client"], supplier: ["المورد", "Supplier", "Fournisseur"], walk_in: ["زبون عابر", "Walk-in customer", "Client de passage"],
   client_name_free: ["اسم العميل (حر)", "Client name (free text)", "Nom du client (libre)"], lines: ["البنود", "Lines", "Lignes"], add_line: ["إضافة بند", "Add line", "Ajouter une ligne"],
   qty: ["الكمية", "Qty", "Qté"], unit_price: ["سعر الوحدة", "Unit price", "Prix unitaire"], discount: ["الخصم", "Discount", "Remise"], tax: ["الضريبة", "Tax", "TVA"],
@@ -181,7 +194,7 @@ export const DICT: Record<string, [string, string, string]> = {
   // ---- statement/parties view ----
   // ---- settings ----
   set_company: ["الشركة", "Company", "Société"], set_invoice: ["الفاتورة", "Invoice", "Facture"], set_tax: ["الضريبة والعملة", "Tax & currency", "TVA & devise"], set_security: ["الأمان", "Security", "Sécurité"], set_backup: ["النسخ الاحتياطي", "Backup", "Sauvegarde"], set_ai: ["الذكاء الاصطناعي", "AI", "IA"],
-  company_name: ["اسم الشركة", "Company name", "Nom de la société"], legal_name: ["الاسم القانوني", "Legal name", "Raison sociale"], logo: ["الشعار", "Logo", "Logo"],
+  company_name: ["اسم الشركة", "Company name", "Nom de la société"], legal_name: ["الاسم القانوني", "Legal name", "Raison sociale"], logo: ["الشعار", "Logo", "Logo"], stamp_image: ["ختم الشركة", "Company stamp", "Cachet"],
   appearance: ["المظهر", "Appearance", "Apparence"], template: ["القالب", "Template", "Modèle"], tpl_modern: ["عصري", "Modern", "Moderne"], tpl_classic: ["كلاسيكي", "Classic", "Classique"], tpl_minimal: ["بسيط", "Minimal", "Minimal"],
   accent_color: ["اللون الرئيسي", "Accent colour", "Couleur principale"], show_qr: ["إظهار رمز QR", "Show QR code", "Afficher le QR code"], default_terms: ["شروط افتراضية", "Default terms", "Conditions par défaut"], footer_text: ["نص أسفل الفاتورة", "Footer text", "Pied de page"],
   numbering: ["ترقيم المستندات", "Document numbering", "Numérotation"], yearly_reset: ["تصفير سنوي", "Yearly reset", "Remise à zéro annuelle"],
@@ -211,5 +224,5 @@ export const DICT: Record<string, [string, string, string]> = {
   lic_owner: ["صاحب الترخيص", "Licensed to", "Titulaire"], lic_plan: ["الخطة", "Plan", "Formule"], lic_number: ["رقم الترخيص", "License number", "Numéro de licence"], lic_device: ["الجهاز", "Device", "Appareil"], lic_activated: ["تاريخ التفعيل", "Activated", "Activée le"], lic_expires: ["ينتهي", "Expires", "Expire"], lic_lifetime: ["مدى الحياة", "Lifetime", "À vie"], lic_days_left: ["الأيام المتبقية", "Days left", "Jours restants"],
   lic_signed_note: ["الترخيص موقّع رقميًا ويُتحقق منه محليًا على جهازك.", "The license is digitally signed and verified locally on your device.", "La licence est signée numériquement et vérifiée localement."], lic_check_now: ["تحقق الآن", "Check now", "Vérifier maintenant"],
   license_desktop_only: ["معلومات الترخيص تظهر في نسخة سطح المكتب.", "License details are shown in the desktop app.", "Les détails de licence s'affichent dans l'application bureau."],
-  stamp_title_ok: ["أصلي", "GENUINE", "AUTHENTIQUE"], stamp_title_bad: ["غير مفعّل", "INACTIVE", "INACTIVE"], support: ["الدعم الفني", "Support", "Assistance"], developer: ["المطوّر", "Developer", "Développeur"],
+  stamp_title_ok: ["ترخيص أصلي", "GENUINE", "AUTHENTIQUE"], stamp_title_bad: ["غير مفعّل", "INACTIVE", "INACTIVE"], stamp_dev: ["نسخة تطوير", "DEV BUILD", "VERSION DEV"], support: ["الدعم الفني", "Support", "Assistance"], developer: ["المطوّر", "Developer", "Développeur"],
 };

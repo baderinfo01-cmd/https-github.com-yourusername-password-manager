@@ -2,6 +2,7 @@
 import { Download, Pencil, Plus, Search, Trash2, Upload } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { NewParam } from "./NewParam";
 import { Badge, Button, Card, Confirm, Empty, Field, Input, Modal, PageHeader, Table, Td, Textarea } from "./ui";
 import { useMoney } from "@/lib/hooks";
 import { useT } from "@/lib/i18n";
@@ -64,6 +65,7 @@ export function PartiesPage({ kind }: { kind: "clients" | "suppliers" }) {
   const set = (k: keyof Party, v: string) => setEdit((e) => ({ ...e, [k]: v }));
   return (
     <div className="mx-auto max-w-7xl">
+      <NewParam onNew={() => writable && setEdit(EMPTY)} />
       <PageHeader
         title={t(kind)}
         subtitle={`${list.length}`}

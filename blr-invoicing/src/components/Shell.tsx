@@ -1,16 +1,18 @@
 "use client";
 import clsx from "clsx";
 import {
-  BarChart3, BookUser, Boxes, Building2, ClipboardList, FileText, LayoutDashboard, Lock, Menu, Moon, Palette, Package,
+  BarChart3, BookUser, Boxes, Building2, ClipboardList, FileText, LayoutDashboard, CalendarDays, CheckSquare, ChevronDown, Clock3, Lock, Menu, Moon, Palette, Package,
   Receipt, Repeat, ScanLine, Settings as Cog, ShieldCheck, ShoppingCart, Sparkles, Sun, Truck, Users, Wallet, Wrench, BadgeCheck,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState, type ReactNode } from "react";
 import { Toast, Button, Input, Field } from "./ui";
+import { PrintPreviewHost } from "./PrintPreview";
 import { useT } from "@/lib/i18n";
 import { can, COLORS, useUi, type Lang } from "@/store/ui";
 import { useData } from "@/store/data";
+import { LOCALE } from "@/lib/i18n";
 
 type NavItem = { href: string; key: string; icon: ReactNode; perm?: string };
 const NAV: { group: string; items: NavItem[] }[] = [
@@ -49,6 +51,13 @@ const NAV: { group: string; items: NavItem[] }[] = [
       { href: "/payments/", key: "payments", icon: <Wallet size={18} />, perm: "payments" },
       { href: "/reports/", key: "reports", icon: <BarChart3 size={18} />, perm: "reports" },
       { href: "/ai/", key: "ai", icon: <Sparkles size={18} />, perm: "ai" },
+    ],
+  },
+  {
+    group: "nav_tools",
+    items: [
+      { href: "/calendar/", key: "calendar", icon: <CalendarDays size={18} /> },
+      { href: "/tasks/", key: "tasks", icon: <CheckSquare size={18} /> },
     ],
   },
   {
@@ -111,7 +120,7 @@ function Frame({ children }: { children: ReactNode }) {
   return (
     <div className="flex h-screen overflow-hidden">
       {open && <div className="fixed inset-0 z-30 bg-black/50 lg:hidden" onClick={() => setOpen(false)} />}
-      <aside className={clsx("no-print fixed inset-y-0 start-0 z-40 flex w-64 shrink-0 flex-col bg-[var(--side)] text-[var(--side-text)] transition-transform lg:static", open ? "translate-x-0" : "max-lg:ltr:-translate-x-full max-lg:rtl:translate-x-full")}>
+      <aside className={clsx("no-print fixed inset-y-0 start-0 z-40 flex w-64 shrink-0 flex-col bg-[var(--side)] text-[var(--side-text)] transition-transform lg:static side-bg", open ? "translate-x-0" : "max-lg:ltr:-translate-x-full max-lg:rtl:translate-x-full")}>
         <div className="flex items-center gap-3 px-5 py-5">
           <img src="/brand/icon-192.png" alt="BLR Fatourati" width={42} height={42} className="rounded-xl shadow-lg" />
           <div className="min-w-0">
@@ -127,7 +136,7 @@ function Frame({ children }: { children: ReactNode }) {
               <div key={g.group}>
                 <div className="px-3 pb-1.5 text-[10px] font-semibold uppercase tracking-wider text-slate-500">{t(g.group)}</div>
                 {items.map((i) => (
-                  <Link key={i.href + i.key} href={i.href} className={clsx("flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition", active(i.href) ? "bg-accent text-white" : "hover:bg-white/5 hover:text-white")}>
+                  <Link key={i.href + i.key} href={i.href} className={clsx("flex items-center gap-3 rounded-xl px-3 py-2 text-sm transition-all duration-200", active(i.href) ? "nav-active text-white" : "hover:bg-white/8 hover:text-white hover:ps-4")}>
                     {i.icon}<span className="truncate">{t(i.key)}</span>
                   </Link>
                 ))}
@@ -142,8 +151,9 @@ function Frame({ children }: { children: ReactNode }) {
         <header className="no-print flex h-14 shrink-0 items-center justify-between gap-3 border-b border-line bg-surface px-4">
           <div className="flex items-center gap-2">
             <button className="rounded-md p-2 text-muted hover:bg-surface2 lg:hidden" onClick={() => setOpen(true)} aria-label="menu"><Menu size={20} /></button>
-            <Button size="sm" onClick={() => router.push("/documents/edit/?type=invoice")} className={can(user?.role, "sales") ? "" : "hidden"}>＋ {t("new_invoice")}</Button>
+            <QuickCreate />
           </div>
+          <HeaderClock />
           <div className="flex items-center gap-1.5">
             <select value={lang} onChange={(e) => setLang(e.target.value as Lang)} className="h-8 rounded-md border border-line bg-surface px-2 text-xs" aria-label="language">
               <option value="ar">العربية</option><option value="fr">Français</option><option value="en">English</option>
@@ -159,6 +169,7 @@ function Frame({ children }: { children: ReactNode }) {
         </header>
         <main className="min-h-0 flex-1 overflow-y-auto p-4 sm:p-6">{children}</main>
       </div>
+      <PrintPreviewHost />
       <Toast />
     </div>
   );
@@ -236,6 +247,76 @@ function ColorPicker() {
                 <button key={c} onClick={() => { setColor(c); setOpen(false); }} aria-label={c} className="swatch" style={{ background: HEX[c], outline: color === c ? `2px solid ${HEX[c]}` : "none", outlineOffset: 2 }} />
               ))}
             </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+function HeaderClock() {
+  const lang = useUi((s) => s.lang);
+  const [now, setNow] = useState<Date | null>(null);
+  useEffect(() => { setNow(new Date()); const i = setInterval(() => setNow(new Date()), 1000); return () => clearInterval(i); }, []);
+  if (!now) return <div />;
+  const loc = LOCALE[lang];
+  return (
+    <div className="hidden items-center gap-3 rounded-xl border border-line bg-surface2 px-4 py-1.5 md:flex" dir="ltr">
+      <Clock3 size={18} className="text-accent" />
+      <div className="leading-tight">
+        <div className="num text-base font-bold tracking-wide">{now.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", second: "2-digit" })}</div>
+      </div>
+      <div className="h-7 w-px bg-line" />
+      <div className="text-xs leading-tight text-muted" dir={lang === "ar" ? "rtl" : "ltr"}>
+        <div className="font-semibold text-ink">{now.toLocaleDateString(loc, { weekday: "long" })}</div>
+        <div className="num">{now.toLocaleDateString(loc, { day: "2-digit", month: "long", year: "numeric" })}</div>
+      </div>
+    </div>
+  );
+}
+
+function QuickCreate() {
+  const t = useT();
+  const router = useRouter();
+  const role = useUi((s) => s.user?.role);
+  const [open, setOpen] = useState(false);
+  const items: { label: string; href: string; perm: string; keys?: string }[] = [
+    { label: t("new_invoice"), href: "/documents/edit/?type=invoice", perm: "sales", keys: "Ctrl+Shift+O" },
+    { label: t("new_quote"), href: "/documents/edit/?type=quote", perm: "sales", keys: "Ctrl+Shift+E" },
+    { label: t("new_purchase"), href: "/documents/edit/?type=purchase", perm: "purchases" },
+    { label: t("add_client"), href: "/clients/?new=1", perm: "clients" },
+    { label: t("add_product"), href: "/products/?new=1", perm: "products" },
+    { label: t("add_expense"), href: "/expenses/?new=1", perm: "expenses" },
+    { label: t("record_payment"), href: "/payments/?new=1", perm: "payments", keys: "Ctrl+Shift+P" },
+  ].filter((i) => can(role, i.perm));
+  // keyboard shortcuts
+  useEffect(() => {
+    const h = (e: KeyboardEvent) => {
+      if (!(e.ctrlKey || e.metaKey)) return;
+      const k = e.key.toLowerCase();
+      const go = (href: string) => { e.preventDefault(); router.push(href); };
+      if (e.shiftKey && k === "o" && can(role, "sales")) go("/documents/edit/?type=invoice");
+      else if (e.shiftKey && k === "e" && can(role, "sales")) go("/documents/edit/?type=quote");
+      else if (e.shiftKey && k === "p" && can(role, "payments")) go("/payments/?new=1");
+      else if (!e.shiftKey && k === "o") go("/documents/?type=invoice");
+      else if (!e.shiftKey && k === "e") go("/documents/?type=quote");
+    };
+    window.addEventListener("keydown", h);
+    return () => window.removeEventListener("keydown", h);
+  }, [router, role]);
+  if (!items.length) return null;
+  return (
+    <div className="relative">
+      <Button size="sm" onClick={() => setOpen((o) => !o)}>＋ {t("new")}<ChevronDown size={14} /></Button>
+      {open && (
+        <>
+          <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
+          <div className="pop absolute start-0 top-full z-50 mt-2 w-64 overflow-hidden rounded-xl border border-line bg-surface py-1 shadow-xl">
+            {items.map((i) => (
+              <button key={i.href} onClick={() => { setOpen(false); router.push(i.href); }} className="flex w-full items-center justify-between gap-3 px-4 py-2 text-start text-sm hover:bg-surface2">
+                <span>{i.label}</span>{i.keys && <kbd className="num rounded bg-surface2 px-1.5 py-0.5 text-[10px] text-muted">{i.keys}</kbd>}
+              </button>
+            ))}
           </div>
         </>
       )}

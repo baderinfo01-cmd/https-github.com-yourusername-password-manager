@@ -19,7 +19,7 @@ export function stampDuty(total: number): number {
   return Math.min(2500, Math.max(5, Math.ceil(raw)));
 }
 
-export interface Totals { subtotal: number; discountAmount: number; tax: number; total: number; taxByRate: Record<string, number> }
+export interface Totals { subtotal: number; discountAmount: number; tax: number; extra: number; total: number; taxByRate: Record<string, number> }
 
 export function computeTotals(
   lines: Line[],
@@ -27,7 +27,8 @@ export function computeTotals(
   discountType: "amount" | "percent",
   shipping: number,
   stamp: number,
-  pricesIncludeTax = false
+  pricesIncludeTax = false,
+  extraTaxes: { rate: number }[] = []
 ): Totals {
   // when prices include tax, extract the tax instead of adding it
   const nets = lines.map((l) => {
@@ -46,9 +47,11 @@ export function computeTotals(
     const k = String(num(l.taxRate));
     taxByRate[k] = (taxByRate[k] || 0) + t;
   });
-  const total = subtotal - discountAmount + tax + num(shipping) + num(stamp);
+  // extra document-level taxes apply on the net amount after discount
+  const extra = extraTaxes.reduce((a, x) => a + (subtotal - discountAmount) * (num(x.rate) / 100), 0);
+  const total = subtotal - discountAmount + tax + extra + num(shipping) + num(stamp);
   return {
-    subtotal: round(subtotal), discountAmount: round(discountAmount), tax: round(tax), total: round(total),
+    subtotal: round(subtotal), discountAmount: round(discountAmount), tax: round(tax), extra: round(extra), total: round(total),
     taxByRate: Object.fromEntries(Object.entries(taxByRate).map(([k, v]) => [k, round(v)])),
   };
 }

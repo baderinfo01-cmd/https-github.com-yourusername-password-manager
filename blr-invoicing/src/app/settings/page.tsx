@@ -72,9 +72,10 @@ function CompanyTab({ s, upd }: TabProps) {
   const t = useT();
   const logo = useRef<HTMLInputElement>(null);
   const sig = useRef<HTMLInputElement>(null);
+  const stp = useRef<HTMLInputElement>(null);
   const c = s.company;
   const set = (k: keyof Settings["company"], v: string) => upd((d) => { (d.company as any)[k] = v; });
-  const img = async (f: File | undefined, k: "logo" | "signature") => { if (f) set(k, await toDataUrl(f, k === "logo" ? 420 : 300)); };
+  const img = async (f: File | undefined, k: "logo" | "signature" | "stamp") => { if (f) set(k, await toDataUrl(f, k === "logo" ? 420 : 320)); };
   return (
     <Card title={t("set_company")}>
       <div className="grid gap-4 sm:grid-cols-2">
@@ -89,13 +90,13 @@ function CompanyTab({ s, upd }: TabProps) {
         <Field label="AI"><Input value={c.ai || ""} onChange={(e) => set("ai", e.target.value)} /></Field>
         <Field label="NIS"><Input value={c.nis || ""} onChange={(e) => set("nis", e.target.value)} /></Field>
         <Field label={t("bank_details")} className="sm:col-span-2"><Textarea value={c.bank || ""} onChange={(e) => set("bank", e.target.value)} placeholder="RIB / IBAN" /></Field>
-        {(["logo", "signature"] as const).map((k) => (
+        {(["logo", "signature", "stamp"] as const).map((k) => (
           <div key={k} className="space-y-2">
-            <div className="text-xs font-medium text-muted">{t(k)}</div>
+            <div className="text-xs font-medium text-muted">{t(k === "stamp" ? "stamp_image" : k)}</div>
             <div className="flex items-center gap-3">
               <div className="grid h-20 w-32 place-items-center rounded-lg border border-dashed border-line bg-surface2">{c[k] ? <img src={c[k]} alt="" className="max-h-16 max-w-28 object-contain" /> : <span className="text-xs text-muted">—</span>}</div>
-              <input ref={k === "logo" ? logo : sig} type="file" accept="image/*" hidden onChange={(e) => img(e.target.files?.[0], k)} />
-              <div className="flex flex-col gap-2"><Button size="sm" variant="secondary" onClick={() => (k === "logo" ? logo : sig).current?.click()}><Upload size={13} />{t("upload")}</Button>{c[k] && <Button size="sm" variant="ghost" onClick={() => set(k, "")}><Trash2 size={13} />{t("remove")}</Button>}</div>
+              <input ref={k === "logo" ? logo : k === "signature" ? sig : stp} type="file" accept="image/*" hidden onChange={(e) => img(e.target.files?.[0], k)} />
+              <div className="flex flex-col gap-2"><Button size="sm" variant="secondary" onClick={() => (k === "logo" ? logo : k === "signature" ? sig : stp).current?.click()}><Upload size={13} />{t("upload")}</Button>{c[k] && <Button size="sm" variant="ghost" onClick={() => set(k, "")}><Trash2 size={13} />{t("remove")}</Button>}</div>
             </div>
           </div>
         ))}

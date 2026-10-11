@@ -1,6 +1,7 @@
 "use client";
 import { Download, Pencil, Plus, Search, Trash2, Upload } from "lucide-react";
 import { useMemo, useState } from "react";
+import { NewParam } from "@/components/NewParam";
 import { Badge, Button, Card, Confirm, Empty, Field, Input, Modal, PageHeader, Select, Table, Td, Textarea } from "@/components/ui";
 import { num } from "@/lib/calc";
 import { UNITS } from "@/lib/defaults";
@@ -61,6 +62,7 @@ export default function Products() {
 
   return (
     <div className="mx-auto max-w-7xl">
+      <NewParam onNew={() => writable && setEdit(blank())} />
       <PageHeader title={t("products")} subtitle={`${items.length}`} actions={<>
         <Button variant="secondary" size="sm" onClick={doExport}><Download size={14} />{t("export")}</Button>
         {writable && <Button variant="secondary" size="sm" onClick={doImport}><Upload size={14} />{t("import")}</Button>}

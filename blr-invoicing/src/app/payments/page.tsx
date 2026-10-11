@@ -1,13 +1,16 @@
 "use client";
-import { Download, Plus, Trash2 } from "lucide-react";
+import { Download, Plus, Printer, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { NewParam } from "@/components/NewParam";
 import { Badge, Button, Card, Confirm, Empty, Field, Input, Modal, PageHeader, Select, Stat, Table, Td } from "@/components/ui";
 import { num, round, todayIso } from "@/lib/calc";
 import { PAYMENT_METHODS } from "@/lib/defaults";
 import { useDocRows, useMoney } from "@/lib/hooks";
 import { fmtDate, useT } from "@/lib/i18n";
 import { exportXlsx } from "@/lib/io";
+import { buildReceiptHtml } from "@/lib/receiptHtml";
+import { openPreview } from "@/store/preview";
 import { useData } from "@/store/data";
 import { can, useUi } from "@/store/ui";
 
@@ -17,7 +20,7 @@ export default function Payments() {
   const lang = useUi((s) => s.lang);
   const role = useUi((s) => s.user?.role);
   const notify = useUi((s) => s.notify);
-  const { payments, docs, clients, suppliers, addPayment, removePayment } = useData();
+  const { payments, docs, clients, suppliers, settings, addPayment, removePayment } = useData();
   const rows = useDocRows();
   const [kind, setKind] = useState<"all" | "in" | "out">("all");
   const [from, setFrom] = useState("");
@@ -34,6 +37,13 @@ export default function Payments() {
   const openDocs = form ? rows.filter((r) => r.doc.partyId === form.partyId && r.doc.type === (form.kind === "in" ? "invoice" : "purchase") && r.due > 0 && r.doc.status !== "draft" && r.doc.status !== "void") : [];
   const parties = form?.kind === "out" ? suppliers : clients;
 
+  const receipt = (p: (typeof payments)[number]) => {
+    const party = [...clients, ...suppliers].find((x) => x.id === p.partyId);
+    const doc = docs.find((d) => d.id === p.docId);
+    const r = rows.find((x) => x.doc.id === p.docId);
+    openPreview({ title: `${t(p.kind === "in" ? "receipt_in" : "receipt_out")} ${p.number || ""}`, fileName: `${p.number || "receipt"}.pdf`, papers: ["a4", "thermal"], paper: "a4", build: async (pp) => buildReceiptHtml(p, { lang, settings, party, doc, balanceAfter: r?.due, paper: pp }) });
+  };
+
   const save = async () => {
     if (!form) return;
     const a = round(num(form.amount));
@@ -47,6 +57,7 @@ export default function Payments() {
 
   return (
     <div className="mx-auto max-w-7xl">
+      <NewParam onNew={() => setForm({ kind: "in", partyId: "", docId: "", amount: "", date: todayIso(), method: "cash", ref: "" })} />
       <PageHeader title={t("payments")} actions={<>
         <Button variant="secondary" size="sm" onClick={() => exportXlsx("payments", t("payments"), [[t("date"), t("type"), t("party"), t("document"), t("method"), t("reference"), t("amount")], ...list.map((p) => [p.date, p.kind === "in" ? t("received") : t("paid_out"), partyName(p.partyId), docNo(p.docId)?.number || "", t("m_" + p.method), p.ref || "", p.amount])])}><Download size={14} />{t("export")}</Button>
         <Button onClick={() => setForm({ kind: "in", partyId: "", docId: "", amount: "", date: todayIso(), method: "cash", ref: "" })}><Plus size={16} />{t("record_payment")}</Button>
@@ -60,15 +71,15 @@ export default function Payments() {
           <Input type="date" value={from} onChange={(e) => setFrom(e.target.value)} className="w-40" aria-label={t("from")} /><Input type="date" value={to} onChange={(e) => setTo(e.target.value)} className="w-40" aria-label={t("to")} />
         </div>
         {list.length === 0 ? <Empty text={t("no_data")} /> : (
-          <Table head={[t("date"), t("type"), t("party"), t("document"), t("method"), t("amount"), ""]}>
+          <Table head={[t("receipt_no"), t("date"), t("type"), t("party"), t("document"), t("method"), t("amount"), ""]}>
             {list.map((p) => {
               const d = docNo(p.docId);
               return (
                 <tr key={p.id}>
-                  <Td className="num">{fmtDate(p.date, lang)}</Td><Td><Badge tone={p.kind === "in" ? "ok" : "warn"}>{p.kind === "in" ? t("received") : t("paid_out")}</Badge></Td>
+                  <Td className="num text-xs">{p.number || "—"}</Td><Td className="num">{fmtDate(p.date, lang)}</Td><Td><Badge tone={p.kind === "in" ? "ok" : "warn"}>{p.kind === "in" ? t("received") : t("paid_out")}</Badge></Td>
                   <Td>{partyName(p.partyId)}</Td><Td>{d ? <Link className="text-accent" href={`/documents/view/?id=${d.id}`}>{d.number}</Link> : <span className="text-muted">{t("on_account")}</span>}</Td>
                   <Td>{t("m_" + p.method)}{p.ref && <span className="text-xs text-muted"> · {p.ref}</span>}</Td><Td className="num font-semibold">{money(p.amount)}</Td>
-                  <Td className="text-end">{can(role, "delete") && <button onClick={() => setDel(p.id)} className="rounded p-1.5 text-bad hover:bg-bad/10" aria-label={t("delete")}><Trash2 size={15} /></button>}</Td>
+                  <Td className="text-end whitespace-nowrap"><button onClick={() => receipt(p)} className="rounded p-1.5 text-muted hover:bg-surface2" aria-label={t("print_receipt_btn")} title={t("print_receipt_btn")}><Printer size={15} /></button>{can(role, "delete") && <button onClick={() => setDel(p.id)} className="rounded p-1.5 text-bad hover:bg-bad/10" aria-label={t("delete")}><Trash2 size={15} /></button>}</Td>
                 </tr>
               );
             })}

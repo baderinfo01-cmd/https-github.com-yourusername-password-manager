@@ -160,9 +160,19 @@ function registerIpc(store) {
   const thermal = (o) => !!o && o.paper === "thermal";
   const printSize = (o) => (thermal(o) ? { width: 80000, height: 297000 } : "A4"); // print(): microns
   const pdfSize = (o) => (thermal(o) ? { width: 3.15, height: 11.7 } : "A4"); // printToPDF(): inches
+  handle(store, "blr:print:printers", async () => {
+    const list = await mainWin.webContents.getPrintersAsync();
+    return list.map((p) => ({ name: p.name, displayName: p.displayName || p.name, isDefault: !!p.isDefault }));
+  });
+  // opts: { paper, deviceName, copies, dialog } — dialog:true shows the Windows print dialog, otherwise prints straight to the chosen printer
   handle(store, "blr:print:html", (html, opts) =>
     withPrintWindow(html, (w) => new Promise((resolve) => {
-      w.webContents.print({ silent: false, printBackground: true, pageSize: printSize(opts) }, (ok, why) => resolve({ printed: ok, reason: why }));
+      const o = opts || {};
+      const copies = Math.min(99, Math.max(1, parseInt(o.copies, 10) || 1));
+      w.webContents.print(
+        { silent: !o.dialog, printBackground: true, pageSize: printSize(o), copies, ...(o.deviceName ? { deviceName: String(o.deviceName) } : {}) },
+        (ok, why) => resolve({ printed: ok, reason: why })
+      );
     }))
   );
   handle(store, "blr:print:pdf", (html, name, opts) =>

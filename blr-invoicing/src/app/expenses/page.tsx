@@ -1,6 +1,7 @@
 "use client";
 import { Download, Pencil, Plus, ScanLine, Trash2 } from "lucide-react";
 import { useMemo, useRef, useState } from "react";
+import { NewParam } from "@/components/NewParam";
 import { Badge, Button, Card, Confirm, Empty, Field, Input, Modal, PageHeader, Select, Stat, Table, Td } from "@/components/ui";
 import { blr, call } from "@/lib/api";
 import { num, todayIso } from "@/lib/calc";
@@ -60,6 +61,7 @@ export default function Expenses() {
 
   return (
     <div className="mx-auto max-w-7xl">
+      <NewParam onNew={() => writable && setEdit(blank())} />
       <PageHeader title={t("expenses")} actions={<>
         <Button variant="secondary" size="sm" onClick={() => exportXlsx("expenses", t("expenses"), [[t("date"), t("category"), t("description"), t("amount"), t("tax"), t("method")], ...list.map((e) => [e.date, catLabel(e.category), e.description, e.amount, e.tax, t("m_" + e.method)])])}><Download size={14} />{t("export")}</Button>
         {writable && <><input ref={file} type="file" accept="image/png,image/jpeg,image/webp" hidden onChange={(e) => e.target.files?.[0] && scan(e.target.files[0])} />

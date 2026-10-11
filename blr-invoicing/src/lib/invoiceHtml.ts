@@ -1,6 +1,7 @@
 import QRCode from "qrcode";
 import { computeTotals, formatNumber, num } from "./calc";
 import { tr } from "./i18n";
+import { amountInWords } from "./words";
 import type { Doc, Party, Settings } from "./types";
 import type { Lang } from "@/store/ui";
 
@@ -23,7 +24,7 @@ export async function buildDocHtml(doc: Doc, o: Opts): Promise<string> {
   const paid = o.paid || 0;
   const credits = o.credits || 0;
   const due = Math.max(0, doc.total - paid - credits);
-  const totals = computeTotals(doc.lines, doc.discount, doc.discountType, doc.shipping, doc.stamp, s.pricesIncludeTax);
+  const totals = computeTotals(doc.lines, doc.discount, doc.discountType, doc.shipping, doc.stamp, s.pricesIncludeTax, doc.extraTaxes || []);
   const title = t(TYPE_KEY[doc.type]);
   const hasBalance = doc.type === "invoice" || doc.type === "purchase";
   const qr = s.showQr
@@ -73,6 +74,8 @@ export async function buildDocHtml(doc: Doc, o: Opts): Promise<string> {
   .totals td{padding:6px 12px;border-bottom:1px solid #eef2f7}.totals tr:last-child td{border-bottom:0}
   .grand td{background:${accent};color:#fff;font-weight:800;font-size:${thermal ? 12 : 14}px}
   .due td{background:#fef3c7;font-weight:700}
+  .subj{font-size:13px;font-weight:600;color:#334155;margin-top:2px}
+  .words{margin-top:14px;padding:8px 12px;border:1px dashed #cbd5e1;border-radius:8px;background:#f8fafc;font-size:${thermal ? 10 : 12}px}
   .notes{flex:1;font-size:11px;color:#334155;white-space:pre-wrap}
   .stamp{position:absolute;top:46mm;${rtl ? "left" : "right"}:20mm;transform:rotate(-14deg);border:3px solid;border-radius:8px;padding:2px 14px;font-size:26px;font-weight:800;letter-spacing:2px;opacity:.55}
   .paid{color:#059669;border-color:#059669}.void{color:#dc2626;border-color:#dc2626}
@@ -85,8 +88,8 @@ export async function buildDocHtml(doc: Doc, o: Opts): Promise<string> {
 
   return `<!doctype html><html lang="${lang}" dir="${rtl ? "rtl" : "ltr"}"><head><meta charset="utf-8"><title>${esc(doc.number)}</title><style>${css}</style></head><body><div class="page">
   ${doc.status === "void" ? `<div class="stamp void">${t("pay_void")}</div>` : hasBalance && doc.total > 0 && due <= 0.005 && doc.status !== "draft" ? `<div class="stamp paid">${t("pay_paid")}</div>` : ""}
-  <div class="top"><div>${co.logo ? `<img class="logo" src="${esc(co.logo)}" alt="">` : ""}${thermal ? "" : ""}<div class="title">${esc(title)}</div>
-    <div class="meta"><div><b>${t("number")}</b> ${esc(doc.number)}</div><div><b>${t("date")}</b> ${esc(doc.date)}</div>${doc.dueDate && hasBalance ? `<div><b>${t("due_date")}</b> ${esc(doc.dueDate)}</div>` : ""}${doc.refNumber ? `<div><b>${t("reference")}</b> ${esc(doc.refNumber)}</div>` : ""}</div></div>
+  <div class="top"><div>${co.logo ? `<img class="logo" src="${esc(co.logo)}" alt="">` : ""}${thermal ? "" : ""}<div class="title">${esc(title)}</div>${doc.subject ? `<div class="subj">${esc(doc.subject)}</div>` : ""}
+    <div class="meta"><div><b>${t("number")}</b> ${esc(doc.number)}</div><div><b>${t("date")}</b> ${esc(doc.date)}</div>${doc.dueDate && hasBalance ? `<div><b>${t("due_date")}</b> ${esc(doc.dueDate)}</div>` : ""}${doc.validUntil ? `<div><b>${t("valid_until")}</b> ${esc(doc.validUntil)}</div>` : ""}${doc.poRef ? `<div><b>${t("po_ref")}</b> ${esc(doc.poRef)}</div>` : ""}${doc.refNumber ? `<div><b>${t("reference")}</b> ${esc(doc.refNumber)}</div>` : ""}</div></div>
     ${qr && !thermal ? `<img src="${qr}" alt="" width="84" height="84">` : ""}</div>
   <div class="grid">${coBlock}${partyBlock}</div>
   <table class="items"><thead><tr>${head}</tr></thead><tbody>${rows}</tbody></table>
@@ -95,6 +98,7 @@ export async function buildDocHtml(doc: Doc, o: Opts): Promise<string> {
     <tr><td>${t("subtotal")}</td><td class="n">${money(doc.subtotal)}</td></tr>
     ${doc.discountAmount ? `<tr><td>${t("discount")}</td><td class="n">- ${money(doc.discountAmount)}</td></tr>` : ""}
     ${taxRows || (doc.tax ? `<tr><td>${t("tax")}</td><td class="n">${money(doc.tax)}</td></tr>` : "")}
+    ${(doc.extraTaxes || []).map((x) => `<tr><td>${esc(x.name)} ${x.rate}%</td><td class="n">${money(((doc.subtotal - doc.discountAmount) * x.rate) / 100)}</td></tr>`).join("")}
     ${doc.shipping ? `<tr><td>${t("shipping")}</td><td class="n">${money(doc.shipping)}</td></tr>` : ""}
     ${doc.stamp ? `<tr><td>${t("stamp_duty")}</td><td class="n">${money(doc.stamp)}</td></tr>` : ""}
     <tr class="grand"><td>${t("total")}</td><td class="n">${money(doc.total)}</td></tr>
@@ -102,6 +106,7 @@ export async function buildDocHtml(doc: Doc, o: Opts): Promise<string> {
     ${hasBalance && credits ? `<tr><td>${t("credits_applied")}</td><td class="n">${money(credits)}</td></tr>` : ""}
     ${hasBalance && (paid || credits) ? `<tr class="due"><td>${t("balance_due")}</td><td class="n">${money(due)}</td></tr>` : ""}
   </tbody></table></div>
-  <div class="foot"><div>${esc(s.footer)}${thermal && qr ? `<div style="margin-top:6px"><img src="${qr}" width="70" height="70" alt=""></div>` : ""}</div>${thermal ? "" : `<div class="sig">${co.signature ? `<img src="${esc(co.signature)}" style="max-height:56px;display:block;margin:-52px auto 0" alt="">` : ""}${t("signature")}</div>`}</div>
+  <div class="words"><b>${t("amount_in_words")}:</b> ${esc(amountInWords(doc.total, lang, s.currency.code, s.currency.decimals))}</div>
+  <div class="foot"><div>${esc(s.footer)}${thermal && qr ? `<div style="margin-top:6px"><img src="${qr}" width="70" height="70" alt=""></div>` : ""}</div>${thermal ? "" : `<div class="sig">${co.stamp ? `<img src="${esc(co.stamp)}" style="max-height:78px;max-width:120px;position:absolute;margin:-70px 0 0 -60px;opacity:.9" alt="">` : ""}${co.signature ? `<img src="${esc(co.signature)}" style="max-height:56px;display:block;margin:-52px auto 0" alt="">` : ""}${t("signature")} &amp; ${t("stamp")}</div>`}</div>
   </div></body></html>`;
 }

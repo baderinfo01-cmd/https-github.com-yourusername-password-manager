@@ -66,9 +66,9 @@ export default function LicensePage() {
                   {s.days_left !== null && row(<Clock size={15} />, t("lic_days_left"), s.days_left)}
                 </>}
               </div>
-              <div className="mx-auto flex items-center justify-center gap-2 md:flex-col">
-                {s && <LicenseStamp tone={tone} title={s.dev ? "DEV" : ok ? t("stamp_title_ok") : t("stamp_title_bad")} subtitle={ok ? "GENUINE LICENSE" : "NOT ACTIVATED"} footer={`BADERINFO · BLR FATOURATI`} />}
-                <img src="/brand/seal.png" alt="Baderinfo" className="-mt-3 h-36 w-36 md:mt-0" />
+              <div className="mx-auto flex flex-col items-center justify-center gap-3">
+                {s && <LicenseStamp tone={tone} title={s.dev ? t("stamp_dev") : ok ? t("stamp_title_ok") : t("stamp_title_bad")} subtitle={s.dev ? "DEVELOPMENT BUILD" : ok ? "GENUINE LICENSE" : "NOT ACTIVATED"} detail={`BLR FATOURATI · ${(s.plan || s.edition || "").toUpperCase() || "LICENSE"}`} footer={`ID: ${s.license_id || "—"} · BADERINFO`} />}
+                <img src="/brand/seal.png" alt="Baderinfo" className="h-32 w-32" />
               </div>
             </div>
             <p className="relative mt-4 flex items-center gap-1.5 text-xs text-muted"><ShieldCheck size={13} />{t("lic_signed_note")}</p>

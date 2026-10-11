@@ -24,7 +24,8 @@ function Inner() {
   const lang = useUi((s) => s.lang);
   const role = useUi((s) => s.user?.role);
   const notify = useUi((s) => s.notify);
-  const { removeDoc, saveDoc } = useData();
+  const { removeDoc, saveDoc, payments } = useData();
+  const lastPay = useMemo(() => { const m = new Map<string, string>(); for (const p of payments) if (p.docId && (m.get(p.docId) || "") < p.date) m.set(p.docId, p.date); return m; }, [payments]);
   const rows = useDocRows();
   const [q, setQ] = useState("");
   const [filter, setFilter] = useState("all");
@@ -71,7 +72,7 @@ function Inner() {
           <Input type="date" value={to} onChange={(e) => setTo(e.target.value)} className="w-40" aria-label={t("to")} />
         </div>
         {list.length === 0 ? <Empty text={t("no_data")} /> : (
-          <Table head={[t("number"), isPurchase ? t("supplier") : t("client"), t("date"), hasPay ? t("due_date") : t("status"), t("total"), hasPay ? t("balance_due") : "", hasPay ? t("status") : "", ""]}>
+          <Table head={[t("number"), isPurchase ? t("supplier") : t("client"), t("date"), hasPay ? t("due_date") : t("status"), t("total"), hasPay ? t("balance_due") : "", hasPay ? t("last_payment") : "", hasPay ? t("status") : "", ""]}>
             {list.map((r) => (
               <tr key={r.doc.id}>
                 <Td><Link href={`/documents/view/?id=${r.doc.id}`} className="font-semibold text-accent">{r.doc.number}</Link></Td>
@@ -79,6 +80,7 @@ function Inner() {
                 <Td className="num">{hasPay ? fmtDate(r.doc.dueDate, lang) : <Badge tone={STATUS_TONE[r.doc.status]}>{t("s_" + r.doc.status)}</Badge>}</Td>
                 <Td className="num font-semibold">{money(type === "credit" ? -r.doc.total : r.doc.total)}</Td>
                 <Td className="num">{hasPay ? money(r.due) : ""}</Td>
+                <Td className="num text-xs text-muted">{hasPay ? fmtDate(lastPay.get(r.doc.id), lang) || "—" : ""}</Td>
                 <Td>{hasPay && r.pay && <Badge tone={PAY_TONE[r.pay]}>{payLabel(r.pay)}</Badge>}</Td>
                 <Td className="text-end whitespace-nowrap">
                   <Link href={`/documents/view/?id=${r.doc.id}`} className="inline-block rounded p-1.5 text-muted hover:bg-surface2" aria-label={t("view")}><Eye size={15} /></Link>

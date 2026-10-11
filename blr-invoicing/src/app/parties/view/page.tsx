@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { Suspense, useMemo, useState } from "react";
 import { PaymentModal } from "@/components/PaymentModal";
 import { Badge, Button, Card, Empty, PageHeader, Stat, Table, Td } from "@/components/ui";
-import { blr, call } from "@/lib/api";
+import { openPreview } from "@/store/preview";
 import { useMoney } from "@/lib/hooks";
 import { fmtDate, tr, useT } from "@/lib/i18n";
 import { exportXlsx } from "@/lib/io";
@@ -43,11 +43,11 @@ function Inner() {
   if (!party) return <Empty text={t("not_found")} />;
   const bal = partyBalance(kind, party, docs, payments);
 
-  const printStatement = async () => {
+  const buildStatement = async () => {
     const m = (n: number) => money(n);
     const rows = ledger.map((l) => `<tr><td>${l.date}</td><td>${l.label}</td><td>${l.ref}</td><td class=n>${l.debit ? m(l.debit) : ""}</td><td class=n>${l.credit ? m(l.credit) : ""}</td><td class=n>${m(l.run)}</td></tr>`).join("");
     const html = `<!doctype html><html dir="${lang === "ar" ? "rtl" : "ltr"}"><meta charset=utf-8><style>body{font-family:Segoe UI,Tahoma,Arial;padding:16mm;font-size:12px}h1{font-size:20px;margin:0 0 4px}table{width:100%;border-collapse:collapse;margin-top:14px}th{background:#f1f5f9;text-align:start}td,th{padding:7px 8px;border-bottom:1px solid #e2e8f0}.n{text-align:end;direction:ltr}.tot{font-size:16px;font-weight:700;margin-top:14px}</style><h1>${tr(lang, "statement")} — ${party.name}</h1><div>${settings.company.name} · ${new Date().toISOString().slice(0, 10)}</div><table><tr><th>${tr(lang, "date")}</th><th>${tr(lang, "type")}</th><th>${tr(lang, "reference")}</th><th>${tr(lang, "debit")}</th><th>${tr(lang, "credit")}</th><th>${tr(lang, "balance")}</th></tr>${rows}</table><div class=tot>${tr(lang, "balance")}: ${m(bal)}</div></html>`;
-    await call(blr().print.html(html));
+    return html;
   };
   const exportIt = () => exportXlsx(`statement-${party.name}`, t("statement"), [[t("date"), t("type"), t("reference"), t("debit"), t("credit"), t("balance")], ...ledger.map((l) => [l.date, l.label, l.ref, l.debit, l.credit, l.run])]);
 
@@ -56,7 +56,7 @@ function Inner() {
       <Link href={`/${kind}/`} className="mb-3 inline-flex items-center gap-1 text-sm text-muted hover:text-ink"><ArrowLeft size={14} className="rtl:rotate-180" />{t(kind)}</Link>
       <PageHeader title={party.name} subtitle={[party.company, party.phone, party.email].filter(Boolean).join(" · ")} actions={<>
         <Button variant="secondary" size="sm" onClick={exportIt}><Download size={14} />{t("export")}</Button>
-        <Button variant="secondary" size="sm" onClick={printStatement}><Printer size={14} />{t("print")}</Button>
+        <Button variant="secondary" size="sm" onClick={() => openPreview({ title: `${t("statement")} — ${party.name}`, fileName: `statement-${party.name}.pdf`, build: buildStatement })}><Printer size={14} />{t("print")}</Button>
         {can(role, "payments") && <Button size="sm" onClick={() => setPay(true)}><Wallet size={14} />{t("record_payment")}</Button>}
       </>} />
       <div className="mb-5 grid gap-4 sm:grid-cols-3">

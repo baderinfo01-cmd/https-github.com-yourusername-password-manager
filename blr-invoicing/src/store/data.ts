@@ -5,13 +5,15 @@ import {
   addDays, addPeriod, affectsStock, balances, computeTotals, num, round, stampDuty, stockSign, todayIso,
 } from "@/lib/calc";
 import { DEFAULT_SETTINGS } from "@/lib/defaults";
-import type { Doc, DocType, Expense, Item, Line, Party, Payment, Recurring, Settings, StockMove } from "@/lib/types";
+import type { Doc, DocType, Expense, Item, Line, Party, Payment, Recurring, Settings, StockMove, Task } from "@/lib/types";
 
 interface DataState {
   loaded: boolean;
   settings: Settings;
   clients: Party[]; suppliers: Party[]; items: Item[]; docs: Doc[]; payments: Payment[];
-  expenses: Expense[]; moves: StockMove[]; recurring: Recurring[]; audit: any[];
+  expenses: Expense[]; moves: StockMove[]; recurring: Recurring[]; tasks: Task[]; audit: any[];
+  saveTask(t: Partial<Task>): Promise<void>;
+  removeTask(id: string): Promise<void>;
   load(): Promise<void>;
   reset(): void;
   saveSettings(s: Settings): Promise<void>;
@@ -40,20 +42,29 @@ const list = <T,>(kind: string) => call<T[]>(blr().db.list(kind));
 export const useData = create<DataState>((set, get) => ({
   loaded: false,
   settings: DEFAULT_SETTINGS,
-  clients: [], suppliers: [], items: [], docs: [], payments: [], expenses: [], moves: [], recurring: [], audit: [],
+  clients: [], suppliers: [], items: [], docs: [], payments: [], expenses: [], moves: [], recurring: [], tasks: [], audit: [],
 
   async load() {
-    const [settingsArr, clients, suppliers, items, docs, payments, expenses, moves, recurring, audit] = await Promise.all([
+    const [settingsArr, clients, suppliers, items, docs, payments, expenses, moves, recurring, tasks, audit] = await Promise.all([
       list<Settings>("settings"), list<Party>("clients"), list<Party>("suppliers"), list<Item>("items"), list<Doc>("docs"),
-      list<Payment>("payments"), list<Expense>("expenses"), list<StockMove>("moves"), list<Recurring>("recurring"), list<any>("audit"),
+      list<Payment>("payments"), list<Expense>("expenses"), list<StockMove>("moves"), list<Recurring>("recurring"), list<Task>("tasks"), list<any>("audit"),
     ]);
     const saved = settingsArr.find((s) => s.id === "main");
     const settings: Settings = saved
       ? { ...DEFAULT_SETTINGS, ...saved, company: { ...DEFAULT_SETTINGS.company, ...saved.company }, currency: { ...DEFAULT_SETTINGS.currency, ...saved.currency }, numbering: { ...DEFAULT_SETTINGS.numbering, ...saved.numbering } }
       : DEFAULT_SETTINGS;
-    set({ settings, clients, suppliers, items, docs, payments, expenses, moves, recurring, audit: audit.sort((a, b) => b.at - a.at), loaded: true });
+    set({ settings, clients, suppliers, items, docs, payments, expenses, moves, recurring, tasks, audit: audit.sort((a, b) => b.at - a.at), loaded: true });
   },
-  reset: () => set({ loaded: false, clients: [], suppliers: [], items: [], docs: [], payments: [], expenses: [], moves: [], recurring: [], audit: [] }),
+  reset: () => set({ loaded: false, clients: [], suppliers: [], items: [], docs: [], payments: [], expenses: [], moves: [], recurring: [], tasks: [], audit: [] }),
+
+  async saveTask(t) {
+    const saved = await call<Task>(blr().db.save("tasks", t));
+    set((s) => ({ tasks: upsert(s.tasks, saved) }));
+  },
+  async removeTask(id) {
+    await call(blr().db.remove("tasks", id));
+    set((s) => ({ tasks: s.tasks.filter((x) => x.id !== id) }));
+  },
 
   log(action, detail) {
     void blr().db.audit(action, detail);
@@ -101,8 +112,8 @@ export const useData = create<DataState>((set, get) => ({
     const prev = st.docs.find((d) => d.id === input.id);
     const doc: Doc = { ...input };
     if (!doc.number) doc.number = await get().newDocNumber(doc.type, doc.date);
-    const t = computeTotals(doc.lines, doc.discount, doc.discountType, doc.shipping, doc.stamp, st.settings.pricesIncludeTax);
-    Object.assign(doc, { subtotal: t.subtotal, discountAmount: t.discountAmount, tax: t.tax, total: t.total });
+    const t = computeTotals(doc.lines, doc.discount, doc.discountType, doc.shipping, doc.stamp, st.settings.pricesIncludeTax, doc.extraTaxes || []);
+    Object.assign(doc, { subtotal: t.subtotal, discountAmount: t.discountAmount, tax: t.tax, extraTax: t.extra, total: t.total });
 
     // desired stock effect of this doc: itemId -> signed qty
     const effect: Record<string, number> = {};
@@ -176,7 +187,10 @@ export const useData = create<DataState>((set, get) => ({
   },
 
   async addPayment(p) {
-    const saved = await call<Payment>(blr().db.save("payments", { ...p, id: uid() }));
+    const year = p.date.slice(0, 4);
+    const n = await call<number>(blr().db.next(`receipt:${year}`));
+    const number = `RCPT-${year}-${String(n).padStart(5, "0")}`;
+    const saved = await call<Payment>(blr().db.save("payments", { ...p, id: uid(), number }));
     set((s) => ({ payments: [...s.payments, saved] }));
     get().log("payment", { amount: p.amount, docId: p.docId });
   },
