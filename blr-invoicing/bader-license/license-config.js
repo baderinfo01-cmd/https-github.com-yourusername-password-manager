@@ -1,0 +1,41 @@
+/**
+ * Bader License — settings of YOUR program.
+ * You may edit this file; do NOT edit device-id.js or license.js.
+ *
+ * ╔════════════════════════════════════════════════════════════════════════════╗
+ * ║  THE THREE LINES BELOW MUST MATCH THE DASHBOARD THAT GENERATED THE CODES.   ║
+ * ║  If they do not, activation says "invalid code" even for a valid code.      ║
+ * ║  After editing run:  npm run license:doctor                                 ║
+ * ╚════════════════════════════════════════════════════════════════════════════╝
+ *   1) server_url  : dashboard > "Technical info" > activation address (ends with /api.php)
+ *   2) public_key  : dashboard > Settings > signing key > "Copy public key"
+ *   3) product_id  : dashboard > Products > the product id used when generating codes
+ */
+module.exports = {
+    // Activation API of the software license dashboard
+    server_url: 'https://baderinfo.com/prog-license/api.php',
+
+    // Public key of the BaderProgLicense dashboard (Settings > signing key)
+    public_key: 'gLhupZMQXB/CGaa7uvQ5kjE55P2JYBTSc21bJqWrURQ=',
+
+    // Product id exactly as in the dashboard > Products (bind type must be "device")
+    product_id: 'blr-invoicing',
+
+    // Shown on the activation window
+    app_name: 'BLR - الفوترة',
+
+    // Ask the server every N hours; stop after N days without any successful check (0 = never stop)
+    check_interval_hours: 12,
+    // 0 = never stop: after one online activation the program works for life, even with no internet.
+    // (the server is still asked every check_interval_hours whenever the device happens to be online,
+    //  so a cancelled/refunded license is still revoked the next time it connects)
+    max_offline_days: 0,
+
+    // Activation window language: ar | fr | en
+    lang: 'ar',
+
+    purchase_url: 'https://baderinfo.com/',
+
+    // Leave this out to use Electron's per-user data folder (recommended).
+    // dev_mode is automatic: true with `npm run dev`, false in the built .exe.
+};

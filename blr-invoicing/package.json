@@ -1,0 +1,63 @@
+{
+  "name": "blr-invoicing",
+  "version": "1.0.0",
+  "description": "BLR - Invoicing & business management desktop application",
+  "author": "Bader Eddine Hamidane (Baderinfo)",
+  "private": true,
+  "main": "electron/main.js",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "electron:dev": "concurrently \"npm run dev\" \"wait-on http://localhost:3000/ && electron .\"",
+    "dist": "npm run build && electron-builder --win --x64",
+    "dist:dir": "npm run build && electron-builder --dir",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test tests/",
+    "license:doctor": "node tools/license-doctor.cjs"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/qrcode": "^1.5.5",
+    "clsx": "^2.1.1",
+    "concurrently": "^10.0.5",
+    "electron": "^44.5.1",
+    "electron-builder": "^26.15.3",
+    "lucide-react": "^1.52.0",
+    "next": "16.3.8",
+    "qrcode": "^1.5.4",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "recharts": "^3.10.1",
+    "tailwindcss": "^4",
+    "typescript": "^5",
+    "wait-on": "^9.5.1",
+    "xlsx": "^0.18.5",
+    "zustand": "^5.0.15"
+  },
+  "build": {
+    "appId": "com.baderinfo.blr",
+    "productName": "BLR",
+    "npmRebuild": false,
+    "buildDependenciesFromSource": false,
+    "directories": { "output": "dist", "buildResources": "build" },
+    "files": ["electron/**/*", "bader-license/**/*", "out/**/*", "package.json"],
+    "win": {
+      "target": [{ "target": "nsis", "arch": ["x64"] }],
+      "icon": "build/icon.png",
+      "artifactName": "${productName}-Setup-${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "BLR"
+    },
+    "asar": true,
+    "publish": null
+  },
+  "homepage": "https://baderinfo.com"
+}
