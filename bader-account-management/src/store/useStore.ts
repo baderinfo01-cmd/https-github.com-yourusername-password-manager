@@ -23,16 +23,6 @@ import {
 } from "@/types";
 import { generateId } from "@/lib/encryption";
 
-export interface SyncConfig {
-  serverUrl: string;
-  /** the secret sync key (base64url). Lives only inside the encrypted vault. */
-  key: string;
-  deviceId: string;
-  deviceName: string;
-  enabled: boolean;
-  lastSync?: number;
-}
-
 interface LocalizedLabels {
   ar?: string;
   en?: string;
@@ -95,11 +85,6 @@ interface StoreState {
   enableAnalytics: boolean;
   aiApiKey: string;
 
-  // End-to-end encrypted sync with the phone / other computers
-  syncConfig: SyncConfig | null;
-  syncState: { cursor: number; meta: Record<string, any> };
-  setSyncConfig: (c: SyncConfig | null) => void;
-  setSyncState: (s: { cursor: number; meta: Record<string, any> }) => void;
 
   setTheme: (theme: string) => void;
   setLanguage: (language: string) => void;
@@ -282,8 +267,6 @@ export const useStore = create<StoreState>()(
       enableBetaFeatures: false,
       enableAnalytics: true,
       aiApiKey: "",
-      syncConfig: null,
-      syncState: { cursor: 0, meta: {} },
 
       // Settings Actions
       setTheme: (theme) => set({ theme }),
@@ -303,8 +286,6 @@ export const useStore = create<StoreState>()(
         set({ enableBetaFeatures }),
       setEnableAnalytics: (enableAnalytics) => set({ enableAnalytics }),
       setAiApiKey: (aiApiKey) => set({ aiApiKey }),
-      setSyncConfig: (syncConfig) => set({ syncConfig, ...(syncConfig ? {} : { syncState: { cursor: 0, meta: {} } }) }),
-      setSyncState: (syncState) => set({ syncState }),
 
       addAccount: (account) => {
         const newAccount: Account = {
@@ -878,8 +859,6 @@ export const useStore = create<StoreState>()(
           enableBetaFeatures: false,
           enableAnalytics: true,
           aiApiKey: "",
-          syncConfig: null, // deleting everything must NOT propagate to the other devices
-          syncState: { cursor: 0, meta: {} },
         });
       },
     }),

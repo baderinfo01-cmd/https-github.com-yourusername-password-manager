@@ -30,7 +30,7 @@ export interface LoginEvent {
   city?: string;
   region?: string;
   country?: string;
-  source: "desktop" | "web" | "phone";
+  source: "desktop" | "web";
 }
 
 const MAX_LOG = 200;
@@ -246,16 +246,6 @@ export function updateLoginEvent(id: string, patch: Partial<LoginEvent>) {
   const blob = readBlob();
   if (!blob?.log) return;
   blob.log = blob.log.map((x) => (x.id === id ? { ...x, ...patch } : x));
-  writeBlob(blob);
-}
-
-export function mergeRemoteLoginEvents(events: LoginEvent[]) {
-  const blob = readBlob();
-  if (!blob) return;
-  const have = new Set((blob.log ?? []).map((x) => x.id));
-  const fresh = events.filter((x) => !have.has(x.id));
-  if (!fresh.length) return;
-  blob.log = [...(blob.log ?? []), ...fresh].sort((a, b) => b.t - a.t).slice(0, MAX_LOG);
   writeBlob(blob);
 }
 

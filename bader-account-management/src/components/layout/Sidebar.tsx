@@ -27,7 +27,6 @@ import {
   BadgeCheck,
   Bot,
   ShieldCheck,
-  RefreshCw,
 } from "lucide-react";
 
 export default function Sidebar() {
@@ -82,7 +81,6 @@ const initials = username
     { href: "/ai", icon: Bot, key: "ai" },
     { href: "/generator", icon: Wand2, key: "generator" },
     { href: "/analytics", icon: BarChart3, key: "analytics" },
-    { href: "/sync", icon: RefreshCw, key: "sync" },
     { href: "/security", icon: ShieldCheck, key: "security" },
     { href: "/settings", icon: Settings, key: "settings" },
     { href: "/contact", icon: Mail, key: "contact" },

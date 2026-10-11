@@ -1,5 +1,13 @@
 import type { LoginEvent } from "@/lib/vaultCrypto";
-import "@/lib/sync/transport.ts"; // Window.baderApp typings
+
+declare global {
+  interface Window {
+    baderApp?: {
+      onLock?: (cb: () => void) => () => void;
+      session?: (opts: { geo: boolean }) => Promise<any>;
+    };
+  }
+}
 
 const GEO_KEY = "bader-geo";
 
@@ -55,12 +63,11 @@ export async function getSessionInfo(): Promise<SessionInfo> {
   }
   const ua = typeof navigator !== "undefined" ? navigator.userAgent : "";
   const { os, browser } = parseUserAgent(ua);
-  const isPhone = /Android|iPhone|iPad/.test(ua);
-  return {
+    return {
     device: `${browser} — ${os}`,
     os,
     app: "web",
-    source: isPhone ? "phone" : "web",
+    source: "web",
     ...(geo ? await lookupGeo() : {}),
   };
 }

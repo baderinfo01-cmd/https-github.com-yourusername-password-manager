@@ -17,8 +17,7 @@ window.SITE_I18N = {
       ["⚙️", "مولّد كلمات المرور", "أنشئ كلمات قوية فريدة بنقرة واحدة، مع نسخ يُمسح تلقائياً."],
       ["📊", "التحليلات", "لوحة تحكم ورسوم بيانية توضح وضع حساباتك وإنفاقك."],
       ["🌍", "ثلاث لغات ووضع داكن", "عربي وإنجليزي وفرنسي، وألوان متعددة ووضع داكن مريح للعين."],
-      ["📱", "تطبيق أندرويد ومزامنة", "نفس البرنامج على هاتفك، وكل تغيير يُسجَّل في الكمبيوتر والهاتف معاً بتشفير كامل من طرف إلى طرف."],
-      ["🔔", "إشعارات تسجيل الدخول", "تنبيه فوري بوقت الدخول والجهاز والنظام وعنوان IP والموقع التقريبي، مع كشف محاولات الدخول الفاشلة."],
+      ["🔔", "إشعارات تسجيل الدخول", "سجل أمان بوقت كل دخول والجهاز والنظام وعنوان IP والموقع التقريبي، وتنبيه عند وجود محاولات دخول فاشلة."],
     ],
     securityTitle: "الأمان ليس ميزة إضافية… هو الأساس",
     securityItems: [
@@ -66,8 +65,7 @@ window.SITE_I18N = {
       ["⚙️", "Password generator", "Create strong unique passwords in one click; copies are auto-cleared."],
       ["📊", "Analytics", "A dashboard and charts of your accounts and spending."],
       ["🌍", "3 languages & dark mode", "Arabic, English, French, multiple colors and an eye-friendly dark mode."],
-      ["📱", "Android app & sync", "The same app on your phone; every change is recorded on both computer and phone with full end-to-end encryption."],
-      ["🔔", "Sign-in notifications", "Instant alerts with time, device, system, IP address and approximate place, plus detection of failed sign-in attempts."],
+      ["🔔", "Sign-in notifications", "A security log with the time, device, system, IP address and approximate place of every sign-in, and a warning about failed attempts."],
     ],
     securityTitle: "Security is not an add-on… it is the foundation",
     securityItems: [
@@ -115,8 +113,7 @@ window.SITE_I18N = {
       ["⚙️", "Générateur de mots de passe", "Mots de passe forts et uniques en un clic ; copie effacée automatiquement."],
       ["📊", "Analyses", "Tableau de bord et graphiques de vos comptes et dépenses."],
       ["🌍", "3 langues et mode sombre", "Arabe, anglais, français, plusieurs couleurs et un mode sombre confortable."],
-      ["📱", "Application Android et synchro", "La même application sur votre téléphone ; chaque modification est enregistrée sur l’ordinateur et le téléphone, chiffrée de bout en bout."],
-      ["🔔", "Alertes de connexion", "Alerte immédiate avec heure, appareil, système, adresse IP et lieu approximatif, et détection des tentatives échouées."],
+      ["🔔", "Alertes de connexion", "Journal de sécurité avec heure, appareil, système, IP et lieu approximatif de chaque connexion, et alerte en cas d’échecs."],
     ],
     securityTitle: "La sécurité n’est pas une option… c’est la base",
     securityItems: [

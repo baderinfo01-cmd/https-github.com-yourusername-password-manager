@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { ShieldCheck, ShieldAlert, Trash2, MapPin, Monitor, Smartphone, Globe } from "lucide-react";
+import { ShieldCheck, ShieldAlert, Trash2, MapPin, Monitor, Globe } from "lucide-react";
 import AppLayout from "@/components/layout/AppLayout";
 import { clearLoginLog, readLoginLog, type LoginEvent } from "@/lib/vaultCrypto";
 import { formatWhen, geoEnabled, placeText, setGeoEnabled } from "@/lib/security";
@@ -31,7 +31,7 @@ export default function SecurityPage() {
   const shown = filter === "failed" ? events.filter((e) => e.result !== "success") : events;
 
   const sourceIcon = (s: LoginEvent["source"]) =>
-    s === "phone" ? <Smartphone className="w-4 h-4" /> : s === "web" ? <Globe className="w-4 h-4" /> : <Monitor className="w-4 h-4" />;
+    s === "web" ? <Globe className="w-4 h-4" /> : <Monitor className="w-4 h-4" />;
 
   const badge = (r: LoginEvent["result"]) => {
     const cls = r === "success" ? "bg-green-100 text-green-800" : r === "failed" ? "bg-red-100 text-red-800" : "bg-amber-100 text-amber-800";

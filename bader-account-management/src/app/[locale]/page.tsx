@@ -17,7 +17,6 @@ import {
   type VaultState,
 } from "@/lib/vaultCrypto";
 import { getSessionInfo } from "@/lib/security";
-import { sendAlert } from "@/lib/sync/controller";
 
 export default function LoginPage() {
   const t = useTranslations();
@@ -45,10 +44,7 @@ export default function LoginPage() {
   const logFailure = (result: "failed" | "locked") => {
     const ev = appendLoginEvent({ t: Date.now(), result, device: "…", os: "", app: "", source: "desktop" });
     if (!ev) return;
-    void getSessionInfo().then((info) => {
-      updateLoginEvent(ev.id, info);
-      void sendAlert({ ...ev, ...info }); // tell the other devices, even though the vault is locked
-    });
+    void getSessionInfo().then((info) => updateLoginEvent(ev.id, info));
   };
 
   const enter = async () => {
