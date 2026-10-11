@@ -1,15 +1,29 @@
-/** One way to show a system notification: Android app (Capacitor) or desktop / browser (Notification API). */
+/**
+ * One way to show a system notification:
+ *  - Android app: the Capacitor "LocalNotifications" plugin, taken from window.Capacitor.Plugins
+ *    (no import, so the web / desktop build never depends on the plugin package)
+ *  - desktop app and browsers: the standard Notification API
+ */
+type LocalNotificationsPlugin = {
+  checkPermissions(): Promise<{ display: string }>;
+  requestPermissions(): Promise<{ display: string }>;
+  schedule(o: { notifications: { id: number; title: string; body: string; smallIcon?: string }[] }): Promise<unknown>;
+};
+
+function nativePlugin(): LocalNotificationsPlugin | null {
+  const cap = (typeof window !== "undefined" ? (window as any).Capacitor : null) as any;
+  if (!cap?.isNativePlatform?.()) return null;
+  return (cap.Plugins?.LocalNotifications as LocalNotificationsPlugin) ?? null;
+}
+
 export async function notify(title: string, body: string): Promise<void> {
   try {
-    const cap = (window as any).Capacitor;
-    if (cap?.isNativePlatform?.()) {
-      const { LocalNotifications } = await import("@capacitor/local-notifications");
-      const perm = await LocalNotifications.checkPermissions();
-      if (perm.display !== "granted") {
-        const asked = await LocalNotifications.requestPermissions();
-        if (asked.display !== "granted") return;
-      }
-      await LocalNotifications.schedule({
+    const native = nativePlugin();
+    if (native) {
+      let perm = (await native.checkPermissions()).display;
+      if (perm !== "granted") perm = (await native.requestPermissions()).display;
+      if (perm !== "granted") return;
+      await native.schedule({
         notifications: [{ id: Math.floor(Date.now() % 2_000_000_000), title, body, smallIcon: "ic_stat_icon" }],
       });
       return;
@@ -23,10 +37,7 @@ export async function notify(title: string, body: string): Promise<void> {
 }
 
 export async function requestNotifyPermission(): Promise<string> {
-  const cap = (window as any).Capacitor;
-  if (cap?.isNativePlatform?.()) {
-    const { LocalNotifications } = await import("@capacitor/local-notifications");
-    return (await LocalNotifications.requestPermissions()).display;
-  }
+  const native = nativePlugin();
+  if (native) return (await native.requestPermissions()).display;
   return typeof Notification !== "undefined" ? await Notification.requestPermission() : "denied";
 }
