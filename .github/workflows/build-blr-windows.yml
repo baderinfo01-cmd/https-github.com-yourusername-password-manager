@@ -37,4 +37,5 @@ jobs:
           VERSION=$(node -p "require('./package.json').version")
           TAG="blr-fatourati-v${VERSION}"
           gh release delete "$TAG" --yes --cleanup-tag --repo "$GITHUB_REPOSITORY" || true
-          gh release create "$TAG" dist/*.exe --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --title "BLR Fatourati ${VERSION}" --notes "Windows installer for BLR Fatourati ${VERSION}. Unsigned build: on first run Windows SmartScreen may ask you to choose More info, then Run anyway."
+          git -C "$GITHUB_WORKSPACE" archive --format=zip --prefix=blr-fatourati/ -o "$RUNNER_TEMP/BLR-Fatourati-source-${VERSION}.zip" HEAD:blr-invoicing
+          gh release create "$TAG" dist/*.exe "$RUNNER_TEMP/BLR-Fatourati-source-${VERSION}.zip" --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --title "BLR Fatourati ${VERSION}" --notes "Windows installer for BLR Fatourati ${VERSION}. Unsigned build: on first run Windows SmartScreen may ask you to choose More info, then Run anyway."

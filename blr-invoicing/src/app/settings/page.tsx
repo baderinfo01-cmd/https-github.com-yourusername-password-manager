@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { Button, Card, Empty, Field, Input, PageHeader, Select, Textarea } from "@/components/ui";
 import { blr, call } from "@/lib/api";
 import { DOC_TYPES } from "@/lib/defaults";
+import { toDataUrl } from "@/lib/image";
 import { useT } from "@/lib/i18n";
 import type { DocType, Settings } from "@/lib/types";
 import { useData } from "@/store/data";
@@ -11,24 +12,6 @@ import { can, useUi } from "@/store/ui";
 
 type Tab = "company" | "invoice" | "tax" | "security" | "backup" | "ai";
 const TABS: Tab[] = ["company", "invoice", "tax", "security", "backup", "ai"];
-
-// shrink an uploaded image so the database stays small
-function toDataUrl(file: File, max = 420): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    const url = URL.createObjectURL(file);
-    img.onload = () => {
-      const k = Math.min(1, max / Math.max(img.width, img.height));
-      const c = document.createElement("canvas");
-      c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
-      c.getContext("2d")!.drawImage(img, 0, 0, c.width, c.height);
-      URL.revokeObjectURL(url);
-      resolve(c.toDataURL("image/png"));
-    };
-    img.onerror = reject;
-    img.src = url;
-  });
-}
 
 export default function SettingsPage() {
   const t = useT();

@@ -11,6 +11,8 @@ import { Toast, Button, Input, Field } from "./ui";
 import { blr, call } from "@/lib/api";
 import { PrintPreviewHost } from "./PrintPreview";
 import { RecoveryKeyDialog } from "./RecoveryKeyDialog";
+import { CompanyWizard, LicenseStep } from "./Onboarding";
+import { licenseApi } from "@/lib/license";
 import { useT } from "@/lib/i18n";
 import { can, COLORS, useUi, type Lang } from "@/store/ui";
 import { useData } from "@/store/data";
@@ -76,6 +78,8 @@ const NAV: { group: string; items: NavItem[] }[] = [
 export function Shell({ children }: { children: ReactNode }) {
   const { hydrated, hydrate, authState, boot, user } = useUi();
   const { loaded, load, runRecurring, settings } = useData();
+  // first run (no account yet) right after activation: show the license certificate once
+  const [showLicense, setShowLicense] = useState(() => { try { return !!licenseApi() && localStorage.getItem("blr-first-license-step") !== "1"; } catch { return false; } });
   useEffect(() => { hydrate(); boot().catch(() => useUi.setState({ authState: "login" })); }, [hydrate, boot]);
   useEffect(() => {
     if (authState !== "in") { useData.getState().reset(); return; }
@@ -97,7 +101,8 @@ export function Shell({ children }: { children: ReactNode }) {
   }, [authState, settings.autoLockMin]);
 
   if (!hydrated || authState === "loading") return <Splash />;
-  if (authState !== "in") return <><AuthScreen mode={authState} /><RecoveryKeyDialog /><Toast /></>;
+  if (authState === "setup" && showLicense) return <><LicenseStep onDone={() => setShowLicense(false)} /><PrintPreviewHost /><Toast /></>;
+  if (authState !== "in") return <><AuthScreen mode={authState} /><RecoveryKeyDialog /><PrintPreviewHost /><Toast /></>;
   if (!loaded || !user) return <Splash />;
   return <Suspense fallback={<Splash />}><Frame>{children}</Frame></Suspense>;
 }
@@ -171,6 +176,7 @@ function Frame({ children }: { children: ReactNode }) {
         <main className="min-h-0 flex-1 overflow-y-auto rounded-2xl px-1 pb-2 pe-2 pt-1 sm:px-2">{children}</main>
       </div>
       <PrintPreviewHost />
+      <CompanyWizard />
       <RecoveryKeyDialog />
       <Toast />
     </div>

@@ -1,7 +1,9 @@
 "use client";
-import { BadgeCheck, CalendarDays, Clock, Copy, KeyRound, Mail, MessageCircle, Monitor, Phone, RefreshCw, ShieldCheck, User } from "lucide-react";
+import { BadgeCheck, CalendarDays, Clock, Copy, KeyRound, Mail, MessageCircle, Monitor, Phone, Printer, RefreshCw, ShieldCheck, User } from "lucide-react";
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { LicenseStamp } from "@/components/LicenseStamp";
+import { printLicense } from "@/components/Onboarding";
+import { buildLicenseHtml } from "@/lib/licenseHtml";
 import { Button, Card, PageHeader } from "@/components/ui";
 import { blr, call } from "@/lib/api";
 import { BRAND } from "@/lib/brand";
@@ -72,7 +74,11 @@ export default function LicensePage() {
               </div>
             </div>
             <p className="relative mt-4 flex items-center gap-1.5 text-xs text-muted"><ShieldCheck size={13} />{t("lic_signed_note")}</p>
-            <Button className="relative mt-5 w-full" disabled={busy} onClick={() => load(true)}><RefreshCw size={15} className={busy ? "animate-spin" : ""} />{t("lic_check_now")}</Button>
+            <div className="relative mt-5 flex flex-wrap gap-2">
+              <Button className="flex-1" disabled={busy} onClick={() => load(true)}><RefreshCw size={15} className={busy ? "animate-spin" : ""} />{t("lic_check_now")}</Button>
+              <Button variant="secondary" disabled={!s} onClick={() => s && printLicense(s, lang, version)}><Printer size={15} />{t("print")}</Button>
+              <Button variant="secondary" disabled={!s} onClick={async () => { if (!s) return; const r = await call<{ saved: boolean }>(blr().print.pdf(buildLicenseHtml(s, lang, version, window.location.origin), "BLR-Fatourati-license.pdf")); if (r.saved) useUi.getState().notify(t("saved")); }}>PDF</Button>
+            </div>
           </div>
         </Card>
       )}
