@@ -1,10 +1,15 @@
 name: Build Android APK
 
-# Run it from GitHub: Actions > "Build Android APK" > Run workflow.
+# Starts by itself whenever this branch is pushed (no button needed), and from a tag "android-v*".
+# Manual "Run workflow" only appears in the Actions tab once this file is on the default branch (main).
 # The .apk appears at the bottom of the run page under "Artifacts" (download, copy to the phone, install).
 on:
   workflow_dispatch: {}
   push:
+    branches: ["claude/gifted-faraday-mwhxt8"]
+    paths:
+      - ".github/workflows/android-apk.yml"
+      - "bader-account-management/**"
     tags: ["android-v*"]
 
 jobs:
