@@ -15,8 +15,8 @@ module.exports = {
     // Activation API of the software license dashboard
     server_url: 'https://baderinfo.com/apps-license/api.php',
 
-    // Public key of the dashboard (Settings > Technical info). Fingerprint CC17-3F8E-2CC1-B18A
-    public_key: 'bTDl7RfL5wVrjzJylOaiyg8V55+70R9tlDJX3IMg/kI=',
+    // Public key of the BaderProgLicense dashboard (Settings > signing key)
+    public_key: 'gLhupZMQXB/CGaa7uvQ5kjE55P2JYBTSc21bJqWrURQ=',
 
     // Product id exactly as in the dashboard > Products (bind type must be "device")
     product_id: 'bader-account-management',
