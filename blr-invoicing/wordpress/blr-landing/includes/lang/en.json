@@ -1,0 +1,102 @@
+{
+"dir": "ltr", "name": "English", "short": "EN",
+"nav": { "features": "Features", "gallery": "Screenshots", "ai": "AI", "pricing": "Pricing", "faq": "FAQ", "contact": "Contact" },
+"hero": {
+ "badge": "Desktop software for Windows",
+ "title": "Invoices, stock and accounts… in one program on your own PC",
+ "text": "BLR Fatourati is a complete invoicing and business-management program: documents, clients and suppliers, stock, point of sale, payments, expenses and reports. It works fully offline after a single activation, comes with a lifetime license, and your data never leaves your computer.",
+ "buy": "Buy now", "trial": "Try free for {days}", "more": "Explore features", "download": "Download"
+},
+"trust": ["Works fully offline", "Lifetime license", "Arabic · English · French", "Invoicing, stock & POS", "Data stays on your PC"],
+"why": {
+ "title": "Why you need it",
+ "sub": "Running a business on scattered notebooks and spreadsheets costs time and hides the real picture of your profit and debts.",
+ "items": [
+  ["Invoices that take time", "Automatic numbering, quote to invoice in one click, recurring invoices created for you, then print or share by WhatsApp and email."],
+  ["Unclear stock", "Track quantities, barcodes, movements and valuation, with alerts when an item runs low or out."],
+  ["Unknown debts and profit", "Client and supplier balances, debt ageing, expenses and reports show where you really stand."]
+ ],
+ "compareTitle": "Why BLR Fatourati",
+ "head": ["Typical cloud invoicing apps", "BLR Fatourati"],
+ "rows": [
+  ["Monthly subscription that never ends", "One lifetime license, one payment"],
+  ["Needs internet and an online account", "Fully offline after a single activation"],
+  ["Your data lives on someone else's servers", "Local database on your PC, nothing uploaded"],
+  ["Generic templates, limited Arabic support", "Arabic (RTL), English and French, amount in words, Algerian stamp duty"],
+  ["Invoicing, stock and POS in separate tools", "Invoicing, stock, point of sale, expenses and reports in one program"],
+  ["Support through a ticket queue", "Direct support from the developer by WhatsApp or email"]
+ ]
+},
+"groups": {
+ "title": "Every feature your business needs",
+ "sub": "Everything below is included in the one license.",
+ "items": [
+  ["Business documents", ["Invoices, quotes, proforma invoices, delivery notes and credit notes", "Purchase invoices and purchase orders", "Automatic yearly numbering with your own prefixes", "Convert a quote to an invoice, an invoice to a credit note or delivery note", "Recurring invoices generated automatically, and one-click duplicate", "Subject line, customer PO reference and quote validity date", "Line discounts, global discount (% or amount), several VAT rates, extra taxes and shipping", "Optional Algerian stamp duty (droit de timbre) on cash payments, prices with or without tax", "Amount in words (Arabic, French, English) on every invoice"]],
+  ["Printing & sharing", ["Print preview first: choose the printer, copies, A4, 80 mm thermal receipt or PDF", "QR code on documents", "3 invoice templates (modern, classic, minimal) with your logo, colour, signature and company stamp", "Numbered payment receipts (RCPT) and payment vouchers", "Client statements", "Share by WhatsApp or email"]],
+  ["Clients & suppliers", ["Balances and credit limit for every client", "Account statement and opening balance", "Suppliers managed the same way", "Excel/CSV import and export that recognises Arabic, French and English column names"]],
+  ["Products & services", ["Categories, SKU and barcode", "Cost price, sale price and margin, with units", "Stock tracked automatically from invoices, purchases and credit notes", "Low-stock alerts", "Stock adjustment and count, plus stock valuation", "Import and export of your product list"]],
+  ["Point of sale", ["Barcode scanning", "Quick cart with discount", "Change calculation", "Cash, card and other payment methods, then receipt printing"]],
+  ["Money", ["Partial payments and several payment methods", "Receivables and payables with overdue detection", "Expenses by category", "AI can read a photo of a supplier invoice or receipt to pre-fill an expense", "Cash flow overview"]],
+  ["Reports & dashboard", ["Sales by month, by client and by product", "Profit report", "VAT collected versus deductible", "Debt ageing and cash flow", "Print, PDF or Excel for every report", "Dashboard with charts and key figures"]],
+  ["Daily tools", ["Calendar: invoice due dates, quote expiry, tasks and recurring invoices", "Task list with priorities", "Global quick search across invoices, clients, suppliers and products", "Quick-create menu with shortcuts: Ctrl+Shift+O new invoice, Ctrl+Shift+E new quote, Ctrl+Shift+P payment", "Live clock and date in the header"]],
+  ["Security & users", ["Users with roles: administrator, manager, cashier, accountant", "Activity (audit) log of who did what", "Sign-in lockout against brute-force attempts", "Auto-lock after inactivity", "Forgotten password recovery with a one-time recovery key", "Daily automatic local backups (the last 14 are kept)", "Encrypted (AES-256) manual backup and restore"]],
+  ["Look & languages", ["The program speaks Arabic (RTL), English and French", "Light and dark mode", "8 colour themes", "Modern glass-style interface with the El Messiri font"]],
+  ["License & offline", ["Works fully offline after one activation", "Lifetime license bound to one device and one program", "Free 2-day trial with a trial code", "Local SQLite database on your PC, nothing is uploaded", "Windows installer", "On first run: a license certificate page you can print or save as PDF, and a company-details wizard (both skippable)"]]
+ ]
+},
+"ai": {
+ "title": "An AI assistant… entirely optional",
+ "text": "Ask about your sales, debts and stock using Claude with your own API key, stored encrypted by Windows. Only a numeric summary is sent, never phone numbers or addresses.",
+ "items": ["Answers questions about sales, debts and stock from your business data", "Smart alerts: overdue invoices, out of stock, dead stock, sales drop, loss", "The alerts work offline, without AI", "Reads a photo of a supplier invoice or receipt to pre-fill an expense", "Only a numeric summary is sent, never phone numbers or addresses", "Optional: uses your own key and can stay switched off"],
+ "card": "BLR Fatourati AI assistant"
+},
+"shots": {
+ "title": "See it in action",
+ "sub": "A quick look at the program. Click an image to enlarge it.",
+ "items": [
+  ["Dashboard", "BLR Fatourati dashboard with charts and key figures"],
+  ["Invoice", "An invoice being prepared in BLR Fatourati"],
+  ["Point of sale", "The point of sale screen with the cart and payment"],
+  ["Reports", "Sales and profit reports in BLR Fatourati"],
+  ["Calendar", "Calendar with due dates, quote expiry and tasks"],
+  ["License certificate", "The license certificate page shown at first run"]
+ ]
+},
+"steps": {
+ "title": "Up and running in 3 steps",
+ "sub": "From purchase to your first invoice in minutes.",
+ "items": [
+  ["Buy", "Get your lifetime license, or ask for a free trial code first."],
+  ["Install and activate", "Run the Windows installer and enter your code once. It binds to your device and to BLR Fatourati only."],
+  ["Start invoicing", "Add your company details (or skip), then create your first invoice. No internet needed from now on."]
+ ]
+},
+"pricing": {
+ "title": "One license, one device, no surprises",
+ "sub": "The license is specific to BLR Fatourati and to one device. It will not work for another program or device.",
+ "once": "one-time payment · lifetime", "year": "per year", "month": "per month",
+ "list": ["All features included", "Works offline after activation", "One device, one program", "Lifetime license, no subscription", "Support from the developer", "License transfer via support when you change PC"],
+ "buy": "Buy now", "trial": "Start a free {days} trial", "badge": "Launch offer"
+},
+"faq": {
+ "title": "Frequently asked questions",
+ "items": [
+  ["Does it work without internet?", "Yes. After a single activation the program works fully offline. Only the optional AI assistant needs internet when you use it."],
+  ["Can I change my computer later?", "Yes. The license is bound to one device, so contact support and we will help you move it to your new PC."],
+  ["How do backups work?", "The program makes a daily automatic local backup and keeps the last 14. You can also create an encrypted (AES-256) manual backup and restore it whenever you need."],
+  ["I forgot my password. What can I do?", "Use the one-time recovery key you received to regain access. Keep it somewhere safe."],
+  ["Can I import data from my old software?", "Yes. Clients, suppliers and products can be imported from Excel or CSV files, and the program recognises Arabic, French and English column names."],
+  ["Can several people use it?", "Yes. Create users with roles (administrator, manager, cashier, accountant), and the activity log shows who did what."],
+  ["Can the developer see my data?", "No. Everything is stored in a local SQLite database on your PC and nothing is uploaded to the developer."],
+  ["Do I need the AI assistant?", "No. It is optional and uses your own key. The smart alerts work offline without any AI."],
+  ["Which printers are supported?", "You can print to a standard A4 printer, to an 80 mm thermal receipt printer, or save as PDF, after checking a print preview."],
+  ["What about updates and new versions?", "The license is for life. For news about new versions, contact the developer on WhatsApp or by email."],
+  ["How can I try it before buying?", "Request a trial code and use the full program free for {days}."]
+ ]
+},
+"contact": { "title": "Contact us", "sub": "For purchase, questions, a trial code or support.", "email": "Email", "phone": "Phone", "whatsapp": "WhatsApp", "telegram": "Telegram", "website": "Website", "address": "Address" },
+"cta": { "title": "Get your invoicing in order today", "text": "Start with a free trial or get your lifetime license." },
+"footer": "All rights reserved. Developer: Bader Eddine Hamidane (Baderinfo)",
+"days": { "one": "1 day", "two": "2 days", "few": "%d days", "many": "%d days" },
+"ui": { "lang": "Language", "close": "Close", "prev": "Previous", "next": "Next", "buyShort": "Buy", "menu": "Sections" }
+}

@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name:       BLR Fatourati Landing — صفحة بيع برنامج BLR Fatourati
- * Description:       صفحة إعلانية احترافية متعددة اللغات (العربية / English / Français) لبيع برنامج BLR Fatourati للفوترة وإدارة الأعمال. أضف الرمز القصير [blr_landing] لأي صفحة، وعدّل السعر ومعلومات الاتصال من الإعدادات.
- * Version:           1.0.0
+ * Description:       صفحة إعلانية احترافية بثماني لغات (العربية / English / Français / Español / Deutsch / Türkçe / Português / Italiano) لبيع برنامج BLR Fatourati للفوترة وإدارة الأعمال. أضف الرمز القصير [blr_landing] لأي صفحة، وعدّل السعر ومعلومات الاتصال من الإعدادات.
+ * Version:           1.1.0
  * Requires at least: 5.8
  * Requires PHP:      7.4
  * Author:            Baderinfo
@@ -15,10 +15,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'BLR_VERSION', '1.0.0' );
+define( 'BLR_VERSION', '1.1.0' );
 define( 'BLR_DIR', plugin_dir_path( __FILE__ ) );
 define( 'BLR_URL', plugin_dir_url( __FILE__ ) );
 define( 'BLR_OPTION', 'blr_settings' );
+
+/** Supported languages, in switcher order. A matching includes/lang/{code}.json must exist. */
+function blr_languages() {
+	return array( 'ar', 'en', 'fr', 'es', 'de', 'tr', 'pt', 'it' );
+}
+
+/** Parse "code=text" lines (one per line) into array( code => text ). */
+function blr_parse_extra( $text ) {
+	$out = array();
+	foreach ( preg_split( '/\r\n|\r|\n/', (string) $text ) as $line ) {
+		if ( preg_match( '/^\s*([a-z]{2})\s*[=:]\s*(.+?)\s*$/u', $line, $m ) ) {
+			$out[ $m[1] ] = $m[2];
+		}
+	}
+	return $out;
+}
 
 /* ------------------------------------------------------------------ settings */
 
@@ -31,6 +47,7 @@ function blr_defaults() {
 		'price_badge_ar' => 'عرض الإطلاق',
 		'price_badge_en' => 'Launch offer',
 		'price_badge_fr' => 'Offre de lancement',
+		'price_badges_extra' => '',
 		'trial_enabled'  => '1',
 		'trial_days'     => '2',
 		'trial_url'      => '',
@@ -44,6 +61,7 @@ function blr_defaults() {
 		'address_ar'     => '',
 		'address_en'     => '',
 		'address_fr'     => '',
+		'address_extra'  => '',
 		'brand_color'    => '#0a9f63',
 		'default_lang'   => 'auto',
 		'full_width'     => '0',
@@ -104,7 +122,11 @@ function blr_sanitize( $in ) {
 				$v = sanitize_hex_color( $v ) ?: $default;
 				break;
 			case 'default_lang':
-				$v = in_array( $v, array( 'auto', 'ar', 'en', 'fr' ), true ) ? $v : 'auto';
+				$v = in_array( $v, array_merge( array( 'auto' ), blr_languages() ), true ) ? $v : 'auto';
+				break;
+			case 'price_badges_extra':
+			case 'address_extra':
+				$v = sanitize_textarea_field( $v );
 				break;
 			case 'hero_text_ar':
 			case 'hero_text_en':
@@ -157,7 +179,7 @@ function blr_admin_page() {
 	?>
 	<div class="wrap" dir="rtl" style="text-align:right">
 		<h1>BLR Fatourati Landing — صفحة بيع البرنامج</h1>
-		<p>أنشئ صفحة جديدة وأضف إليها الرمز القصير: <code>[blr_landing]</code> — أو بلغة محددة: <code>[blr_landing lang="en"]</code>.</p>
+		<p>أنشئ صفحة جديدة وأضف إليها الرمز القصير: <code>[blr_landing]</code> — أو بلغة محددة: <code>[blr_landing lang="en"]</code> (ar, en, fr, es, de, tr, pt, it). لقطات الشاشة: ضع الملفات dashboard.jpg وinvoice.jpg وpos.jpg وreports.jpg وcalendar.jpg وlicense.jpg (1360×850) في المجلد <code>assets/shots/</code>.</p>
 
 		<form method="post" action="options.php">
 			<?php settings_fields( 'blr_group' ); ?>
@@ -179,6 +201,7 @@ function blr_admin_page() {
 				$field( 'price_badge_ar', 'شارة العرض (عربي)' );
 				$field( 'price_badge_en', 'شارة العرض (English)' );
 				$field( 'price_badge_fr', 'شارة العرض (Français)' );
+				$field( 'price_badges_extra', 'شارة العرض للغات الأخرى', 'textarea', "سطر لكل لغة بالصيغة: الرمز=النص. مثال: es=Oferta de lanzamiento (الرموز: es, de, tr, pt, it). إن تُرك فارغاً يُستعمل النص الجاهز." );
 				?>
 			</table>
 
@@ -205,6 +228,7 @@ function blr_admin_page() {
 				$field( 'address_ar', 'العنوان (عربي)' );
 				$field( 'address_en', 'العنوان (English)' );
 				$field( 'address_fr', 'العنوان (Français)' );
+				$field( 'address_extra', 'العنوان باللغات الأخرى', 'textarea', 'سطر لكل لغة بالصيغة: الرمز=العنوان. مثال: es=Calle Mayor 1, Madrid' );
 				?>
 			</table>
 
@@ -213,10 +237,15 @@ function blr_admin_page() {
 				<?php $field( 'brand_color', 'اللون الرئيسي', 'color' ); ?>
 				<tr><th scope="row"><label for="blr_default_lang">اللغة الافتراضية</label></th><td>
 					<select id="blr_default_lang" name="<?php echo esc_attr( BLR_OPTION ); ?>[default_lang]">
-						<option value="auto" <?php selected( $s['default_lang'], 'auto' ); ?>>تلقائي (حسب لغة الموقع)</option>
+						<option value="auto" <?php selected( $s['default_lang'], 'auto' ); ?>>تلقائي (لغة متصفح الزائر ثم لغة الموقع)</option>
 						<option value="ar" <?php selected( $s['default_lang'], 'ar' ); ?>>العربية</option>
 						<option value="en" <?php selected( $s['default_lang'], 'en' ); ?>>English</option>
 						<option value="fr" <?php selected( $s['default_lang'], 'fr' ); ?>>Français</option>
+						<option value="es" <?php selected( $s['default_lang'], 'es' ); ?>>Español</option>
+						<option value="de" <?php selected( $s['default_lang'], 'de' ); ?>>Deutsch</option>
+						<option value="tr" <?php selected( $s['default_lang'], 'tr' ); ?>>Türkçe</option>
+						<option value="pt" <?php selected( $s['default_lang'], 'pt' ); ?>>Português</option>
+						<option value="it" <?php selected( $s['default_lang'], 'it' ); ?>>Italiano</option>
 					</select>
 					<p class="description">يستطيع الزائر تغيير اللغة من أزرار الصفحة، ويتذكر المتصفح اختياره.</p></td></tr>
 				<?php $field( 'full_width', 'عرض كامل', 'checkbox', 'تمديد الصفحة لعرض الشاشة (يعمل أفضل مع قالب "عرض كامل" في قالبك)' ); ?>
@@ -267,22 +296,42 @@ function blr_days_text( $days, $lang ) {
 	return sprintf( $d['few'], $days );
 }
 
+/** Price formatted for one language: separators, symbol position and currency label. */
 function blr_price_text( $s, $lang ) {
 	$amount = (float) $s['price_amount'];
 	$cur    = $s['price_currency'];
+	$nb     = "\xC2\xA0";
 	$names  = array(
 		'ar' => array( 'DZD' => 'دج', 'SAR' => 'ر.س', 'AED' => 'د.إ', 'EGP' => 'ج.م', 'MAD' => 'د.م', 'TND' => 'د.ت', 'KWD' => 'د.ك', 'QAR' => 'ر.ق', 'JOD' => 'د.أ', 'LYD' => 'د.ل', 'IQD' => 'د.ع' ),
+		'fr' => array( 'DZD' => 'DA', 'TND' => 'DT' ),
+		'es' => array( 'DZD' => 'DA' ),
+		'pt' => array( 'DZD' => 'DA' ),
+		'it' => array( 'DZD' => 'DA' ),
+		'de' => array( 'DZD' => 'DA' ),
+		'tr' => array(),
 		'en' => array(),
-		'fr' => array( 'DZD' => 'DA', 'MAD' => 'MAD', 'TND' => 'DT' ),
 	);
+	// thousands separator, decimal separator, symbol before the number?
+	$fmt_rules = array(
+		'ar' => array( ',', '.', true ),
+		'en' => array( ',', '.', true ),
+		'fr' => array( $nb, ',', false ),
+		'es' => array( '.', ',', false ),
+		'de' => array( '.', ',', false ),
+		'tr' => array( '.', ',', true ),
+		'pt' => array( $nb, ',', false ),
+		'it' => array( '.', ',', false ),
+	);
+	$rule   = isset( $fmt_rules[ $lang ] ) ? $fmt_rules[ $lang ] : $fmt_rules['en'];
 	$prefix = array( 'USD' => '$', 'EUR' => '€', 'GBP' => '£' );
-	$fmt    = function ( $n ) use ( $cur, $names, $prefix, $lang ) {
-		$num = ( floor( $n ) == $n ) ? number_format( $n, 0, '.', 'fr' === $lang ? ' ' : ',' ) : number_format( $n, 2, 'fr' === $lang ? ',' : '.', 'fr' === $lang ? ' ' : ',' );
+	$fmt    = function ( $n ) use ( $cur, $names, $prefix, $lang, $rule, $nb ) {
+		$whole = ( floor( $n ) == $n );
+		$num   = number_format( $n, $whole ? 0 : 2, $rule[1], $rule[0] );
 		if ( isset( $prefix[ $cur ] ) ) {
-			return 'fr' === $lang ? $num . ' ' . $prefix[ $cur ] : $prefix[ $cur ] . $num;
+			return $rule[2] ? $prefix[ $cur ] . $num : $num . $nb . $prefix[ $cur ];
 		}
 		$label = isset( $names[ $lang ][ $cur ] ) ? $names[ $lang ][ $cur ] : $cur;
-		return $num . ' ' . $label;
+		return $num . $nb . $label;
 	};
 	$old = (float) $s['price_old'];
 	return array(
@@ -309,10 +358,11 @@ function blr_dict( $lang, $s ) {
 	};
 	$walk( $T, '' );
 
-	if ( '' !== trim( $s[ 'hero_title_' . $lang ] ) ) {
+	// optional overrides from the settings page (ar / en / fr have dedicated fields)
+	if ( isset( $s[ 'hero_title_' . $lang ] ) && '' !== trim( $s[ 'hero_title_' . $lang ] ) ) {
 		$out['hero.title'] = $s[ 'hero_title_' . $lang ];
 	}
-	if ( '' !== trim( $s[ 'hero_text_' . $lang ] ) ) {
+	if ( isset( $s[ 'hero_text_' . $lang ] ) && '' !== trim( $s[ 'hero_text_' . $lang ] ) ) {
 		$out['hero.text'] = $s[ 'hero_text_' . $lang ];
 	}
 
@@ -320,17 +370,31 @@ function blr_dict( $lang, $s ) {
 	$out['price.now'] = $p['now'];
 	$out['price.old'] = $p['old'];
 	$out['price.per'] = $T['pricing'][ 'once' === $s['price_period'] ? 'once' : $s['price_period'] ];
-	$out['price.badge'] = $s[ 'price_badge_' . $lang ];
-	$out['contact.addressValue'] = $s[ 'address_' . $lang ];
+
+	$badges = blr_parse_extra( $s['price_badges_extra'] );
+	if ( isset( $s[ 'price_badge_' . $lang ] ) ) {
+		$out['price.badge'] = $s[ 'price_badge_' . $lang ];
+	} elseif ( isset( $badges[ $lang ] ) ) {
+		$out['price.badge'] = $badges[ $lang ];
+	} else {
+		$out['price.badge'] = isset( $T['pricing']['badge'] ) ? $T['pricing']['badge'] : '';
+	}
+
+	$addr = blr_parse_extra( $s['address_extra'] );
+	if ( isset( $s[ 'address_' . $lang ] ) ) {
+		$out['contact.addressValue'] = $s[ 'address_' . $lang ];
+	} else {
+		$out['contact.addressValue'] = isset( $addr[ $lang ] ) ? $addr[ $lang ] : '';
+	}
 	return $out;
 }
 
 function blr_detect_lang( $s, $atts_lang ) {
-	$allowed = array( 'ar', 'en', 'fr' );
+	$allowed = blr_languages();
 	if ( in_array( $atts_lang, $allowed, true ) ) {
 		return $atts_lang;
 	}
-	if ( isset( $_GET['blr_lang'] ) && in_array( $_GET['blr_lang'], $allowed, true ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+	if ( isset( $_GET['blr_lang'] ) && is_string( $_GET['blr_lang'] ) && in_array( $_GET['blr_lang'], $allowed, true ) ) { // phpcs:ignore WordPress.Security.NonceVerification
 		return $_GET['blr_lang']; // phpcs:ignore
 	}
 	if ( in_array( $s['default_lang'], $allowed, true ) ) {
@@ -349,6 +413,11 @@ function blr_shortcode( $atts ) {
 	$s    = blr_settings();
 	$S    = blr_strings();
 	$lang = blr_detect_lang( $s, $atts['lang'] );
+	if ( ! isset( $S[ $lang ] ) ) {
+		$lang = isset( $S['en'] ) ? 'en' : (string) key( $S );
+	}
+	// the browser language is used only when nothing forces a language
+	$auto = ( 'auto' === $s['default_lang'] && '' === $atts['lang'] && ! isset( $_GET['blr_lang'] ) ) ? '1' : '0'; // phpcs:ignore WordPress.Security.NonceVerification
 
 	wp_enqueue_style( 'blr-landing', BLR_URL . 'assets/landing.css', array(), BLR_VERSION );
 	wp_enqueue_script( 'blr-landing', BLR_URL . 'assets/landing.js', array(), BLR_VERSION, true );
@@ -360,16 +429,24 @@ function blr_shortcode( $atts ) {
 	$D = $dicts[ $lang ];
 
 	// text with data-i so the language switcher can translate it without reloading
-	$t  = function ( $key ) use ( $D ) {
+	$t = function ( $key ) use ( $D ) {
 		return isset( $D[ $key ] ) ? $D[ $key ] : '';
 	};
-	$e  = function ( $tag, $key, $class = '', $extra = '' ) use ( $t ) {
+	$e = function ( $tag, $key, $class = '', $extra = '' ) use ( $t ) {
 		return '<' . $tag . ( $class ? ' class="' . esc_attr( $class ) . '"' : '' ) . ' data-i="' . esc_attr( $key ) . '"' . $extra . '>' . esc_html( $t( $key ) ) . '</' . $tag . '>'; // phpcs:ignore
+	};
+	// the same, for a list of numbered items
+	$n = function ( $tag, $prefix, $count, $class = '' ) use ( $e ) {
+		$html = '';
+		for ( $i = 0; $i < $count; $i++ ) {
+			$html .= $e( $tag, $prefix . '.' . $i, $class );
+		}
+		return $html;
 	};
 
 	// links
-	$buy      = $s['buy_url'];
-	$trial    = '';
+	$buy   = $s['buy_url'];
+	$trial = '';
 	if ( '1' === $s['trial_enabled'] ) {
 		if ( $s['trial_url'] ) {
 			$trial = $s['trial_url'];
@@ -385,25 +462,42 @@ function blr_shortcode( $atts ) {
 		return $href ? '<a class="blr-btn ' . esc_attr( $class ) . '" href="' . esc_url( $href ) . '" rel="noopener">' . $e( 'span', $key ) . '</a>' : '';
 	};
 
+	$group_icons = array( '🧾', '🖨️', '👥', '📦', '🛒', '💳', '📊', '🧰', '🔐', '🎨', '🔑' );
+	$shot_files  = array( 'dashboard', 'invoice', 'pos', 'reports', 'calendar', 'license' );
+	$nav         = array( 'features', 'gallery', 'ai', 'pricing', 'faq', 'contact' );
+	$T           = $S[ $lang ];
+
 	$style = '--blr:' . esc_attr( $s['brand_color'] ) . ';';
 	$wrap  = 'blr' . ( '1' === $s['full_width'] ? ' blr--full' : '' );
 
 	ob_start();
 	?>
-<div class="<?php echo esc_attr( $wrap ); ?>" id="blr-top" lang="<?php echo esc_attr( $lang ); ?>" dir="<?php echo esc_attr( $S[ $lang ]['dir'] ); ?>" style="<?php echo esc_attr( $style ); ?>" data-lang="<?php echo esc_attr( $lang ); ?>">
+<div class="<?php echo esc_attr( $wrap ); ?>" id="blr-top" lang="<?php echo esc_attr( $lang ); ?>" dir="<?php echo esc_attr( $T['dir'] ); ?>" style="<?php echo esc_attr( $style ); ?>" data-lang="<?php echo esc_attr( $lang ); ?>" data-auto="<?php echo esc_attr( $auto ); ?>">
 
 	<header class="blr-bar">
 		<div class="blr-wrap blr-bar__in">
 			<a class="blr-logo" href="#blr-top"><img src="<?php echo esc_url( BLR_URL . 'assets/logo.png' ); ?>" alt="" width="34" height="34"><span>BLR Fatourati</span></a>
-			<nav class="blr-nav" aria-label="Sections">
-				<?php foreach ( array( 'features', 'security', 'ai', 'pricing', 'faq', 'contact' ) as $n ) : ?>
-					<a href="#blr-<?php echo esc_attr( $n ); ?>" data-i="nav.<?php echo esc_attr( $n ); ?>"><?php echo esc_html( $t( 'nav.' . $n ) ); ?></a>
+			<nav class="blr-nav" aria-label="BLR Fatourati">
+				<?php foreach ( $nav as $k ) : ?>
+					<a href="#blr-<?php echo esc_attr( $k ); ?>" data-i="nav.<?php echo esc_attr( $k ); ?>"><?php echo esc_html( $t( 'nav.' . $k ) ); ?></a>
 				<?php endforeach; ?>
 			</nav>
-			<div class="blr-lang" role="group" aria-label="Language">
-				<?php foreach ( $S as $code => $row ) : ?>
-					<button type="button" data-set-lang="<?php echo esc_attr( $code ); ?>" class="<?php echo $code === $lang ? 'is-on' : ''; ?>"><?php echo esc_html( $row['name'] ); ?></button>
-				<?php endforeach; ?>
+			<div class="blr-tools">
+				<?php if ( $buy ) : ?>
+					<a class="blr-btn blr-btn--primary blr-btn--sm" href="<?php echo esc_url( $buy ); ?>" rel="noopener" data-i="ui.buyShort"><?php echo esc_html( $t( 'ui.buyShort' ) ); ?></a>
+				<?php endif; ?>
+				<div class="blr-lang" data-lang-menu>
+					<button type="button" class="blr-lang__btn" aria-haspopup="true" aria-expanded="false" aria-label="<?php echo esc_attr( $t( 'ui.lang' ) ); ?>" data-iaria="ui.lang">
+						<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM3.5 9h17M3.5 15h17M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9s1.3-6.4 3.8-9z"/></svg>
+						<span class="blr-lang__cur"><?php echo esc_html( $T['name'] ); ?></span>
+						<svg class="blr-lang__car" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6"/></svg>
+					</button>
+					<ul class="blr-lang__list" hidden>
+						<?php foreach ( $S as $code => $row ) : ?>
+							<li><button type="button" lang="<?php echo esc_attr( $code ); ?>" dir="<?php echo esc_attr( $row['dir'] ); ?>" data-set-lang="<?php echo esc_attr( $code ); ?>" aria-pressed="<?php echo $code === $lang ? 'true' : 'false'; ?>" class="<?php echo $code === $lang ? 'is-on' : ''; ?>"><span><?php echo esc_html( $row['name'] ); ?></span><small><?php echo esc_html( $row['short'] ); ?></small></button></li>
+						<?php endforeach; ?>
+					</ul>
+				</div>
 			</div>
 		</div>
 	</header>
@@ -422,9 +516,7 @@ function blr_shortcode( $atts ) {
 				<a class="blr-btn blr-btn--ghost" href="#blr-features"><span data-i="hero.more"><?php echo esc_html( $t( 'hero.more' ) ); ?></span></a>
 			</div>
 			<ul class="blr-trust">
-				<?php foreach ( $S[ $lang ]['trust'] as $i => $_ ) : ?>
-					<li data-i="trust.<?php echo (int) $i; ?>"><?php echo esc_html( $t( 'trust.' . $i ) ); ?></li>
-				<?php endforeach; ?>
+				<?php echo $n( 'li', 'trust', count( $T['trust'] ) ); // phpcs:ignore ?>
 			</ul>
 		</div>
 	</section>
@@ -433,10 +525,26 @@ function blr_shortcode( $atts ) {
 		<div class="blr-wrap">
 			<?php echo $e( 'h2', 'why.title' ); echo $e( 'p', 'why.sub', 'blr-sub' ); // phpcs:ignore ?>
 			<div class="blr-grid blr-grid--3">
-				<?php foreach ( $S[ $lang ]['why']['items'] as $i => $it ) : ?>
+				<?php
+				$why_icons = array( '🧾', '📦', '💸' );
+				foreach ( $T['why']['items'] as $i => $it ) :
+					?>
 					<div class="blr-card">
-						<div class="blr-ic"><?php echo esc_html( $it[0] ); ?></div>
-						<?php echo $e( 'h3', "why.items.$i.1" ); echo $e( 'p', "why.items.$i.2" ); // phpcs:ignore ?>
+						<div class="blr-ic" aria-hidden="true"><?php echo esc_html( $why_icons[ $i % 3 ] ); ?></div>
+						<?php echo $e( 'h3', "why.items.$i.0" ); echo $e( 'p', "why.items.$i.1" ); // phpcs:ignore ?>
+					</div>
+				<?php endforeach; ?>
+			</div>
+
+			<h3 class="blr-h3c" data-i="why.compareTitle"><?php echo esc_html( $t( 'why.compareTitle' ) ); ?></h3>
+			<div class="blr-compare">
+				<div class="blr-compare__row blr-compare__head">
+					<?php echo $e( 'div', 'why.head.0' ); echo $e( 'div', 'why.head.1' ); // phpcs:ignore ?>
+				</div>
+				<?php foreach ( $T['why']['rows'] as $i => $_ ) : ?>
+					<div class="blr-compare__row">
+						<div class="blr-no"><span aria-hidden="true">✕</span><?php echo $e( 'span', "why.rows.$i.0" ); // phpcs:ignore ?></div>
+						<div class="blr-yes"><span aria-hidden="true">✓</span><?php echo $e( 'span', "why.rows.$i.1" ); // phpcs:ignore ?></div>
 					</div>
 				<?php endforeach; ?>
 			</div>
@@ -445,40 +553,27 @@ function blr_shortcode( $atts ) {
 
 	<section class="blr-sec blr-sec--alt" id="blr-features">
 		<div class="blr-wrap">
-			<?php echo $e( 'h2', 'features.title' ); echo $e( 'p', 'features.sub', 'blr-sub' ); // phpcs:ignore ?>
-			<div class="blr-grid blr-grid--4">
-				<?php foreach ( $S[ $lang ]['features']['items'] as $i => $it ) : ?>
-					<div class="blr-card">
-						<div class="blr-ic"><?php echo esc_html( $it[0] ); ?></div>
-						<?php echo $e( 'h3', "features.items.$i.1" ); echo $e( 'p', "features.items.$i.2" ); // phpcs:ignore ?>
-					</div>
+			<?php echo $e( 'h2', 'groups.title' ); echo $e( 'p', 'groups.sub', 'blr-sub' ); // phpcs:ignore ?>
+			<div class="blr-grid blr-grid--feat">
+				<?php foreach ( $T['groups']['items'] as $i => $it ) : ?>
+					<article class="blr-card blr-group">
+						<div class="blr-ic" aria-hidden="true"><?php echo esc_html( isset( $group_icons[ $i ] ) ? $group_icons[ $i ] : '✨' ); ?></div>
+						<?php echo $e( 'h3', "groups.items.$i.0" ); // phpcs:ignore ?>
+						<ul class="blr-checks">
+							<?php echo $n( 'li', "groups.items.$i.1", count( $it[1] ) ); // phpcs:ignore ?>
+						</ul>
+					</article>
 				<?php endforeach; ?>
 			</div>
 		</div>
 	</section>
 
-	<section class="blr-sec blr-dark" id="blr-security">
-		<div class="blr-wrap">
-			<?php echo $e( 'h2', 'security.title' ); echo $e( 'p', 'security.sub', 'blr-sub' ); // phpcs:ignore ?>
-			<div class="blr-grid blr-grid--4">
-				<?php foreach ( $S[ $lang ]['security']['items'] as $i => $it ) : ?>
-					<div class="blr-card">
-						<div class="blr-ic">🔒</div>
-						<?php echo $e( 'h3', "security.items.$i.0" ); echo $e( 'p', "security.items.$i.1" ); // phpcs:ignore ?>
-					</div>
-				<?php endforeach; ?>
-			</div>
-		</div>
-	</section>
-
-	<section class="blr-sec" id="blr-ai">
+	<section class="blr-sec blr-dark" id="blr-ai">
 		<div class="blr-wrap blr-split">
 			<div>
 				<?php echo $e( 'h2', 'ai.title', 'blr-left' ); echo $e( 'p', 'ai.text', 'blr-muted' ); // phpcs:ignore ?>
 				<ul class="blr-checks">
-					<?php foreach ( $S[ $lang ]['ai']['items'] as $i => $_ ) : ?>
-						<li data-i="ai.items.<?php echo (int) $i; ?>"><?php echo esc_html( $t( 'ai.items.' . $i ) ); ?></li>
-					<?php endforeach; ?>
+					<?php echo $n( 'li', 'ai.items', count( $T['ai']['items'] ) ); // phpcs:ignore ?>
 				</ul>
 			</div>
 			<div class="blr-mock" aria-hidden="true">
@@ -489,14 +584,30 @@ function blr_shortcode( $atts ) {
 		</div>
 	</section>
 
+	<section class="blr-sec" id="blr-gallery" data-blr-gallery hidden>
+		<div class="blr-wrap">
+			<?php echo $e( 'h2', 'shots.title' ); echo $e( 'p', 'shots.sub', 'blr-sub' ); // phpcs:ignore ?>
+			<div class="blr-shots">
+				<?php foreach ( $shot_files as $i => $f ) : ?>
+					<figure class="blr-shot" hidden>
+						<button type="button" class="blr-shot__btn" data-full="<?php echo esc_url( BLR_URL . 'assets/shots/' . $f . '.jpg' ); ?>">
+							<img src="<?php echo esc_url( BLR_URL . 'assets/shots/' . $f . '.jpg' ); ?>" alt="<?php echo esc_attr( $t( "shots.items.$i.1" ) ); ?>" data-ialt="shots.items.<?php echo (int) $i; ?>.1" width="1360" height="850" loading="lazy" decoding="async">
+						</button>
+						<?php echo $e( 'figcaption', "shots.items.$i.0" ); // phpcs:ignore ?>
+					</figure>
+				<?php endforeach; ?>
+			</div>
+		</div>
+	</section>
+
 	<section class="blr-sec blr-sec--alt" id="blr-steps">
 		<div class="blr-wrap">
 			<?php echo $e( 'h2', 'steps.title' ); echo $e( 'p', 'steps.sub', 'blr-sub' ); // phpcs:ignore ?>
 			<div class="blr-grid blr-grid--3">
-				<?php foreach ( $S[ $lang ]['steps']['items'] as $i => $it ) : ?>
+				<?php foreach ( $T['steps']['items'] as $i => $it ) : ?>
 					<div class="blr-card blr-step">
-						<div class="blr-num"><?php echo esc_html( $it[0] ); ?></div>
-						<?php echo $e( 'h3', "steps.items.$i.1" ); echo $e( 'p', "steps.items.$i.2" ); // phpcs:ignore ?>
+						<div class="blr-num"><?php echo (int) ( $i + 1 ); ?></div>
+						<?php echo $e( 'h3', "steps.items.$i.0" ); echo $e( 'p', "steps.items.$i.1" ); // phpcs:ignore ?>
 					</div>
 				<?php endforeach; ?>
 			</div>
@@ -507,20 +618,14 @@ function blr_shortcode( $atts ) {
 		<div class="blr-wrap">
 			<?php echo $e( 'h2', 'pricing.title' ); echo $e( 'p', 'pricing.sub', 'blr-sub' ); // phpcs:ignore ?>
 			<div class="blr-card blr-price">
-				<?php if ( $t( 'price.badge' ) ) : ?>
-					<?php echo $e( 'span', 'price.badge', 'blr-badge' ); // phpcs:ignore ?>
-				<?php endif; ?>
+				<?php echo $e( 'span', 'price.badge', 'blr-badge', $t( 'price.badge' ) ? '' : ' hidden' ); // phpcs:ignore ?>
 				<div class="blr-amount">
-					<?php if ( $t( 'price.old' ) ) : ?>
-						<?php echo $e( 'span', 'price.old', 'blr-old' ); // phpcs:ignore ?>
-					<?php endif; ?>
+					<?php echo $e( 'span', 'price.old', 'blr-old', $t( 'price.old' ) ? '' : ' hidden' ); // phpcs:ignore ?>
 					<?php echo $e( 'span', 'price.now', 'blr-now' ); // phpcs:ignore ?>
 				</div>
 				<?php echo $e( 'div', 'price.per', 'blr-per' ); // phpcs:ignore ?>
 				<ul class="blr-checks">
-					<?php foreach ( $S[ $lang ]['pricing']['list'] as $i => $_ ) : ?>
-						<li data-i="pricing.list.<?php echo (int) $i; ?>"><?php echo esc_html( $t( 'pricing.list.' . $i ) ); ?></li>
-					<?php endforeach; ?>
+					<?php echo $n( 'li', 'pricing.list', count( $T['pricing']['list'] ) ); // phpcs:ignore ?>
 				</ul>
 				<div class="blr-cta blr-cta--col">
 					<?php
@@ -536,10 +641,9 @@ function blr_shortcode( $atts ) {
 		<div class="blr-wrap">
 			<?php echo $e( 'h2', 'faq.title' ); // phpcs:ignore ?>
 			<div class="blr-faq">
-				<?php foreach ( $S[ $lang ]['faq']['items'] as $i => $_ ) : ?>
+				<?php foreach ( $T['faq']['items'] as $i => $_ ) : ?>
 					<details>
-						<summary data-i="faq.items.<?php echo (int) $i; ?>.0"><?php echo esc_html( $t( "faq.items.$i.0" ) ); ?></summary>
-						<p data-i="faq.items.<?php echo (int) $i; ?>.1"><?php echo esc_html( $t( "faq.items.$i.1" ) ); ?></p>
+						<?php echo $e( 'summary', "faq.items.$i.0" ); echo $e( 'p', "faq.items.$i.1" ); // phpcs:ignore ?>
 					</details>
 				<?php endforeach; ?>
 			</div>
@@ -572,7 +676,7 @@ function blr_shortcode( $atts ) {
 					<div class="blr-row"><span data-i="contact.<?php echo esc_attr( $r[0] ); ?>"><?php echo esc_html( $t( 'contact.' . $r[0] ) ); ?></span>
 						<a href="<?php echo esc_url( $r[2] ); ?>" rel="noopener" dir="ltr"><?php echo esc_html( $r[1] ); ?></a></div>
 				<?php endforeach; ?>
-				<?php if ( $s['address_ar'] || $s['address_en'] || $s['address_fr'] ) : ?>
+				<?php if ( $s['address_ar'] || $s['address_en'] || $s['address_fr'] || '' !== trim( $s['address_extra'] ) ) : ?>
 					<div class="blr-row"><span data-i="contact.address"><?php echo esc_html( $t( 'contact.address' ) ); ?></span>
 						<b data-i="contact.addressValue"><?php echo esc_html( $t( 'contact.addressValue' ) ); ?></b></div>
 				<?php endif; ?>
@@ -596,6 +700,13 @@ function blr_shortcode( $atts ) {
 		<div class="blr-wrap">© <?php echo esc_html( gmdate( 'Y' ) ); ?> BLR Fatourati — <span data-i="footer"><?php echo esc_html( $t( 'footer' ) ); ?></span></div>
 	</footer>
 
+	<div class="blr-lb" hidden role="dialog" aria-modal="true" aria-label="BLR Fatourati">
+		<button type="button" class="blr-lb__x" data-lb="close" aria-label="<?php echo esc_attr( $t( 'ui.close' ) ); ?>" data-iaria="ui.close">×</button>
+		<button type="button" class="blr-lb__nav blr-lb__prev" data-lb="prev" aria-label="<?php echo esc_attr( $t( 'ui.prev' ) ); ?>" data-iaria="ui.prev">‹</button>
+		<figure class="blr-lb__fig"><img alt="" src=""><figcaption></figcaption></figure>
+		<button type="button" class="blr-lb__nav blr-lb__next" data-lb="next" aria-label="<?php echo esc_attr( $t( 'ui.next' ) ); ?>" data-iaria="ui.next">›</button>
+	</div>
+
 	<script type="application/json" class="blr-dict"><?php echo wp_json_encode( $dicts, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE ); // phpcs:ignore ?></script>
 	<script type="application/ld+json"><?php
 	echo wp_json_encode(
@@ -605,12 +716,36 @@ function blr_shortcode( $atts ) {
 			'name'                => 'BLR Fatourati',
 			'applicationCategory' => 'BusinessApplication',
 			'operatingSystem'     => 'Windows 10, Windows 11',
+			'inLanguage'          => array_keys( $S ),
+			'description'         => $D['hero.text'],
+			'author'              => array( '@type' => 'Person', 'name' => 'Bader Eddine Hamidane', 'url' => 'https://baderinfo.com' ),
 			'offers'              => array(
 				'@type'         => 'Offer',
 				'price'         => (string) (float) $s['price_amount'],
 				'priceCurrency' => $s['price_currency'],
 				'url'           => $buy,
 			),
+		),
+		JSON_HEX_TAG | JSON_HEX_AMP | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
+	); // phpcs:ignore
+	?></script>
+	<?php
+	$faq_ld = array();
+	foreach ( $T['faq']['items'] as $i => $_ ) {
+		$faq_ld[] = array(
+			'@type'          => 'Question',
+			'name'           => $D[ "faq.items.$i.0" ],
+			'acceptedAnswer' => array( '@type' => 'Answer', 'text' => $D[ "faq.items.$i.1" ] ),
+		);
+	}
+	?>
+	<script type="application/ld+json"><?php
+	echo wp_json_encode(
+		array(
+			'@context'   => 'https://schema.org',
+			'@type'      => 'FAQPage',
+			'inLanguage' => $lang,
+			'mainEntity' => $faq_ld,
 		),
 		JSON_HEX_TAG | JSON_HEX_AMP | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
 	); // phpcs:ignore

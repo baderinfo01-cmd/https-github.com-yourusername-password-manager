@@ -1,0 +1,102 @@
+{
+"dir": "ltr", "name": "Português", "short": "PT",
+"nav": { "features": "Funcionalidades", "gallery": "Capturas", "ai": "IA", "pricing": "Preço", "faq": "Perguntas", "contact": "Contacto" },
+"hero": {
+ "badge": "Programa de secretária para Windows",
+ "title": "Faturas, stock e contas… num único programa no seu próprio PC",
+ "text": "O BLR Fatourati é um programa completo de faturação e gestão de negócio: documentos comerciais, clientes e fornecedores, stock, ponto de venda, pagamentos, despesas e relatórios. Funciona totalmente offline após uma única ativação, com licença vitalícia, e os seus dados nunca saem do seu computador.",
+ "buy": "Comprar agora", "trial": "Experimente grátis por {days}", "more": "Descobrir funcionalidades", "download": "Transferir"
+},
+"trust": ["Funciona totalmente offline", "Licença vitalícia", "Árabe · English · Français", "Faturação, stock e caixa", "Dados no seu PC"],
+"why": {
+ "title": "Porque precisa dele",
+ "sub": "Gerir o negócio com cadernos e folhas de cálculo dispersos custa tempo e esconde a imagem real dos seus lucros e dívidas.",
+ "items": [
+  ["Faturas que demoram", "Numeração automática, do orçamento à fatura com um clique, faturas recorrentes criadas por si, e depois imprima ou partilhe por WhatsApp e e-mail."],
+  ["Stock pouco claro", "Acompanhe quantidades, códigos de barras, movimentos e valorização, com alertas quando um artigo está a acabar ou esgotado."],
+  ["Dívidas e lucros desconhecidos", "Saldos de clientes e fornecedores, antiguidade de dívidas, despesas e relatórios mostram onde realmente está."]
+ ],
+ "compareTitle": "Porquê o BLR Fatourati",
+ "head": ["Apps de faturação na nuvem habituais", "BLR Fatourati"],
+ "rows": [
+  ["Subscrição mensal que nunca acaba", "Uma licença vitalícia, um único pagamento"],
+  ["Precisa de internet e de conta online", "Totalmente offline após uma única ativação"],
+  ["Os seus dados em servidores de terceiros", "Base de dados local no seu PC, nada é enviado"],
+  ["Modelos genéricos e árabe limitado", "Árabe (RTL), inglês e francês, valor por extenso, selo fiscal argelino"],
+  ["Faturação, stock e caixa em ferramentas separadas", "Faturação, stock, ponto de venda, despesas e relatórios num só programa"],
+  ["Suporte por fila de tickets", "Suporte direto do programador por WhatsApp ou e-mail"]
+ ]
+},
+"groups": {
+ "title": "Todas as funcionalidades de que o seu negócio precisa",
+ "sub": "Tudo o que se segue está incluído numa única licença.",
+ "items": [
+  ["Documentos comerciais", ["Faturas, orçamentos, faturas proforma, guias de remessa e notas de crédito", "Faturas de compra e notas de encomenda", "Numeração anual automática com prefixos à sua escolha", "Converta um orçamento em fatura, e uma fatura em nota de crédito ou guia de remessa", "Faturas recorrentes geradas automaticamente e duplicação com um clique", "Linha de assunto, referência de encomenda do cliente e data de validade do orçamento", "Descontos por linha, desconto global (% ou valor), várias taxas de IVA, impostos adicionais e portes", "Selo fiscal argelino (droit de timbre) opcional em pagamentos em numerário, preços com ou sem imposto", "Valor por extenso (árabe, francês, inglês) em cada fatura"]],
+  ["Impressão e partilha", ["Pré-visualização antes de imprimir: escolha impressora, cópias, A4, talão térmico de 80 mm ou PDF", "Código QR nos documentos", "3 modelos de fatura (moderno, clássico, minimalista) com o seu logótipo, cor, assinatura e carimbo da empresa", "Recibos de pagamento numerados (RCPT) e vales de pagamento", "Extratos de conta de clientes", "Partilha por WhatsApp ou e-mail"]],
+  ["Clientes e fornecedores", ["Saldos e limite de crédito de cada cliente", "Extrato de conta e saldo inicial", "Os fornecedores são geridos da mesma forma", "Importação e exportação Excel/CSV que reconhece nomes de colunas em árabe, francês e inglês"]],
+  ["Produtos e serviços", ["Categorias, SKU e código de barras", "Preço de custo, preço de venda e margem, com unidades", "Stock atualizado automaticamente por faturas, compras e notas de crédito", "Alertas de stock baixo", "Ajuste e contagem de stock, com valorização do inventário", "Importação e exportação da sua lista de produtos"]],
+  ["Ponto de venda", ["Leitura de códigos de barras", "Carrinho rápido com desconto", "Cálculo do troco", "Numerário, cartão e outros meios de pagamento, seguido da impressão do talão"]],
+  ["Dinheiro", ["Pagamentos parciais e vários meios de pagamento", "Contas a receber e a pagar com deteção de atrasos", "Despesas por categoria", "A IA pode ler a foto de uma fatura de fornecedor ou de um talão para pré-preencher uma despesa", "Visão geral do fluxo de caixa"]],
+  ["Relatórios e painel", ["Vendas por mês, por cliente e por produto", "Relatório de lucros", "IVA liquidado face ao IVA dedutível", "Antiguidade de dívidas e fluxo de caixa", "Imprimir, PDF ou Excel em cada relatório", "Painel com gráficos e indicadores-chave"]],
+  ["Ferramentas do dia a dia", ["Calendário: vencimentos de faturas, validade de orçamentos, tarefas e faturas recorrentes", "Lista de tarefas com prioridades", "Pesquisa global rápida em faturas, clientes, fornecedores e produtos", "Menu de criação rápida e atalhos: Ctrl+Shift+O nova fatura, Ctrl+Shift+E novo orçamento, Ctrl+Shift+P pagamento", "Relógio e data em direto no cabeçalho"]],
+  ["Segurança e utilizadores", ["Utilizadores com funções: administrador, gestor, operador de caixa, contabilista", "Registo de atividade que mostra quem fez o quê", "Bloqueio de início de sessão contra ataques de força bruta", "Bloqueio automático por inatividade", "Recuperação de palavra-passe esquecida com uma chave de recuperação de utilização única", "Cópias de segurança locais automáticas diárias (as últimas 14 são guardadas)", "Cópia manual cifrada (AES-256) e restauro"]],
+  ["Aspeto e idiomas", ["O programa fala árabe (RTL), inglês e francês", "Modo claro e escuro", "8 temas de cor", "Interface moderna em estilo vidro com o tipo de letra El Messiri"]],
+  ["Licença e offline", ["Funciona totalmente offline após uma ativação", "Licença vitalícia associada a um único dispositivo e a um único programa", "Teste gratuito de 2 dias com um código de teste", "Base de dados SQLite local no seu PC, nada é enviado", "Instalador para Windows", "No primeiro arranque: uma página de certificado de licença para imprimir ou guardar em PDF e um assistente de dados da empresa (ambos opcionais)"]]
+ ]
+},
+"ai": {
+ "title": "Um assistente de IA… totalmente opcional",
+ "text": "Pergunte pelas suas vendas, dívidas e stock com o Claude e a sua própria chave API, guardada cifrada pelo Windows. É enviado apenas um resumo numérico, nunca telefones nem moradas.",
+ "items": ["Responde a perguntas sobre vendas, dívidas e stock a partir dos dados do seu negócio", "Alertas inteligentes: faturas em atraso, artigos esgotados, stock parado, queda de vendas, prejuízo", "Os alertas funcionam offline, sem IA", "Lê a foto de uma fatura de fornecedor ou de um talão para pré-preencher uma despesa", "É enviado apenas um resumo numérico, sem telefones nem moradas", "Opcional: usa a sua própria chave e pode ficar desativado"],
+ "card": "Assistente de IA do BLR Fatourati"
+},
+"shots": {
+ "title": "Veja em ação",
+ "sub": "Uma olhadela rápida ao programa. Clique numa imagem para ampliar.",
+ "items": [
+  ["Painel", "Painel do BLR Fatourati com gráficos e indicadores-chave"],
+  ["Fatura", "Uma fatura em preparação no BLR Fatourati"],
+  ["Ponto de venda", "O ecrã do ponto de venda com o carrinho e o pagamento"],
+  ["Relatórios", "Relatórios de vendas e lucros no BLR Fatourati"],
+  ["Calendário", "Calendário com vencimentos, validade de orçamentos e tarefas"],
+  ["Certificado de licença", "A página do certificado de licença mostrada no primeiro arranque"]
+ ]
+},
+"steps": {
+ "title": "Pronto em 3 passos",
+ "sub": "Da compra à primeira fatura em minutos.",
+ "items": [
+  ["Compre", "Obtenha a sua licença vitalícia ou peça primeiro um código de teste gratuito."],
+  ["Instale e ative", "Execute o instalador do Windows e introduza o seu código uma só vez. Fica associado ao seu dispositivo e apenas ao BLR Fatourati."],
+  ["Comece a faturar", "Adicione os dados da empresa (ou salte) e crie a sua primeira fatura. A partir daqui não precisa de internet."]
+ ]
+},
+"pricing": {
+ "title": "Uma licença, um dispositivo, sem surpresas",
+ "sub": "A licença é específica do BLR Fatourati e de um único dispositivo. Não funciona noutro programa nem noutro equipamento.",
+ "once": "pagamento único · vitalício", "year": "por ano", "month": "por mês",
+ "list": ["Todas as funcionalidades incluídas", "Funciona offline após a ativação", "Um dispositivo, um programa", "Licença vitalícia, sem subscrição", "Suporte do programador", "Transferência de licença via suporte ao mudar de PC"],
+ "buy": "Comprar agora", "trial": "Iniciar teste gratuito de {days}", "badge": "Oferta de lançamento"
+},
+"faq": {
+ "title": "Perguntas frequentes",
+ "items": [
+  ["Funciona sem internet?", "Sim. Após uma única ativação o programa funciona totalmente offline. Só o assistente de IA opcional precisa de internet quando o utiliza."],
+  ["Posso mudar de computador mais tarde?", "Sim. A licença está associada a um dispositivo; contacte o suporte e ajudamos a transferi-la para o seu novo PC."],
+  ["Como funcionam as cópias de segurança?", "O programa faz todos os dias uma cópia local automática e guarda as últimas 14. Pode também criar uma cópia manual cifrada (AES-256) e restaurá-la quando precisar."],
+  ["Esqueci-me da palavra-passe. O que faço?", "Use a chave de recuperação de utilização única que recebeu para voltar a aceder. Guarde-a num local seguro."],
+  ["Posso importar dados do meu programa antigo?", "Sim. Clientes, fornecedores e produtos podem ser importados de ficheiros Excel ou CSV, e o programa reconhece nomes de colunas em árabe, francês e inglês."],
+  ["Várias pessoas podem usá-lo?", "Sim. Crie utilizadores com funções (administrador, gestor, operador de caixa, contabilista); o registo de atividade mostra quem fez o quê."],
+  ["O programador pode ver os meus dados?", "Não. Tudo fica numa base de dados SQLite local no seu PC e nada é enviado ao programador."],
+  ["Preciso do assistente de IA?", "Não. É opcional e usa a sua própria chave. Os alertas inteligentes funcionam offline, sem qualquer IA."],
+  ["Que impressoras são suportadas?", "Pode imprimir numa impressora A4 normal, numa impressora de talões térmica de 80 mm ou guardar em PDF, depois de ver a pré-visualização."],
+  ["E as atualizações e novas versões?", "A licença é vitalícia. Para saber das novas versões, contacte o programador por WhatsApp ou e-mail."],
+  ["Como posso experimentar antes de comprar?", "Peça um código de teste e use o programa completo gratuitamente por {days}."]
+ ]
+},
+"contact": { "title": "Fale connosco", "sub": "Para compra, dúvidas, código de teste ou suporte.", "email": "E-mail", "phone": "Telefone", "whatsapp": "WhatsApp", "telegram": "Telegram", "website": "Site", "address": "Morada" },
+"cta": { "title": "Ponha a sua faturação em ordem hoje", "text": "Comece com um teste gratuito ou obtenha a sua licença vitalícia." },
+"footer": "Todos os direitos reservados. Programador: Bader Eddine Hamidane (Baderinfo)",
+"days": { "one": "1 dia", "two": "2 dias", "few": "%d dias", "many": "%d dias" },
+"ui": { "lang": "Idioma", "close": "Fechar", "prev": "Anterior", "next": "Seguinte", "buyShort": "Comprar", "menu": "Secções" }
+}

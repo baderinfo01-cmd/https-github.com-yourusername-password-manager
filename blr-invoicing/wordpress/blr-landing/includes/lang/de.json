@@ -1,0 +1,102 @@
+{
+"dir": "ltr", "name": "Deutsch", "short": "DE",
+"nav": { "features": "Funktionen", "gallery": "Screenshots", "ai": "KI", "pricing": "Preis", "faq": "FAQ", "contact": "Kontakt" },
+"hero": {
+ "badge": "Desktop-Software für Windows",
+ "title": "Rechnungen, Lager und Buchhaltung… in einem Programm auf Ihrem eigenen PC",
+ "text": "BLR Fatourati ist ein umfassendes Programm für Fakturierung und Betriebsverwaltung: Geschäftsdokumente, Kunden und Lieferanten, Lager, Kassensystem, Zahlungen, Ausgaben und Berichte. Es läuft nach einer einmaligen Aktivierung vollständig offline, mit lebenslanger Lizenz, und Ihre Daten verlassen Ihren Computer nie.",
+ "buy": "Jetzt kaufen", "trial": "{days} kostenlos testen", "more": "Funktionen entdecken", "download": "Herunterladen"
+},
+"trust": ["Funktioniert komplett offline", "Lebenslange Lizenz", "Arabisch · English · Français", "Fakturierung, Lager und Kasse", "Daten bleiben auf Ihrem PC"],
+"why": {
+ "title": "Warum Sie es brauchen",
+ "sub": "Wer sein Geschäft mit verstreuten Notizbüchern und Tabellen führt, verliert Zeit und verliert den Überblick über Gewinn und Schulden.",
+ "items": [
+  ["Rechnungen, die Zeit kosten", "Automatische Nummerierung, Angebot per Klick zur Rechnung, wiederkehrende Rechnungen entstehen von selbst, dann drucken oder per WhatsApp und E-Mail teilen."],
+  ["Unklarer Lagerbestand", "Mengen, Barcodes, Bewegungen und Bewertung im Blick, mit Warnungen bei knappen oder ausverkauften Artikeln."],
+  ["Unbekannte Schulden und Gewinne", "Salden von Kunden und Lieferanten, Altersstruktur der Forderungen, Ausgaben und Berichte zeigen, wo Sie wirklich stehen."]
+ ],
+ "compareTitle": "Warum BLR Fatourati",
+ "head": ["Übliche Cloud-Rechnungsprogramme", "BLR Fatourati"],
+ "rows": [
+  ["Monatsabo ohne Ende", "Eine lebenslange Lizenz, eine einmalige Zahlung"],
+  ["Braucht Internet und ein Online-Konto", "Nach einer einmaligen Aktivierung komplett offline"],
+  ["Ihre Daten liegen auf fremden Servern", "Lokale Datenbank auf Ihrem PC, nichts wird hochgeladen"],
+  ["Allgemeine Vorlagen, eingeschränktes Arabisch", "Arabisch (RTL), Englisch und Französisch, Betrag in Worten, algerische Stempelsteuer"],
+  ["Rechnungen, Lager und Kasse in getrennten Werkzeugen", "Fakturierung, Lager, Kasse, Ausgaben und Berichte in einem Programm"],
+  ["Support über eine Ticket-Warteschlange", "Direkter Support vom Entwickler per WhatsApp oder E-Mail"]
+ ]
+},
+"groups": {
+ "title": "Alle Funktionen, die Ihr Betrieb braucht",
+ "sub": "Alles Folgende ist in der einen Lizenz enthalten.",
+ "items": [
+  ["Geschäftsdokumente", ["Rechnungen, Angebote, Proforma-Rechnungen, Lieferscheine und Gutschriften", "Eingangsrechnungen und Bestellungen", "Automatische jährliche Nummerierung mit eigenen Präfixen", "Angebot in Rechnung umwandeln, Rechnung in Gutschrift oder Lieferschein", "Wiederkehrende Rechnungen automatisch erzeugt, Dokumente per Klick duplizieren", "Betreffzeile, Bestellnummer des Kunden und Gültigkeitsdatum des Angebots", "Positionsrabatte, Gesamtrabatt (% oder Betrag), mehrere MwSt.-Sätze, Zusatzsteuern und Versand", "Optionale algerische Stempelsteuer (droit de timbre) bei Barzahlung, Preise mit oder ohne Steuer", "Betrag in Worten (Arabisch, Französisch, Englisch) auf jeder Rechnung"]],
+  ["Drucken und Teilen", ["Druckvorschau vorab: Drucker, Kopien, A4, 80-mm-Bonrolle oder PDF wählen", "QR-Code auf Dokumenten", "3 Rechnungsvorlagen (modern, klassisch, minimal) mit Ihrem Logo, Ihrer Farbe, Unterschrift und Firmenstempel", "Nummerierte Zahlungsbelege (RCPT) und Auszahlungsbelege", "Kontoauszüge für Kunden", "Teilen per WhatsApp oder E-Mail"]],
+  ["Kunden und Lieferanten", ["Salden und Kreditlimit je Kunde", "Kontoauszug und Eröffnungssaldo", "Lieferanten werden genauso verwaltet", "Excel/CSV-Import und -Export, der arabische, französische und englische Spaltennamen erkennt"]],
+  ["Produkte und Dienstleistungen", ["Kategorien, Artikelnummer (SKU) und Barcode", "Einkaufspreis, Verkaufspreis und Marge, mit Einheiten", "Lagerbestand wird automatisch durch Rechnungen, Einkäufe und Gutschriften aktualisiert", "Warnungen bei niedrigem Bestand", "Bestandskorrektur und Inventur sowie Lagerbewertung", "Import und Export Ihrer Produktliste"]],
+  ["Kassensystem", ["Barcode-Scan", "Schneller Warenkorb mit Rabatt", "Rückgeldberechnung", "Bar, Karte und weitere Zahlungsarten, danach Bon-Druck"]],
+  ["Geld", ["Teilzahlungen und mehrere Zahlungsarten", "Forderungen und Verbindlichkeiten mit Erkennung überfälliger Posten", "Ausgaben nach Kategorie", "Die KI kann das Foto einer Lieferantenrechnung oder eines Belegs lesen und eine Ausgabe vorausfüllen", "Liquiditätsübersicht"]],
+  ["Berichte und Dashboard", ["Umsatz nach Monat, Kunde und Produkt", "Gewinnbericht", "Eingenommene gegenüber abziehbarer MwSt.", "Altersstruktur der Forderungen und Cashflow", "Jeder Bericht als Ausdruck, PDF oder Excel", "Dashboard mit Diagrammen und Kennzahlen"]],
+  ["Werkzeuge für den Alltag", ["Kalender: Rechnungsfälligkeiten, Ablauf von Angeboten, Aufgaben und wiederkehrende Rechnungen", "Aufgabenliste mit Prioritäten", "Schnelle globale Suche in Rechnungen, Kunden, Lieferanten und Produkten", "Schnell-Erstellen-Menü und Kürzel: Strg+Umschalt+O neue Rechnung, Strg+Umschalt+E neues Angebot, Strg+Umschalt+P Zahlung", "Uhrzeit und Datum live in der Kopfzeile"]],
+  ["Sicherheit und Benutzer", ["Benutzer mit Rollen: Administrator, Manager, Kassierer, Buchhalter", "Aktivitätsprotokoll: wer hat was getan", "Anmeldesperre gegen Brute-Force-Versuche", "Automatische Sperre bei Inaktivität", "Vergessenes Passwort per einmaligem Wiederherstellungsschlüssel zurücksetzen", "Tägliche automatische lokale Sicherungen (die letzten 14 bleiben erhalten)", "Verschlüsselte (AES-256) manuelle Sicherung und Wiederherstellung"]],
+  ["Design und Sprachen", ["Das Programm spricht Arabisch (RTL), Englisch und Französisch", "Heller und dunkler Modus", "8 Farbthemen", "Moderne Glas-Oberfläche mit der Schrift El Messiri"]],
+  ["Lizenz und Offline-Betrieb", ["Nach einer Aktivierung komplett offline nutzbar", "Lebenslange Lizenz, gebunden an ein Gerät und ein Programm", "2 Tage kostenlos testen mit einem Testcode", "Lokale SQLite-Datenbank auf Ihrem PC, nichts wird hochgeladen", "Installer für Windows", "Beim ersten Start: ein Lizenzzertifikat zum Drucken oder Speichern als PDF und ein Assistent für die Firmendaten (beides überspringbar)"]]
+ ]
+},
+"ai": {
+ "title": "Ein KI-Assistent… völlig optional",
+ "text": "Fragen Sie nach Umsatz, Schulden und Lagerbestand mit Claude und Ihrem eigenen API-Schlüssel, der von Windows verschlüsselt gespeichert wird. Gesendet wird nur eine Zahlenzusammenfassung, nie Telefonnummern oder Adressen.",
+ "items": ["Beantwortet Fragen zu Umsatz, Schulden und Lager anhand Ihrer Geschäftsdaten", "Intelligente Warnungen: überfällige Rechnungen, ausverkauft, Ladenhüter, Umsatzrückgang, Verlust", "Die Warnungen funktionieren offline, ganz ohne KI", "Liest das Foto einer Lieferantenrechnung oder eines Belegs und füllt eine Ausgabe vor", "Nur eine Zahlenzusammenfassung wird gesendet, keine Telefonnummern oder Adressen", "Optional: mit Ihrem eigenen Schlüssel, und Sie können es ausgeschaltet lassen"],
+ "card": "KI-Assistent von BLR Fatourati"
+},
+"shots": {
+ "title": "Sehen Sie es in Aktion",
+ "sub": "Ein kurzer Blick auf das Programm. Klicken Sie auf ein Bild, um es zu vergrößern.",
+ "items": [
+  ["Dashboard", "BLR-Fatourati-Dashboard mit Diagrammen und Kennzahlen"],
+  ["Rechnung", "Eine Rechnung in Bearbeitung in BLR Fatourati"],
+  ["Kasse", "Der Kassenbildschirm mit Warenkorb und Zahlung"],
+  ["Berichte", "Umsatz- und Gewinnberichte in BLR Fatourati"],
+  ["Kalender", "Kalender mit Fälligkeiten, Angebotsablauf und Aufgaben"],
+  ["Lizenzzertifikat", "Die Seite mit dem Lizenzzertifikat beim ersten Start"]
+ ]
+},
+"steps": {
+ "title": "In 3 Schritten startklar",
+ "sub": "Vom Kauf bis zur ersten Rechnung in wenigen Minuten.",
+ "items": [
+  ["Kaufen", "Holen Sie sich Ihre lebenslange Lizenz oder fordern Sie zuerst einen kostenlosen Testcode an."],
+  ["Installieren und aktivieren", "Starten Sie den Windows-Installer und geben Sie Ihren Code einmal ein. Er wird an Ihr Gerät und nur an BLR Fatourati gebunden."],
+  ["Rechnungen schreiben", "Tragen Sie Ihre Firmendaten ein (oder überspringen Sie das) und erstellen Sie Ihre erste Rechnung. Ab jetzt ist kein Internet nötig."]
+ ]
+},
+"pricing": {
+ "title": "Eine Lizenz, ein Gerät, keine Überraschungen",
+ "sub": "Die Lizenz gilt nur für BLR Fatourati und ein Gerät. Für ein anderes Programm oder Gerät funktioniert sie nicht.",
+ "once": "einmalige Zahlung · lebenslang", "year": "pro Jahr", "month": "pro Monat",
+ "list": ["Alle Funktionen inklusive", "Nach der Aktivierung offline nutzbar", "Ein Gerät, ein Programm", "Lebenslange Lizenz, kein Abo", "Support vom Entwickler", "Lizenzübertragung über den Support bei PC-Wechsel"],
+ "buy": "Jetzt kaufen", "trial": "{days} kostenlos testen", "badge": "Einführungsangebot"
+},
+"faq": {
+ "title": "Häufige Fragen",
+ "items": [
+  ["Funktioniert es ohne Internet?", "Ja. Nach einer einmaligen Aktivierung läuft das Programm komplett offline. Nur der optionale KI-Assistent braucht bei der Nutzung Internet."],
+  ["Kann ich später den Computer wechseln?", "Ja. Die Lizenz ist an ein Gerät gebunden. Wenden Sie sich an den Support, wir helfen Ihnen beim Umzug auf den neuen PC."],
+  ["Wie funktionieren die Sicherungen?", "Das Programm erstellt täglich automatisch eine lokale Sicherung und behält die letzten 14. Außerdem können Sie eine verschlüsselte (AES-256) manuelle Sicherung anlegen und jederzeit wiederherstellen."],
+  ["Ich habe mein Passwort vergessen. Was tun?", "Verwenden Sie den einmaligen Wiederherstellungsschlüssel, den Sie erhalten haben, um wieder Zugriff zu bekommen. Bewahren Sie ihn sicher auf."],
+  ["Kann ich Daten aus meiner alten Software importieren?", "Ja. Kunden, Lieferanten und Produkte lassen sich aus Excel- oder CSV-Dateien importieren, und das Programm erkennt arabische, französische und englische Spaltennamen."],
+  ["Können mehrere Personen es nutzen?", "Ja. Legen Sie Benutzer mit Rollen an (Administrator, Manager, Kassierer, Buchhalter); das Aktivitätsprotokoll zeigt, wer was getan hat."],
+  ["Kann der Entwickler meine Daten sehen?", "Nein. Alles liegt in einer lokalen SQLite-Datenbank auf Ihrem PC, und nichts wird an den Entwickler übertragen."],
+  ["Brauche ich den KI-Assistenten?", "Nein. Er ist optional und nutzt Ihren eigenen Schlüssel. Die intelligenten Warnungen funktionieren offline ganz ohne KI."],
+  ["Welche Drucker werden unterstützt?", "Sie können auf einem normalen A4-Drucker, einem 80-mm-Thermobondrucker drucken oder als PDF speichern, nachdem Sie die Druckvorschau geprüft haben."],
+  ["Wie steht es um Updates und neue Versionen?", "Die Lizenz gilt lebenslang. Für Neuigkeiten zu neuen Versionen wenden Sie sich per WhatsApp oder E-Mail an den Entwickler."],
+  ["Wie kann ich es vor dem Kauf testen?", "Fordern Sie einen Testcode an und nutzen Sie das vollständige Programm {days} kostenlos."]
+ ]
+},
+"contact": { "title": "Kontakt", "sub": "Für Kauf, Fragen, einen Testcode oder Support.", "email": "E-Mail", "phone": "Telefon", "whatsapp": "WhatsApp", "telegram": "Telegram", "website": "Website", "address": "Adresse" },
+"cta": { "title": "Bringen Sie Ihre Fakturierung noch heute in Ordnung", "text": "Starten Sie mit einer kostenlosen Testversion oder holen Sie sich Ihre lebenslange Lizenz." },
+"footer": "Alle Rechte vorbehalten. Entwickler: Bader Eddine Hamidane (Baderinfo)",
+"days": { "one": "1 Tag", "two": "2 Tage", "few": "%d Tage", "many": "%d Tage" },
+"ui": { "lang": "Sprache", "close": "Schließen", "prev": "Zurück", "next": "Weiter", "buyShort": "Kaufen", "menu": "Bereiche" }
+}

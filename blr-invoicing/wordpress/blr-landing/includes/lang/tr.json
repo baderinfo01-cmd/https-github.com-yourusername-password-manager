@@ -1,0 +1,102 @@
+{
+"dir": "ltr", "name": "Türkçe", "short": "TR",
+"nav": { "features": "Özellikler", "gallery": "Ekran görüntüleri", "ai": "Yapay zekâ", "pricing": "Fiyat", "faq": "SSS", "contact": "İletişim" },
+"hero": {
+ "badge": "Windows için masaüstü yazılım",
+ "title": "Faturalarınız, stoğunuz ve hesaplarınız… kendi bilgisayarınızdaki tek bir programda",
+ "text": "BLR Fatourati eksiksiz bir faturalama ve işletme yönetimi programıdır: ticari belgeler, müşteriler ve tedarikçiler, stok, satış noktası, ödemeler, giderler ve raporlar. Tek bir etkinleştirmeden sonra tamamen çevrimdışı çalışır, ömür boyu lisansla gelir ve verileriniz bilgisayarınızdan asla çıkmaz.",
+ "buy": "Hemen satın al", "trial": "{days} ücretsiz dene", "more": "Özellikleri keşfet", "download": "İndir"
+},
+"trust": ["Tamamen çevrimdışı çalışır", "Ömür boyu lisans", "Arapça · English · Français", "Faturalama, stok ve kasa", "Veriler bilgisayarınızda kalır"],
+"why": {
+ "title": "Neden ihtiyacınız var?",
+ "sub": "İşi dağınık defterler ve tablolarla yürütmek zaman kaybettirir; kârınızın ve borçlarınızın gerçek tablosunu gizler.",
+ "items": [
+  ["Zaman alan faturalar", "Otomatik numaralandırma, tek tıkla tekliften faturaya geçiş, kendiliğinden oluşan tekrarlayan faturalar; sonra yazdırın ya da WhatsApp ve e-posta ile paylaşın."],
+  ["Belirsiz stok", "Miktarları, barkodları, hareketleri ve değerlemeyi izleyin; ürün azaldığında veya bittiğinde uyarı alın."],
+  ["Bilinmeyen borç ve kâr", "Müşteri ve tedarikçi bakiyeleri, borç yaşlandırma, giderler ve raporlar gerçekte nerede olduğunuzu gösterir."]
+ ],
+ "compareTitle": "Neden BLR Fatourati",
+ "head": ["Yaygın bulut faturalama uygulamaları", "BLR Fatourati"],
+ "rows": [
+  ["Hiç bitmeyen aylık abonelik", "Ömür boyu tek lisans, tek ödeme"],
+  ["İnternet ve çevrimiçi hesap gerektirir", "Tek etkinleştirmeden sonra tamamen çevrimdışı"],
+  ["Verileriniz başkasının sunucularında", "Bilgisayarınızda yerel veritabanı, hiçbir şey yüklenmez"],
+  ["Genel şablonlar, sınırlı Arapça desteği", "Arapça (RTL), İngilizce ve Fransızca, yazıyla tutar, Cezayir damga vergisi"],
+  ["Faturalama, stok ve kasa ayrı araçlarda", "Faturalama, stok, satış noktası, giderler ve raporlar tek programda"],
+  ["Bilet sırası üzerinden destek", "Geliştiriciden WhatsApp veya e-posta ile doğrudan destek"]
+ ]
+},
+"groups": {
+ "title": "İşletmenizin ihtiyaç duyduğu tüm özellikler",
+ "sub": "Aşağıdakilerin hepsi tek lisansa dahildir.",
+ "items": [
+  ["Ticari belgeler", ["Faturalar, teklifler, proforma faturalar, irsaliyeler ve iade faturaları", "Alış faturaları ve satın alma siparişleri", "Kendi ön eklerinizle otomatik yıllık numaralandırma", "Teklifi faturaya, faturayı iade faturasına veya irsaliyeye dönüştürme", "Otomatik oluşturulan tekrarlayan faturalar ve tek tıkla belge kopyalama", "Konu satırı, müşteri sipariş referansı ve teklif geçerlilik tarihi", "Satır indirimleri, genel indirim (% veya tutar), birden çok KDV oranı, ek vergiler ve nakliye", "Nakit ödemelerde isteğe bağlı Cezayir damga vergisi (droit de timbre), vergili veya vergisiz fiyatlar", "Her faturada yazıyla tutar (Arapça, Fransızca, İngilizce)"]],
+  ["Yazdırma ve paylaşım", ["Yazdırmadan önce önizleme: yazıcı, kopya sayısı, A4, 80 mm termal fiş veya PDF seçimi", "Belgelerde QR kod", "Logonuz, renginiz, imzanız ve kaşenizle 3 fatura şablonu (modern, klasik, minimal)", "Numaralı tahsilat makbuzları (RCPT) ve ödeme fişleri", "Müşteri hesap ekstreleri", "WhatsApp veya e-posta ile paylaşım"]],
+  ["Müşteriler ve tedarikçiler", ["Her müşteri için bakiye ve kredi limiti", "Hesap ekstresi ve açılış bakiyesi", "Tedarikçiler de aynı şekilde yönetilir", "Arapça, Fransızca ve İngilizce sütun adlarını tanıyan Excel/CSV içe ve dışa aktarma"]],
+  ["Ürünler ve hizmetler", ["Kategoriler, stok kodu (SKU) ve barkod", "Maliyet fiyatı, satış fiyatı ve marj, birimlerle birlikte", "Faturalar, alışlar ve iade faturalarıyla otomatik güncellenen stok", "Düşük stok uyarıları", "Stok düzeltme ve sayım, ayrıca stok değerleme", "Ürün listenizi içe ve dışa aktarma"]],
+  ["Satış noktası", ["Barkod okutma", "İndirimli hızlı sepet", "Para üstü hesaplama", "Nakit, kart ve diğer ödeme yöntemleri, ardından fiş yazdırma"]],
+  ["Para", ["Kısmi ödemeler ve birden çok ödeme yöntemi", "Gecikmiş kalemleri tespit eden alacak ve borç takibi", "Kategoriye göre giderler", "Yapay zekâ, tedarikçi faturası veya fişin fotoğrafını okuyup gideri önceden doldurabilir", "Nakit akışı genel görünümü"]],
+  ["Raporlar ve panel", ["Aya, müşteriye ve ürüne göre satışlar", "Kâr raporu", "Tahsil edilen ve indirilebilir KDV", "Borç yaşlandırma ve nakit akışı", "Her rapor için yazdırma, PDF veya Excel", "Grafikler ve temel göstergelerle panel"]],
+  ["Günlük araçlar", ["Takvim: fatura vadeleri, teklif bitiş tarihleri, görevler ve tekrarlayan faturalar", "Öncelikli görev listesi", "Faturalar, müşteriler, tedarikçiler ve ürünlerde hızlı genel arama", "Hızlı oluşturma menüsü ve kısayollar: Ctrl+Shift+O yeni fatura, Ctrl+Shift+E yeni teklif, Ctrl+Shift+P ödeme", "Üst çubukta canlı saat ve tarih"]],
+  ["Güvenlik ve kullanıcılar", ["Rollere sahip kullanıcılar: yönetici, müdür, kasiyer, muhasebeci", "Kimin ne yaptığını gösteren etkinlik (denetim) günlüğü", "Kaba kuvvet denemelerine karşı oturum açma kilidi", "Hareketsizlikte otomatik kilit", "Tek kullanımlık kurtarma anahtarıyla unutulan parola kurtarma", "Günlük otomatik yerel yedekler (son 14 saklanır)", "Şifreli (AES-256) elle yedekleme ve geri yükleme"]],
+  ["Görünüm ve diller", ["Program Arapça (RTL), İngilizce ve Fransızca konuşur", "Açık ve koyu mod", "8 renk teması", "El Messiri yazı tipiyle modern cam tarzı arayüz"]],
+  ["Lisans ve çevrimdışı", ["Tek etkinleştirmeden sonra tamamen çevrimdışı çalışır", "Tek cihaza ve tek programa bağlı ömür boyu lisans", "Deneme koduyla 2 gün ücretsiz deneme", "Bilgisayarınızda yerel SQLite veritabanı, hiçbir şey yüklenmez", "Windows kurulum programı", "İlk çalıştırmada: yazdırılabilen veya PDF olarak kaydedilebilen lisans sertifikası sayfası ve firma bilgileri sihirbazı (ikisi de atlanabilir)"]]
+ ]
+},
+"ai": {
+ "title": "Yapay zekâ asistanı… tamamen isteğe bağlı",
+ "text": "Satışlarınızı, borçlarınızı ve stoğunuzu Claude ile ve Windows tarafından şifreli saklanan kendi API anahtarınızla sorgulayın. Yalnızca sayısal bir özet gönderilir; telefon numaraları ve adresler asla gönderilmez.",
+ "items": ["İşletme verilerinizden satış, borç ve stok sorularını yanıtlar", "Akıllı uyarılar: vadesi geçmiş faturalar, tükenen ürünler, hareketsiz stok, satış düşüşü, zarar", "Uyarılar çevrimdışı ve yapay zekâ olmadan da çalışır", "Tedarikçi faturası veya fişin fotoğrafını okuyup gideri önceden doldurur", "Yalnızca sayısal özet gönderilir; telefon numarası veya adres yok", "İsteğe bağlı: kendi anahtarınızı kullanır ve kapalı kalabilir"],
+ "card": "BLR Fatourati yapay zekâ asistanı"
+},
+"shots": {
+ "title": "Çalışırken görün",
+ "sub": "Programa hızlı bir bakış. Büyütmek için bir görüntüye tıklayın.",
+ "items": [
+  ["Panel", "Grafikler ve temel göstergelerle BLR Fatourati paneli"],
+  ["Fatura", "BLR Fatourati içinde hazırlanan bir fatura"],
+  ["Satış noktası", "Sepet ve ödeme içeren satış noktası ekranı"],
+  ["Raporlar", "BLR Fatourati içinde satış ve kâr raporları"],
+  ["Takvim", "Vadeler, teklif bitiş tarihleri ve görevlerle takvim"],
+  ["Lisans sertifikası", "İlk çalıştırmada görünen lisans sertifikası sayfası"]
+ ]
+},
+"steps": {
+ "title": "3 adımda hazır",
+ "sub": "Satın almadan ilk faturanıza dakikalar içinde.",
+ "items": [
+  ["Satın alın", "Ömür boyu lisansınızı alın ya da önce ücretsiz bir deneme kodu isteyin."],
+  ["Kurun ve etkinleştirin", "Windows kurulum programını çalıştırın ve kodunuzu bir kez girin. Kod yalnızca cihazınıza ve BLR Fatourati'ye bağlanır."],
+  ["Faturalamaya başlayın", "Firma bilgilerinizi girin (veya atlayın) ve ilk faturanızı oluşturun. Bundan sonra internete gerek yok."]
+ ]
+},
+"pricing": {
+ "title": "Tek lisans, tek cihaz, sürpriz yok",
+ "sub": "Lisans yalnızca BLR Fatourati ve tek bir cihaz için geçerlidir. Başka bir program veya cihazda çalışmaz.",
+ "once": "tek seferlik ödeme · ömür boyu", "year": "yıllık", "month": "aylık",
+ "list": ["Tüm özellikler dahil", "Etkinleştirmeden sonra çevrimdışı çalışır", "Tek cihaz, tek program", "Ömür boyu lisans, abonelik yok", "Geliştiriciden destek", "Bilgisayar değişiminde destek aracılığıyla lisans aktarımı"],
+ "buy": "Hemen satın al", "trial": "{days} ücretsiz denemeyi başlat", "badge": "Lansman fırsatı"
+},
+"faq": {
+ "title": "Sık sorulan sorular",
+ "items": [
+  ["İnternet olmadan çalışır mı?", "Evet. Tek bir etkinleştirmeden sonra program tamamen çevrimdışı çalışır. Yalnızca isteğe bağlı yapay zekâ asistanı kullanırken internete ihtiyaç duyar."],
+  ["Daha sonra bilgisayarımı değiştirebilir miyim?", "Evet. Lisans tek bir cihaza bağlıdır; destekle iletişime geçin, yeni bilgisayarınıza taşımanıza yardımcı olalım."],
+  ["Yedekleme nasıl çalışır?", "Program her gün otomatik yerel yedek alır ve son 14 yedeği saklar. Ayrıca şifreli (AES-256) bir elle yedek oluşturup dilediğiniz zaman geri yükleyebilirsiniz."],
+  ["Parolamı unuttum, ne yapmalıyım?", "Size verilen tek kullanımlık kurtarma anahtarıyla erişiminizi geri alın. Anahtarı güvenli bir yerde saklayın."],
+  ["Eski yazılımımdaki verileri aktarabilir miyim?", "Evet. Müşteriler, tedarikçiler ve ürünler Excel veya CSV dosyalarından içe aktarılabilir; program Arapça, Fransızca ve İngilizce sütun adlarını tanır."],
+  ["Birden fazla kişi kullanabilir mi?", "Evet. Rollere sahip kullanıcılar oluşturun (yönetici, müdür, kasiyer, muhasebeci); etkinlik günlüğü kimin ne yaptığını gösterir."],
+  ["Geliştirici verilerimi görebilir mi?", "Hayır. Her şey bilgisayarınızdaki yerel bir SQLite veritabanında tutulur ve geliştiriciye hiçbir şey yüklenmez."],
+  ["Yapay zekâ asistanına ihtiyacım var mı?", "Hayır. İsteğe bağlıdır ve kendi anahtarınızı kullanır. Akıllı uyarılar çevrimdışı ve yapay zekâ olmadan çalışır."],
+  ["Hangi yazıcılar destekleniyor?", "Önizlemeyi kontrol ettikten sonra standart bir A4 yazıcıya, 80 mm termal fiş yazıcısına yazdırabilir veya PDF olarak kaydedebilirsiniz."],
+  ["Güncellemeler ve yeni sürümler ne olacak?", "Lisans ömür boyudur. Yeni sürümlerle ilgili bilgi için geliştiriciyle WhatsApp veya e-posta ile iletişime geçin."],
+  ["Satın almadan önce nasıl deneyebilirim?", "Bir deneme kodu isteyin ve programın tamamını {days} ücretsiz kullanın."]
+ ]
+},
+"contact": { "title": "Bize ulaşın", "sub": "Satın alma, sorular, deneme kodu veya destek için.", "email": "E-posta", "phone": "Telefon", "whatsapp": "WhatsApp", "telegram": "Telegram", "website": "Web sitesi", "address": "Adres" },
+"cta": { "title": "Faturalamanızı bugün düzene sokun", "text": "Ücretsiz denemeyle başlayın ya da ömür boyu lisansınızı alın." },
+"footer": "Tüm hakları saklıdır. Geliştirici: Bader Eddine Hamidane (Baderinfo)",
+"days": { "one": "1 gün", "two": "2 gün", "few": "%d gün", "many": "%d gün" },
+"ui": { "lang": "Dil", "close": "Kapat", "prev": "Önceki", "next": "Sonraki", "buyShort": "Satın al", "menu": "Bölümler" }
+}
