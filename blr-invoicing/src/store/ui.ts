@@ -5,6 +5,8 @@ import type { Role, User } from "@/lib/types";
 
 export type Lang = "ar" | "en" | "fr";
 export type Theme = "light" | "dark";
+export const COLORS = ["sky", "purple", "blue", "green", "teal", "orange", "rose", "slate"] as const;
+export type Color = (typeof COLORS)[number];
 
 const read = <T,>(k: string, d: T): T => {
   try { const v = localStorage.getItem(k); return v ? (JSON.parse(v) as T) : d; } catch { return d; }
@@ -12,12 +14,13 @@ const read = <T,>(k: string, d: T): T => {
 const write = (k: string, v: unknown) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} };
 
 interface UiState {
-  lang: Lang; theme: Theme; hydrated: boolean;
+  lang: Lang; theme: Theme; color: Color; hydrated: boolean;
   user: User | null; authState: "loading" | "setup" | "login" | "in";
   toast: { msg: string; kind: "ok" | "err" } | null;
   hydrate(): void;
   setLang(l: Lang): void;
   setTheme(t: Theme): void;
+  setColor(c: Color): void;
   boot(): Promise<void>;
   signIn(username: string, password: string): Promise<{ ok: boolean; error?: string; waitMs?: number }>;
   setup(p: { name: string; username: string; password: string }): Promise<void>;
@@ -26,15 +29,17 @@ interface UiState {
 }
 
 export const useUi = create<UiState>((set, get) => ({
-  lang: "ar", theme: "light", hydrated: false, user: null, authState: "loading", toast: null,
+  lang: "ar", theme: "light", color: "sky", hydrated: false, user: null, authState: "loading", toast: null,
   hydrate() {
     const lang = read<Lang>("blr-lang", "ar");
     const theme = read<Theme>("blr-theme", "light");
-    set({ lang, theme, hydrated: true });
-    apply(lang, theme);
+    const color = read<Color>("blr-color", "sky");
+    set({ lang, theme, color, hydrated: true });
+    apply(lang, theme, color);
   },
-  setLang(lang) { write("blr-lang", lang); set({ lang }); apply(lang, get().theme); },
-  setTheme(theme) { write("blr-theme", theme); set({ theme }); apply(get().lang, theme); },
+  setLang(lang) { write("blr-lang", lang); set({ lang }); apply(lang, get().theme, get().color); },
+  setTheme(theme) { write("blr-theme", theme); set({ theme }); apply(get().lang, theme, get().color); },
+  setColor(color) { write("blr-color", color); set({ color }); apply(get().lang, get().theme, color); },
   async boot() {
     const has = await call<boolean>(blr().auth.hasUsers());
     if (!has) return set({ authState: "setup", user: null });
@@ -60,11 +65,12 @@ export const useUi = create<UiState>((set, get) => ({
   },
 }));
 
-function apply(lang: Lang, theme: Theme) {
+function apply(lang: Lang, theme: Theme, color: Color) {
   const el = document.documentElement;
   el.lang = lang;
   el.dir = lang === "ar" ? "rtl" : "ltr";
   el.classList.toggle("dark", theme === "dark");
+  el.dataset.theme = color;
 }
 
 // what each role may do

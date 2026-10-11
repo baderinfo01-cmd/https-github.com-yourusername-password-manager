@@ -43,9 +43,9 @@ export default function LicensePage() {
       <PageHeader title={t("license")} />
       {!bridge ? <Card><p className="text-sm text-muted">{t("license_desktop_only")}</p></Card> : (
         <Card pad={false} className="overflow-hidden">
-          <div className="flex items-center gap-4 bg-gradient-to-l from-indigo-600 to-blue-600 px-6 py-5 text-white">
+          <div className="flex items-center gap-4 px-6 py-5 text-white" style={{ backgroundImage: "linear-gradient(135deg, var(--accent), var(--accent-2))" }}>
             <img src="/brand/icon-192.png" alt="" width={56} height={56} className="rounded-2xl shadow-lg" />
-            <div className="min-w-0"><div className="text-xs opacity-80">{t("license_certificate")}</div><div className="text-2xl font-bold">BLR</div></div>
+            <div className="min-w-0"><div className="text-xs opacity-80">{t("license_certificate")}</div><div className="text-2xl font-bold">BLR Fatourati</div></div>
             <div className="ms-auto hidden text-end text-xs opacity-90 sm:block"><div>v{version}</div><div>{t("issued_by")} Baderinfo</div></div>
           </div>
           <div className="relative p-6">
@@ -67,7 +67,7 @@ export default function LicensePage() {
                 </>}
               </div>
               <div className="mx-auto flex items-center justify-center gap-2 md:flex-col">
-                {s && <LicenseStamp tone={tone} title={s.dev ? "DEV" : ok ? t("stamp_title_ok") : t("stamp_title_bad")} subtitle={ok ? "GENUINE LICENSE" : "NOT ACTIVATED"} footer={`BADERINFO · BLR`} />}
+                {s && <LicenseStamp tone={tone} title={s.dev ? "DEV" : ok ? t("stamp_title_ok") : t("stamp_title_bad")} subtitle={ok ? "GENUINE LICENSE" : "NOT ACTIVATED"} footer={`BADERINFO · BLR FATOURATI`} />}
                 <img src="/brand/seal.png" alt="Baderinfo" className="-mt-3 h-36 w-36 md:mt-0" />
               </div>
             </div>

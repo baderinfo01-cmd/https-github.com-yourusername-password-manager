@@ -22,7 +22,7 @@ module.exports = {
     product_id: 'blr-invoicing',
 
     // Shown on the activation window
-    app_name: 'BLR - الفوترة',
+    app_name: 'BLR Fatourati',
 
     // Ask the server every N hours; stop after N days without any successful check (0 = never stop)
     check_interval_hours: 12,

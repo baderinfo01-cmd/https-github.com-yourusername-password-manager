@@ -1,4 +1,4 @@
-/* BLR Landing — client-side language switcher (no libraries) */
+/* BLR Fatourati Landing — client-side language switcher (no libraries) */
 (function () {
   "use strict";
   var KEY = "blr-lang";

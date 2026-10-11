@@ -29,7 +29,7 @@ export const DEFAULT_SETTINGS: Settings = {
   footer: "",
   terms: "",
   template: "modern",
-  accent: "#2563eb",
+  accent: "#0284c7",
   showQr: true,
   lowStockAlert: true,
   autoLockMin: 0,

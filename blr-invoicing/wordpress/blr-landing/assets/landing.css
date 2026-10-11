@@ -1,5 +1,5 @@
-/* BLR Landing — every rule is scoped under .blr so it never fights the theme */
-.blr { --blr:#2563eb; --blr-ink:#0f172a; --blr-mut:#64748b; --blr-line:#dbeafe; --blr-bg:#f5faff; --blr-r:20px;
+/* BLR Fatourati Landing — every rule is scoped under .blr so it never fights the theme */
+.blr { --blr:#0284c7; --blr-ink:#0f172a; --blr-mut:#64748b; --blr-line:#dbeafe; --blr-bg:#f5faff; --blr-r:20px;
   font-family: "Segoe UI", Tahoma, "Noto Naskh Arabic", system-ui, -apple-system, Arial, sans-serif; color: var(--blr-ink); line-height: 1.7; background: #fff; text-align: start; }
 .blr *, .blr *::before, .blr *::after { box-sizing: border-box; }
 .blr h1, .blr h2, .blr h3, .blr p, .blr ul { margin: 0; padding: 0; }

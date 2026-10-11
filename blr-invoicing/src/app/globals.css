@@ -8,8 +8,8 @@
   --border: #e3e8f0;
   --text: #0f172a;
   --muted: #64748b;
-  --accent: #2563eb;
-  --accent-2: #1d4ed8;
+  --accent: #0284c7;
+  --accent-2: #0369a1;
   --side: #0b1220;
   --side-text: #cbd5e1;
   --ok: #059669;
@@ -23,8 +23,6 @@
   --border: #223049;
   --text: #e6edf7;
   --muted: #94a3b8;
-  --accent: #3b82f6;
-  --accent-2: #60a5fa;
   --side: #070b14;
 }
 
@@ -40,11 +38,12 @@
   --color-ok: var(--ok);
   --color-warn: var(--warn);
   --color-bad: var(--bad);
-  --font-sans: "Segoe UI", Tahoma, "Noto Sans Arabic", system-ui, -apple-system, Arial, sans-serif;
+  --font-sans: var(--font-el-messiri), "Segoe UI", Tahoma, "Noto Sans Arabic", system-ui, -apple-system, Arial, sans-serif;
 }
 
 html, body { height: 100%; }
-body { background: var(--bg); color: var(--text); font-family: var(--font-sans); font-size: 14px; }
+body { background: var(--bg); color: var(--text); font-family: var(--font-sans); font-size: 15px; }
+input, select, textarea, button { font-family: inherit; }
 * { scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
 input, select, textarea { color: var(--text); }
 input[type="number"] { -moz-appearance: textfield; }
@@ -53,3 +52,41 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-app
 @media print { .no-print { display: none !important; } }
 @keyframes pop { from { opacity: 0; transform: translateY(6px) scale(.98); } to { opacity: 1; transform: none; } }
 .pop { animation: pop .16s ease-out; }
+
+/* ---- colour themes (chosen by the user) ---- */
+html[data-theme="purple"] { --accent: #7c3aed; --accent-2: #5b21b6; }
+html.dark[data-theme="purple"] { --accent: #8b5cf6; --accent-2: #7c3aed; }
+html[data-theme="blue"] { --accent: #2563eb; --accent-2: #1d4ed8; }
+html.dark[data-theme="blue"] { --accent: #3b82f6; --accent-2: #2563eb; }
+html[data-theme="green"] { --accent: #059669; --accent-2: #047857; }
+html.dark[data-theme="green"] { --accent: #10b981; --accent-2: #059669; }
+html[data-theme="teal"] { --accent: #0d9488; --accent-2: #0f766e; }
+html.dark[data-theme="teal"] { --accent: #14b8a6; --accent-2: #0d9488; }
+html[data-theme="orange"] { --accent: #ea580c; --accent-2: #c2410c; }
+html.dark[data-theme="orange"] { --accent: #f97316; --accent-2: #ea580c; }
+html[data-theme="rose"] { --accent: #e11d48; --accent-2: #be123c; }
+html.dark[data-theme="rose"] { --accent: #f43f5e; --accent-2: #e11d48; }
+html[data-theme="slate"] { --accent: #475569; --accent-2: #334155; }
+html.dark[data-theme="slate"] { --accent: #94a3b8; --accent-2: #64748b; }
+
+/* ---- professional buttons ---- */
+.btn { position: relative; transition: transform .18s cubic-bezier(.4,0,.2,1), box-shadow .18s, background-color .18s, filter .18s; }
+.btn:active { transform: translateY(0) scale(.98); }
+.btn-primary {
+  color: #fff;
+  background-image: linear-gradient(135deg, var(--accent), var(--accent-2));
+  box-shadow: 0 6px 16px -6px color-mix(in srgb, var(--accent) 70%, transparent), inset 0 1px 0 rgba(255,255,255,.28), inset 0 -1px 0 rgba(0,0,0,.12);
+}
+.btn-primary:hover { transform: translateY(-1px); filter: brightness(1.06); box-shadow: 0 10px 22px -8px color-mix(in srgb, var(--accent) 80%, transparent), inset 0 1px 0 rgba(255,255,255,.35); }
+.btn-success { color:#fff; background-image: linear-gradient(135deg,#10b981,#059669); box-shadow: 0 6px 16px -6px rgba(5,150,105,.6), inset 0 1px 0 rgba(255,255,255,.28); }
+.btn-success:hover { transform: translateY(-1px); filter: brightness(1.06); }
+.btn-danger { color:#fff; background-image: linear-gradient(135deg,#ef4444,#dc2626); box-shadow: 0 6px 16px -6px rgba(220,38,38,.6), inset 0 1px 0 rgba(255,255,255,.25); }
+.btn-danger:hover { transform: translateY(-1px); filter: brightness(1.06); }
+.btn-secondary { background: var(--surface); border: 1px solid var(--border); box-shadow: 0 1px 2px rgba(15,23,42,.06); }
+.btn-secondary:hover { transform: translateY(-1px); border-color: color-mix(in srgb, var(--accent) 45%, var(--border)); box-shadow: 0 6px 14px -8px rgba(15,23,42,.25); background: var(--surface-2); }
+.btn-ghost:hover { background: var(--surface-2); }
+.card-soft { box-shadow: 0 1px 2px rgba(15,23,42,.05), 0 10px 28px -16px rgba(15,23,42,.18); }
+.swatch { width: 22px; height: 22px; border-radius: 9999px; border: 2px solid var(--surface); box-shadow: 0 0 0 1px var(--border); transition: transform .15s; }
+.swatch:hover { transform: scale(1.18); }
+html[data-theme="sky"] { --accent: #0284c7; --accent-2: #0369a1; }
+html.dark[data-theme="sky"] { --accent: #38bdf8; --accent-2: #0ea5e9; }

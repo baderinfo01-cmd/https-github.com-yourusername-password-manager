@@ -1,7 +1,7 @@
 <?php
 /**
- * Plugin Name:       BLR Landing — صفحة بيع برنامج BLR
- * Description:       صفحة إعلانية احترافية متعددة اللغات (العربية / English / Français) لبيع برنامج BLR للفوترة وإدارة الأعمال. أضف الرمز القصير [blr_landing] لأي صفحة، وعدّل السعر ومعلومات الاتصال من الإعدادات.
+ * Plugin Name:       BLR Fatourati Landing — صفحة بيع برنامج BLR Fatourati
+ * Description:       صفحة إعلانية احترافية متعددة اللغات (العربية / English / Français) لبيع برنامج BLR Fatourati للفوترة وإدارة الأعمال. أضف الرمز القصير [blr_landing] لأي صفحة، وعدّل السعر ومعلومات الاتصال من الإعدادات.
  * Version:           1.0.0
  * Requires at least: 5.8
  * Requires PHP:      7.4
@@ -44,7 +44,7 @@ function blr_defaults() {
 		'address_ar'     => '',
 		'address_en'     => '',
 		'address_fr'     => '',
-		'brand_color'    => '#2563eb',
+		'brand_color'    => '#0284c7',
 		'default_lang'   => 'auto',
 		'full_width'     => '0',
 		'hero_title_ar'  => '', 'hero_title_en' => '', 'hero_title_fr' => '',
@@ -124,7 +124,7 @@ add_action( 'admin_init', function () {
 } );
 
 add_action( 'admin_menu', function () {
-	add_options_page( 'BLR Landing', 'BLR Landing', 'manage_options', 'blr-landing', 'blr_admin_page' );
+	add_options_page( 'BLR Fatourati Landing', 'BLR Fatourati Landing', 'manage_options', 'blr-landing', 'blr_admin_page' );
 } );
 
 add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), function ( $links ) {
@@ -156,7 +156,7 @@ function blr_admin_page() {
 	};
 	?>
 	<div class="wrap" dir="rtl" style="text-align:right">
-		<h1>BLR Landing — صفحة بيع البرنامج</h1>
+		<h1>BLR Fatourati Landing — صفحة بيع البرنامج</h1>
 		<p>أنشئ صفحة جديدة وأضف إليها الرمز القصير: <code>[blr_landing]</code> — أو بلغة محددة: <code>[blr_landing lang="en"]</code>.</p>
 
 		<form method="post" action="options.php">
@@ -376,7 +376,7 @@ function blr_shortcode( $atts ) {
 		} elseif ( $s['whatsapp'] ) {
 			$trial = 'https://wa.me/' . $s['whatsapp'];
 		} elseif ( $s['email'] ) {
-			$trial = 'mailto:' . $s['email'] . '?subject=' . rawurlencode( 'Trial / تجربة / Essai — BLR' );
+			$trial = 'mailto:' . $s['email'] . '?subject=' . rawurlencode( 'Trial / تجربة / Essai — BLR Fatourati' );
 		}
 	}
 	$download = $s['download_url'];
@@ -394,7 +394,7 @@ function blr_shortcode( $atts ) {
 
 	<header class="blr-bar">
 		<div class="blr-wrap blr-bar__in">
-			<a class="blr-logo" href="#blr-top"><img src="<?php echo esc_url( BLR_URL . 'assets/logo.png' ); ?>" alt="" width="34" height="34"><span>BLR</span></a>
+			<a class="blr-logo" href="#blr-top"><img src="<?php echo esc_url( BLR_URL . 'assets/logo.png' ); ?>" alt="" width="34" height="34"><span>BLR Fatourati</span></a>
 			<nav class="blr-nav" aria-label="Sections">
 				<?php foreach ( array( 'features', 'security', 'ai', 'pricing', 'faq', 'contact' ) as $n ) : ?>
 					<a href="#blr-<?php echo esc_attr( $n ); ?>" data-i="nav.<?php echo esc_attr( $n ); ?>"><?php echo esc_html( $t( 'nav.' . $n ) ); ?></a>
@@ -593,7 +593,7 @@ function blr_shortcode( $atts ) {
 	</section>
 
 	<footer class="blr-foot">
-		<div class="blr-wrap">© <?php echo esc_html( gmdate( 'Y' ) ); ?> BLR — <span data-i="footer"><?php echo esc_html( $t( 'footer' ) ); ?></span></div>
+		<div class="blr-wrap">© <?php echo esc_html( gmdate( 'Y' ) ); ?> BLR Fatourati — <span data-i="footer"><?php echo esc_html( $t( 'footer' ) ); ?></span></div>
 	</footer>
 
 	<script type="application/json" class="blr-dict"><?php echo wp_json_encode( $dicts, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE ); // phpcs:ignore ?></script>
@@ -602,7 +602,7 @@ function blr_shortcode( $atts ) {
 		array(
 			'@context'            => 'https://schema.org',
 			'@type'               => 'SoftwareApplication',
-			'name'                => 'BLR',
+			'name'                => 'BLR Fatourati',
 			'applicationCategory' => 'BusinessApplication',
 			'operatingSystem'     => 'Windows 10, Windows 11',
 			'offers'              => array(

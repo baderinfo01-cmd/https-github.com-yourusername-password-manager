@@ -1,7 +1,7 @@
 {
   "name": "blr-invoicing",
   "version": "1.0.0",
-  "description": "BLR - Invoicing & business management desktop application",
+  "description": "BLR Fatourati - Smart invoicing & business management desktop application",
   "author": "Bader Eddine Hamidane (Baderinfo)",
   "private": true,
   "main": "electron/main.js",
@@ -39,7 +39,7 @@
   },
   "build": {
     "appId": "com.baderinfo.blr",
-    "productName": "BLR",
+    "productName": "BLR Fatourati",
     "npmRebuild": false,
     "buildDependenciesFromSource": false,
     "directories": { "output": "dist", "buildResources": "build" },
@@ -54,7 +54,7 @@
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "BLR"
+      "shortcutName": "BLR Fatourati"
     },
     "asar": true,
     "publish": null

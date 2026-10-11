@@ -1,5 +1,5 @@
 export const BRAND = {
-  name: "BLR",
+  name: "BLR Fatourati",
   developer: "Bader Eddine Hamidane",
   email: "baderinfo12@gmail.com",
   phone: "0550896115",

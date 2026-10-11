@@ -37,7 +37,7 @@
   function render(lang) {
     var T = I[lang];
     document.documentElement.lang = lang; document.documentElement.dir = T.dir;
-    document.documentElement.style.setProperty("--p", C.brand.primaryColor || "#2563eb");
+    document.documentElement.style.setProperty("--p", C.brand.primaryColor || "#0284c7");
     document.title = C.brand.name + " — " + T.heroTitle;
     $("brandName").textContent = C.brand.name;
 

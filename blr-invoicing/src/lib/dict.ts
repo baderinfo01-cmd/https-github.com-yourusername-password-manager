@@ -1,7 +1,7 @@
 // [Arabic, English, French]
 export const DICT: Record<string, [string, string, string]> = {
   // ---- general ----
-  tagline: ["إدارة الفوترة", "Invoicing & business", "Facturation & gestion"],
+  tagline: ["الفوترة الذكية", "Smart invoicing", "Facturation intelligente"],
   confirm: ["تأكيد", "Confirm", "Confirmer"],
   cancel: ["إلغاء", "Cancel", "Annuler"],
   delete: ["حذف", "Delete", "Supprimer"],
@@ -81,6 +81,7 @@ export const DICT: Record<string, [string, string, string]> = {
   stock: ["المخزون", "Stock", "Stock"], payments: ["المدفوعات", "Payments", "Paiements"], reports: ["التقارير", "Reports", "Rapports"],
   ai: ["المساعد الذكي", "AI assistant", "Assistant IA"], users: ["المستخدمون", "Users", "Utilisateurs"], settings: ["الإعدادات", "Settings", "Paramètres"],
   audit: ["سجل النشاط", "Activity log", "Journal d'activité"], license: ["الترخيص", "License", "Licence"],
+  color_theme: ["لون البرنامج", "Colour theme", "Couleur du thème"],
   lock: ["قفل", "Lock", "Verrouiller"], logout: ["خروج", "Log out", "Déconnexion"],
   // ---- auth ----
   login: ["تسجيل الدخول", "Sign in", "Connexion"], login_sub: ["أدخل بيانات حسابك", "Enter your credentials", "Saisissez vos identifiants"],

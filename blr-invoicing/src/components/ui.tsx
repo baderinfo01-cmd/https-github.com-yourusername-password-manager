@@ -10,13 +10,13 @@ export function Button({ variant = "primary", size = "md", className, ...p }: Co
     <button
       {...p}
       className={clsx(
-        "inline-flex items-center justify-center gap-2 rounded-lg font-medium transition disabled:opacity-50 disabled:pointer-events-none focus-visible:outline-2 focus-visible:outline-accent",
+        "btn inline-flex items-center justify-center gap-2 rounded-xl font-semibold disabled:opacity-50 disabled:pointer-events-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent",
         size === "sm" ? "h-8 px-3 text-xs" : "h-10 px-4 text-sm",
-        variant === "primary" && "bg-accent text-white hover:bg-accent2",
-        variant === "success" && "bg-ok text-white hover:opacity-90",
-        variant === "secondary" && "border border-line bg-surface text-ink hover:bg-surface2",
-        variant === "ghost" && "text-muted hover:bg-surface2 hover:text-ink",
-        variant === "danger" && "bg-bad text-white hover:opacity-90",
+        variant === "primary" && "btn-primary",
+        variant === "success" && "btn-success",
+        variant === "secondary" && "btn-secondary text-ink",
+        variant === "ghost" && "btn-ghost text-muted hover:text-ink",
+        variant === "danger" && "btn-danger",
         className
       )}
     />
@@ -40,7 +40,7 @@ export function Field({ label, children, className, hint }: { label: string; chi
 
 export function Card({ title, actions, children, className, pad = true }: { title?: ReactNode; actions?: ReactNode; children: ReactNode; className?: string; pad?: boolean }) {
   return (
-    <section className={clsx("rounded-xl border border-line bg-surface shadow-sm", className)}>
+    <section className={clsx("card-soft rounded-xl border border-line bg-surface", className)}>
       {(title || actions) && (
         <header className="flex items-center justify-between gap-3 border-b border-line px-4 py-3">
           <h2 className="text-sm font-semibold">{title}</h2>

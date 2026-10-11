@@ -56,7 +56,7 @@ function openActivationWindow(BrowserWindow, createWindow) {
         resizable: false,
         fullscreenable: false,
         maximizable: false,
-        title: 'BLR — License',
+        title: 'BLR Fatourati — License',
         icon: path.join(__dirname, '..', 'build', 'icon.png'),
         autoHideMenuBar: true,
         webPreferences: {

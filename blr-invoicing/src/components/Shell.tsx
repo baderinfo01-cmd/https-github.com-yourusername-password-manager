@@ -1,7 +1,7 @@
 "use client";
 import clsx from "clsx";
 import {
-  BarChart3, BookUser, Boxes, Building2, ClipboardList, FileText, LayoutDashboard, Lock, Menu, Moon, Package,
+  BarChart3, BookUser, Boxes, Building2, ClipboardList, FileText, LayoutDashboard, Lock, Menu, Moon, Palette, Package,
   Receipt, Repeat, ScanLine, Settings as Cog, ShieldCheck, ShoppingCart, Sparkles, Sun, Truck, Users, Wallet, Wrench, BadgeCheck,
 } from "lucide-react";
 import Link from "next/link";
@@ -9,7 +9,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState, type ReactNode } from "react";
 import { Toast, Button, Input, Field } from "./ui";
 import { useT } from "@/lib/i18n";
-import { can, useUi, type Lang } from "@/store/ui";
+import { can, COLORS, useUi, type Lang } from "@/store/ui";
 import { useData } from "@/store/data";
 
 type NavItem = { href: string; key: string; icon: ReactNode; perm?: string };
@@ -92,7 +92,7 @@ export function Shell({ children }: { children: ReactNode }) {
 }
 
 function Splash() {
-  return <div className="grid h-screen place-items-center bg-bg"><img src="/brand/icon-192.png" alt="BLR" width={72} height={72} className="animate-pulse rounded-2xl" /></div>;
+  return <div className="grid h-screen place-items-center bg-bg"><img src="/brand/icon-192.png" alt="BLR Fatourati" width={80} height={80} className="animate-pulse rounded-2xl" /></div>;
 }
 
 function Frame({ children }: { children: ReactNode }) {
@@ -113,10 +113,10 @@ function Frame({ children }: { children: ReactNode }) {
       {open && <div className="fixed inset-0 z-30 bg-black/50 lg:hidden" onClick={() => setOpen(false)} />}
       <aside className={clsx("no-print fixed inset-y-0 start-0 z-40 flex w-64 shrink-0 flex-col bg-[var(--side)] text-[var(--side-text)] transition-transform lg:static", open ? "translate-x-0" : "max-lg:ltr:-translate-x-full max-lg:rtl:translate-x-full")}>
         <div className="flex items-center gap-3 px-5 py-5">
-          <img src="/brand/icon-192.png" alt="BLR" width={38} height={38} className="rounded-xl" />
+          <img src="/brand/icon-192.png" alt="BLR Fatourati" width={42} height={42} className="rounded-xl shadow-lg" />
           <div className="min-w-0">
-            <div className="text-lg font-extrabold leading-none text-white">BLR</div>
-            <div className="mt-1 truncate text-[11px] text-slate-400">{company.name || t("tagline")}</div>
+            <div className="text-lg font-bold leading-none text-white">BLR Fatourati</div>
+            <div className="mt-1.5 truncate text-[11px] text-slate-400">{company.name || t("tagline")}</div>
           </div>
         </div>
         <nav className="flex-1 space-y-4 overflow-y-auto px-3 pb-4">
@@ -135,7 +135,7 @@ function Frame({ children }: { children: ReactNode }) {
             );
           })}
         </nav>
-        <div className="border-t border-white/10 p-3 text-[11px] text-slate-500">BLR v1.0 · Baderinfo</div>
+        <div className="border-t border-white/10 p-3 text-[11px] text-slate-500">BLR Fatourati v1.0 · Baderinfo</div>
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
@@ -148,6 +148,7 @@ function Frame({ children }: { children: ReactNode }) {
             <select value={lang} onChange={(e) => setLang(e.target.value as Lang)} className="h-8 rounded-md border border-line bg-surface px-2 text-xs" aria-label="language">
               <option value="ar">العربية</option><option value="fr">Français</option><option value="en">English</option>
             </select>
+            <ColorPicker />
             <button onClick={() => setTheme(theme === "dark" ? "light" : "dark")} className="rounded-md p-2 text-muted hover:bg-surface2" aria-label="theme">{theme === "dark" ? <Sun size={17} /> : <Moon size={17} />}</button>
             <div className="mx-1 hidden text-end leading-tight sm:block">
               <div className="text-xs font-semibold">{user?.name}</div>
@@ -196,8 +197,8 @@ function AuthScreen({ mode }: { mode: "setup" | "login" }) {
     <div className="grid min-h-screen place-items-center bg-[radial-gradient(ellipse_at_top,#1e3a8a_0%,#0b1220_60%)] p-4">
       <form onSubmit={submit} className="pop w-full max-w-sm space-y-4 rounded-2xl border border-white/10 bg-surface p-7 shadow-2xl">
         <div className="text-center">
-          <img src="/brand/icon-192.png" alt="BLR" width={72} height={72} className="mx-auto rounded-2xl shadow-lg" />
-          <h1 className="mt-3 text-2xl font-extrabold">BLR</h1>
+          <img src="/brand/app-icon.png" alt="BLR Fatourati" width={84} height={84} className="mx-auto rounded-2xl shadow-lg" />
+          <h1 className="mt-1 text-2xl font-extrabold">BLR Fatourati</h1>
           <p className="text-xs text-muted">{mode === "setup" ? t("setup_sub") : t("login_sub")}</p>
         </div>
         {mode === "setup" && <Field label={t("full_name")}><Input value={name} onChange={(e) => setName(e.target.value)} autoFocus /></Field>}
@@ -213,6 +214,31 @@ function AuthScreen({ mode }: { mode: "setup" | "login" }) {
           ))}
         </div>
       </form>
+    </div>
+  );
+}
+
+function ColorPicker() {
+  const t = useT();
+  const { color, setColor } = useUi();
+  const [open, setOpen] = useState(false);
+  const HEX: Record<string, string> = { sky: "#0284c7", purple: "#7c3aed", blue: "#2563eb", green: "#059669", teal: "#0d9488", orange: "#ea580c", rose: "#e11d48", slate: "#475569" };
+  return (
+    <div className="relative">
+      <button onClick={() => setOpen((o) => !o)} className="rounded-md p-2 text-muted hover:bg-surface2" aria-label={t("color_theme")} title={t("color_theme")}><Palette size={17} /></button>
+      {open && (
+        <>
+          <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
+          <div className="pop absolute end-0 top-full z-50 mt-2 w-56 rounded-xl border border-line bg-surface p-3 shadow-xl">
+            <div className="mb-2 text-xs font-medium text-muted">{t("color_theme")}</div>
+            <div className="flex flex-wrap gap-2.5">
+              {COLORS.map((c) => (
+                <button key={c} onClick={() => { setColor(c); setOpen(false); }} aria-label={c} className="swatch" style={{ background: HEX[c], outline: color === c ? `2px solid ${HEX[c]}` : "none", outlineOffset: 2 }} />
+              ))}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }

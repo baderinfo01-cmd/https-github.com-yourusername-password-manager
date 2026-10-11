@@ -54,7 +54,7 @@ let mainWin = null;
 async function createWindow() {
   mainWin = new BrowserWindow({
     width: 1440, height: 900, minWidth: 1000, minHeight: 640,
-    title: "BLR",
+    title: "BLR Fatourati",
     backgroundColor: "#0b1220",
     autoHideMenuBar: true,
     icon: path.join(__dirname, "..", "build", "icon.png"),
