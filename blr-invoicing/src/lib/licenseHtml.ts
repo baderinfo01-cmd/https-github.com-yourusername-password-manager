@@ -28,10 +28,10 @@ export function buildLicenseHtml(s: LicenseStatus, lang: Lang, version: string, 
   h2{font-size:15px;color:#64748b;font-weight:600;margin:0 0 6px}
   table{width:100%;border-collapse:collapse;margin:8px 0 22px}td{padding:10px 12px;border-bottom:1px solid #e2e8f0;font-size:14px}td:first-child{color:#64748b;width:34%}td:last-child{font-weight:700}
   .row{display:flex;align-items:center;justify-content:space-around;gap:20px;margin-top:20px}
-  .stamp{width:320px;height:120px;border:4px solid ${ink};border-radius:14px;outline:1.5px solid ${ink};outline-offset:-10px;color:${ink};display:flex;align-items:center;gap:14px;padding:0 18px;transform:rotate(-4deg);background:${ink}0f}
-  .stamp .ic{width:60px;height:60px;border:3px solid ${ink};border-radius:50%;display:grid;place-items:center;font-size:30px;font-weight:900}
-  .stamp b{display:block;font-size:26px;line-height:1.1}.stamp i{display:block;font-style:normal;font-size:11px;letter-spacing:2px;font-weight:700;margin-top:4px}.stamp s{display:block;text-decoration:none;font-size:9px;opacity:.85;margin-top:6px;letter-spacing:1px}
-  .seal{width:130px}.note{margin-top:26px;font-size:11px;color:#64748b;border-top:1px dashed #cbd5e1;padding-top:10px;line-height:1.7}
+  .stamp{width:230px;height:84px;border:3px solid ${ink};border-radius:10px;outline:1px solid ${ink};outline-offset:-7px;color:${ink};display:flex;align-items:center;gap:10px;padding:0 12px;transform:rotate(-4deg);background:${ink}0f}
+  .stamp .ic{width:40px;height:40px;border:2.5px solid ${ink};border-radius:50%;display:grid;place-items:center;font-size:21px;font-weight:900}
+  .stamp b{display:block;font-size:18px;line-height:1.1}.stamp i{display:block;font-style:normal;font-size:8px;letter-spacing:1.5px;font-weight:700;margin-top:3px}.stamp s{display:block;text-decoration:none;font-size:6.5px;opacity:.85;margin-top:4px;letter-spacing:.6px}
+  .seal{width:100px}.note{margin-top:26px;font-size:11px;color:#64748b;border-top:1px dashed #cbd5e1;padding-top:10px;line-height:1.7}
   .dev{margin-top:14px;font-size:12px}@page{size:A4;margin:0}</style></head><body><div class="page"><div class="frame">
   <img class="wm" src="${origin}/brand/seal.png" alt="">
   <div class="head"><img src="${origin}/brand/app-icon.png" alt=""><div><h1>BLR Fatourati</h1><small>${esc(t("license_certificate"))} · v${esc(version)}</small></div></div>

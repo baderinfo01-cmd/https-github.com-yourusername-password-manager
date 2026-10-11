@@ -96,6 +96,8 @@ export function addPeriod(iso: string, every: "week" | "month" | "quarter" | "ye
 export function formatNumber(n: number, s: Settings, withSymbol = true) {
   const dec = s.currency.decimals;
   const body = new Intl.NumberFormat("en-US", { minimumFractionDigits: dec, maximumFractionDigits: dec }).format(round(n, dec)).replace(/,/g, " ");
+  // wrapped in a left-to-right isolate so amounts never get reordered inside Arabic sentences
   if (!withSymbol) return body;
-  return s.currency.position === "before" ? `${s.currency.symbol} ${body}` : `${body} ${s.currency.symbol}`;
+  const txt = s.currency.position === "before" ? `${s.currency.symbol} ${body}` : `${body} ${s.currency.symbol}`;
+  return `\u2066${txt}\u2069`;
 }

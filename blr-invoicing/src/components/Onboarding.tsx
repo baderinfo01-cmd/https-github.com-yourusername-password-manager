@@ -58,8 +58,8 @@ export function LicenseStep({ onDone }: { onDone: () => void }) {
               ))}
             </dl>
             <div className="mx-auto flex flex-col items-center gap-2">
-              <LicenseStamp width={230} tone={tone} title={s.dev ? t("stamp_dev") : ok ? t("stamp_title_ok") : t("stamp_title_bad")} subtitle={s.dev ? "DEVELOPMENT BUILD" : ok ? "GENUINE LICENSE" : "NOT ACTIVATED"} detail={`BLR FATOURATI · ${(s.plan || s.edition || "").toUpperCase() || "LICENSE"}`} footer={`ID: ${s.license_id || "—"} · BADERINFO`} />
-              <img src="/brand/seal.png" alt="Baderinfo" className="h-[104px] w-[104px]" />
+              <LicenseStamp width={168} tone={tone} title={s.dev ? t("stamp_dev") : ok ? t("stamp_title_ok") : t("stamp_title_bad")} subtitle={s.dev ? "DEVELOPMENT BUILD" : ok ? "GENUINE LICENSE" : "NOT ACTIVATED"} detail={`BLR FATOURATI · ${(s.plan || s.edition || "").toUpperCase() || "LICENSE"}`} footer={`ID: ${s.license_id || "—"} · BADERINFO`} />
+              <img src="/brand/seal.png" alt="Baderinfo" className="h-[96px] w-[96px]" />
             </div>
           </div>
         )}

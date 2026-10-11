@@ -69,8 +69,8 @@ export default function LicensePage() {
                 </>}
               </div>
               <div className="mx-auto flex flex-col items-center justify-center gap-3">
-                {s && <LicenseStamp tone={tone} title={s.dev ? t("stamp_dev") : ok ? t("stamp_title_ok") : t("stamp_title_bad")} subtitle={s.dev ? "DEVELOPMENT BUILD" : ok ? "GENUINE LICENSE" : "NOT ACTIVATED"} width={230} detail={`BLR FATOURATI · ${(s.plan || s.edition || "").toUpperCase() || "LICENSE"}`} footer={`ID: ${s.license_id || "—"} · BADERINFO`} />}
-                <img src="/brand/seal.png" alt="Baderinfo" className="h-[118px] w-[118px]" />
+                {s && <LicenseStamp tone={tone} title={s.dev ? t("stamp_dev") : ok ? t("stamp_title_ok") : t("stamp_title_bad")} subtitle={s.dev ? "DEVELOPMENT BUILD" : ok ? "GENUINE LICENSE" : "NOT ACTIVATED"} width={176} detail={`BLR FATOURATI · ${(s.plan || s.edition || "").toUpperCase() || "LICENSE"}`} footer={`ID: ${s.license_id || "—"} · BADERINFO`} />}
+                <img src="/brand/seal.png" alt="Baderinfo" className="h-[104px] w-[104px]" />
               </div>
             </div>
             <p className="relative mt-4 flex items-center gap-1.5 text-xs text-muted"><ShieldCheck size={13} />{t("lic_signed_note")}</p>
