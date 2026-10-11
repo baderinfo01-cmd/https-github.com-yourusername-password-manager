@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -27,12 +27,25 @@ import {
   BadgeCheck,
   Bot,
   ShieldCheck,
+  RefreshCw,
 } from "lucide-react";
 
 export default function Sidebar() {
   const t = useTranslations("nav");
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
+  // phone / small screens: the menu is a slide-in drawer opened from the header button
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  useEffect(() => {
+    const toggle = () => setMobileOpen((v) => !v);
+    window.addEventListener("bader:toggle-menu", toggle);
+    return () => window.removeEventListener("bader:toggle-menu", toggle);
+  }, []);
+
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [pathname]);
 
   const myInfo = useStore((state: any) => state.myInfo) || {};
 
@@ -69,6 +82,7 @@ const initials = username
     { href: "/ai", icon: Bot, key: "ai" },
     { href: "/generator", icon: Wand2, key: "generator" },
     { href: "/analytics", icon: BarChart3, key: "analytics" },
+    { href: "/sync", icon: RefreshCw, key: "sync" },
     { href: "/security", icon: ShieldCheck, key: "security" },
     { href: "/settings", icon: Settings, key: "settings" },
     { href: "/contact", icon: Mail, key: "contact" },
@@ -77,11 +91,17 @@ const initials = username
   ];
 
   return (
-    <aside
-      className={`${
-        collapsed ? "w-20" : "w-72"
-      } transition-all duration-300 glass h-screen sticky top-0 flex flex-col border-l border-border`}
-    >
+    <>
+      {mobileOpen && (
+        <div className="fixed inset-0 z-40 bg-black/40 md:hidden" onClick={() => setMobileOpen(false)} aria-hidden="true" />
+      )}
+      <aside
+        className={`${
+          collapsed ? "md:w-20" : "md:w-72"
+        } w-72 max-w-[85vw] glass max-md:!bg-white h-dvh flex flex-col border-l border-border transition-transform duration-300 md:transition-all
+        fixed inset-y-0 start-0 z-50 md:sticky md:top-0 md:z-auto
+        ${mobileOpen ? "translate-x-0" : "ltr:-translate-x-full rtl:translate-x-full md:!translate-x-0"}`}
+      >
       <div className={`px-5 pt-5 pb-1 flex items-center gap-3 ${collapsed ? "justify-center" : ""}`}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={branding.assets.logo} alt="" className="w-10 h-10 rounded-xl shadow-md flex-shrink-0" />
@@ -203,5 +223,6 @@ const initials = username
         </button>
       </div>
     </aside>
+    </>
   );
 }

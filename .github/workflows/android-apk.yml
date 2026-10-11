@@ -1,0 +1,48 @@
+name: Build Android APK
+
+# Run it from GitHub: Actions > "Build Android APK" > Run workflow.
+# The .apk appears at the bottom of the run page under "Artifacts" (download, copy to the phone, install).
+on:
+  workflow_dispatch: {}
+  push:
+    tags: ["android-v*"]
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: bader-account-management
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: bader-account-management/package-lock.json
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Install packages
+        run: npm ci
+
+      - name: Build the web app
+        run: npm run build
+
+      - name: Copy the web app into the Android project
+        run: npx cap sync android
+
+      - name: Build the APK (debug-signed, installable)
+        working-directory: bader-account-management/android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bader-account-management-apk
+          path: bader-account-management/android/app/build/outputs/apk/debug/*.apk

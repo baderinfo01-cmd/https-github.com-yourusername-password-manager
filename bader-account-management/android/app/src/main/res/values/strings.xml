@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Bader</string>
+    <string name="title_activity_main">Bader Account Management</string>
+    <string name="package_name">com.baderinfo.accountmanagement</string>
+    <string name="custom_url_scheme">com.baderinfo.accountmanagement</string>
+</resources>

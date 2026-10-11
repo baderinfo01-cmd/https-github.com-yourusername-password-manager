@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -6,6 +6,8 @@ import { El_Messiri } from "next/font/google";
 import { routing } from "@/i18n/routing";
 import "../globals.css";
 import ThemeInit from "@/components/ui/ThemeInit";
+import BackgroundServices from "@/components/ui/BackgroundServices";
+import PwaRegister from "@/components/ui/PwaRegister";
 
 const elMessiri = El_Messiri({
   subsets: ["arabic", "latin"],
@@ -17,6 +19,15 @@ const elMessiri = El_Messiri({
 export const metadata: Metadata = {
   title: "Bader Account Management",
   description: "برنامج إدارة الحسابات والمواعيد والاشتراكات الخاصة",
+  manifest: "/manifest.webmanifest",
+  icons: { icon: "/brand/icon-192.png", apple: "/brand/icon-192.png" },
+  appleWebApp: { capable: true, title: "Bader", statusBarStyle: "default" },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#0ea5e9",
+  width: "device-width",
+  initialScale: 1,
 };
 
 export function generateStaticParams() {
@@ -54,6 +65,8 @@ export default async function LocaleLayout({
       >
         <NextIntlClientProvider messages={messages} locale={locale}>
           <ThemeInit />
+          <BackgroundServices />
+          <PwaRegister />
           {children}
         </NextIntlClientProvider>
       </body>

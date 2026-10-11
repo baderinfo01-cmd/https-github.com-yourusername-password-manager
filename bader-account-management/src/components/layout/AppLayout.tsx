@@ -6,6 +6,7 @@ import Sidebar from "./Sidebar";
 import Header from "./Header";
 import { useRequireUnlock } from "@/lib/session";
 import LoginNotice from "@/components/ui/LoginNotice";
+import { startAutoSync } from "@/lib/sync/controller";
 
 const FIRST_SETUP_KEY = "bader-first-setup-completed-v1";
 
@@ -18,6 +19,10 @@ export default function AppLayout({
   const router = useRouter();
   const [checking, setChecking] = useState(true);
   const unlocked = useRequireUnlock();
+
+  useEffect(() => {
+    if (unlocked) startAutoSync(); // idempotent: keeps the background sync loop alive while unlocked
+  }, [unlocked]);
 
   useEffect(() => {
     if (!unlocked) return;
@@ -51,12 +56,12 @@ export default function AppLayout({
   }
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-dvh">
       <LoginNotice />
       <Sidebar />
       <div className="flex-1 flex flex-col min-w-0">
         <Header />
-        <main className="flex-1 p-6">{children}</main>
+        <main className="flex-1 p-3 sm:p-6 min-w-0">{children}</main>
       </div>
     </div>
   );

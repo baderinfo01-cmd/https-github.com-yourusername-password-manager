@@ -161,6 +161,27 @@ ipcMain.handle("bader-app:session", async (_e, opts) => {
   return info;
 });
 
+// ---- sync relay calls go through the main process (the page's CSP only allows its own origin) ----
+ipcMain.handle("bader-sync:post", async (_e, url, body) => {
+  try {
+    const u = new URL(String(url));
+    const local = u.protocol === "http:" && (u.hostname === "localhost" || u.hostname === "127.0.0.1");
+    if (u.protocol !== "https:" && !local) return { ok: false, status: 0, json: { ok: false, error: "https_required" } };
+    const payload = JSON.stringify(body);
+    if (payload.length > 9 * 1024 * 1024) return { ok: false, status: 0, json: { ok: false, error: "too_large" } };
+    const r = await fetch(u, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: payload,
+      signal: AbortSignal.timeout(25000)
+    });
+    const json = await r.json().catch(() => null);
+    return { ok: r.ok, status: r.status, json };
+  } catch (e) {
+    return { ok: false, status: 0, json: { ok: false, error: e && e.message ? e.message : "network_error" } };
+  }
+});
+
 app.whenReady().then(async () => {
   registerAppProtocol();
   registerAi(ipcMain);

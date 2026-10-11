@@ -7,6 +7,8 @@ import { useTranslations } from "next-intl";
 import { ShieldCheck, ShieldAlert, X, Monitor, MapPin, Clock, Globe } from "lucide-react";
 import { appendLoginEvent, loginSummary, type LoginEvent } from "@/lib/vaultCrypto";
 import { formatWhen, getSessionInfo, placeText } from "@/lib/security";
+import { sendAlert } from "@/lib/sync/controller";
+import { notify } from "@/lib/notify";
 
 const PENDING = "bader-login-pending";
 
@@ -41,18 +43,12 @@ export default function LoginNotice() {
       const { lastSuccess, failedSince } = loginSummary(); // BEFORE adding this sign-in
       const info = await getSessionInfo();
       const ev = appendLoginEvent({ t: Date.now(), result: "success", ...info });
+      if (ev) void sendAlert(ev);
       if (!alive || !ev) return;
       setN({ now: ev, prev: lastSuccess, failed: failedSince });
 
-      if (failedSince.length > 0 && typeof Notification !== "undefined") {
-        const show = () =>
-          new Notification(t("notifTitle"), { body: t("notifBody", { count: failedSince.length }), icon: "/brand/app-icon.png" });
-        try {
-          if (Notification.permission === "granted") show();
-          else if (Notification.permission !== "denied") Notification.requestPermission().then((p) => p === "granted" && show());
-        } catch {
-          /* notifications unavailable */
-        }
+      if (failedSince.length > 0) {
+        void notify(t("notifTitle"), t("notifBody", { count: failedSince.length }));
       } else {
         timer = setTimeout(() => alive && setN(null), 14000);
       }

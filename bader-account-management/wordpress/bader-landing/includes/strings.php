@@ -43,6 +43,8 @@ return array(
 				array( '💾', 'نسخ احتياطي مشفّر', 'تصدير واستيراد ملفات مشفّرة بكلمة مرور خاصة، لا تُقرأ إن ضاع الملف.' ),
 				array( '🌍', 'ثلاث لغات ووضع داكن', 'عربي وإنجليزي وفرنسي، وخمسة ألوان، ووضع داكن مريح للعين.' ),
 				array( '🪪', 'ترخيص واضح', 'صفحة تعرض حالة ترخيصك وبصمة جهازك، بترخيص موقّع رقمياً لا يمكن تزويره.' ),
+				array( '📱', 'تطبيق أندرويد ومزامنة', 'نفس البرنامج على هاتفك، وكل تغيير يُسجَّل في الكمبيوتر والهاتف معاً بتشفير كامل من طرف إلى طرف.' ),
+				array( '🔔', 'إشعارات تسجيل الدخول', 'تنبيه فوري بوقت الدخول والجهاز والنظام وعنوان IP والموقع التقريبي، مع كشف محاولات الدخول الفاشلة.' ),
 			),
 		),
 		'security' => array(
@@ -135,6 +137,8 @@ return array(
 				array( '💾', 'Encrypted backups', 'Export and import files protected by their own password, useless if the file is lost.' ),
 				array( '🌍', '3 languages & dark mode', 'Arabic, English, French, five colors and an eye-friendly dark mode.' ),
 				array( '🪪', 'Clear licensing', 'A page showing your license status and device fingerprint, with a digitally signed license that cannot be forged.' ),
+				array( '📱', 'Android app & sync', 'The same app on your phone; every change is recorded on both computer and phone with full end-to-end encryption.' ),
+				array( '🔔', 'Sign-in notifications', 'Instant alerts with time, device, system, IP address and approximate place, plus detection of failed sign-in attempts.' ),
 			),
 		),
 		'security' => array(
@@ -227,6 +231,8 @@ return array(
 				array( '💾', 'Sauvegardes chiffrées', 'Export et import protégés par leur propre mot de passe.' ),
 				array( '🌍', '3 langues et mode sombre', 'Arabe, anglais, français, cinq couleurs et un mode sombre confortable.' ),
 				array( '🪪', 'Licence claire', 'Une page affiche l’état de votre licence et l’empreinte de l’appareil ; licence signée numériquement.' ),
+				array( '📱', 'Application Android et synchro', 'La même application sur votre téléphone ; chaque modification est enregistrée sur l’ordinateur et le téléphone, chiffrée de bout en bout.' ),
+				array( '🔔', 'Alertes de connexion', 'Alerte immédiate avec heure, appareil, système, adresse IP et lieu approximatif, et détection des tentatives échouées.' ),
 			),
 		),
 		'security' => array(

@@ -1,4 +1,5 @@
 import type { LoginEvent } from "@/lib/vaultCrypto";
+import "@/lib/sync/transport.ts"; // Window.baderApp typings
 
 const GEO_KEY = "bader-geo";
 
@@ -15,15 +16,6 @@ export function setGeoEnabled(on: boolean) {
     localStorage.setItem(GEO_KEY, on ? "on" : "off");
   } catch {
     /* ignore */
-  }
-}
-
-declare global {
-  interface Window {
-    baderApp?: {
-      onLock?: (cb: () => void) => () => void;
-      session?: (opts: { geo: boolean }) => Promise<SessionInfo>;
-    };
   }
 }
 

@@ -5,6 +5,7 @@ import { useMemo, useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import {
   Bell,
+  Menu,
   Search,
   Palette,
   Languages,
@@ -213,9 +214,18 @@ export default function Header() {
 
   return (
     <header className="glass sticky top-0 z-30 border-b border-border">
-      <div className="px-6 py-3 flex items-center justify-between gap-4">
+      <div className="px-3 sm:px-6 py-3 flex items-center justify-between gap-2 sm:gap-4">
+        <button
+          type="button"
+          onClick={() => window.dispatchEvent(new Event("bader:toggle-menu"))}
+          className="md:hidden p-2.5 rounded-xl hover:bg-white/60"
+          aria-label="menu"
+        >
+          <Menu className="w-6 h-6" />
+        </button>
+
         {/* Search */}
-        <div className="flex-1 max-w-md">
+        <div className="flex-1 max-w-md min-w-0 hidden sm:block">
           <div className="relative">
             <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
