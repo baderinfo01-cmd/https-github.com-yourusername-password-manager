@@ -46,13 +46,14 @@ function Inner() {
     if (doc) return;
     if (existing) { setDoc(structuredClone(existing)); return; }
     const date = todayIso();
+    const pre = items.find((i) => i.id === sp.get("item"));
     setDoc({
       id: crypto.randomUUID(), type, number: "", date, dueDate: hasDue ? addDays(date, settings.dueDays) : undefined, partyName: "",
-      lines: [newLine(settings.defaultTax)], discount: 0, discountType: "percent", shipping: 0, stamp: 0, paymentMethod: "cash",
+      lines: [pre ? { ...newLine(pre.taxRate), itemId: pre.id, desc: pre.name, price: isPurchase ? pre.cost : pre.price, unit: pre.unit } : newLine(settings.defaultTax)], discount: 0, discountType: "percent", shipping: 0, stamp: 0, paymentMethod: "cash",
       notes: "", terms: settings.terms, status: type === "invoice" || type === "purchase" || type === "quote" || type === "proforma" ? "sent" : "issued",
       subtotal: 0, discountAmount: 0, tax: 0, total: 0, createdBy: username,
     });
-  }, [existing, id, doc, type, hasDue, settings, username]);
+  }, [existing, id, doc, type, hasDue, settings, username, items, sp, isPurchase]);
 
   const totals = useMemo(() => (doc ? computeTotals(doc.lines, doc.discount, doc.discountType, doc.shipping, doc.stamp, settings.pricesIncludeTax, doc.extraTaxes || []) : null), [doc, settings.pricesIncludeTax]);
 
@@ -150,7 +151,7 @@ function Inner() {
               {doc.lines.map((l, i) => (
                 <tr key={l.id} className="border-b border-line align-top">
                   <td className="px-2 py-2 text-center text-xs text-muted">{i + 1}</td>
-                  <td className="px-2 py-2"><ItemPicker value={l.desc} items={items} placeholder={t("search_or_type")} onText={(v) => patchLine(l.id, { desc: v, itemId: undefined })} onPick={(it) => pickItem(l.id, it)} autoFocus={i === doc.lines.length - 1 && !l.desc && doc.lines.length > 1} /></td>
+                  <td className="px-2 py-2"><ItemPicker value={l.desc} items={items.filter((i) => i.active !== false)} placeholder={t("search_or_type")} onText={(v) => patchLine(l.id, { desc: v, itemId: undefined })} onPick={(it) => pickItem(l.id, it)} autoFocus={i === doc.lines.length - 1 && !l.desc && doc.lines.length > 1} /></td>
                   <td className="px-2 py-2"><Input type="number" step="any" min="0" value={l.qty} onChange={(e) => patchLine(l.id, { qty: e.target.value as any })} className="num" /></td>
                   <td className="px-2 py-2"><Input type="number" step="any" min="0" value={l.price} onChange={(e) => patchLine(l.id, { price: e.target.value as any })} className="num" /></td>
                   <td className="px-2 py-2"><Input type="number" step="any" min="0" max="100" value={l.discountPct} onChange={(e) => patchLine(l.id, { discountPct: e.target.value as any })} className="num" /></td>

@@ -46,6 +46,7 @@ const NAV: { group: string; items: NavItem[] }[] = [
     group: "nav_inventory",
     items: [
       { href: "/products/", key: "products", icon: <Package size={18} />, perm: "products:read" },
+      { href: "/services/", key: "services", icon: <Wrench size={18} />, perm: "products:read" },
       { href: "/stock/", key: "stock", icon: <Boxes size={18} />, perm: "stock:read" },
     ],
   },

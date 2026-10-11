@@ -5,13 +5,15 @@ import {
   addDays, addPeriod, affectsStock, balances, computeTotals, num, round, stampDuty, stockSign, todayIso,
 } from "@/lib/calc";
 import { DEFAULT_SETTINGS } from "@/lib/defaults";
-import type { Doc, DocType, Expense, Item, Line, Party, Payment, Recurring, Settings, StockMove, Task } from "@/lib/types";
+import type { Category, Doc, DocType, Expense, Item, Line, Party, Payment, Recurring, Settings, StockMove, Task } from "@/lib/types";
 
 interface DataState {
   loaded: boolean;
   settings: Settings;
   clients: Party[]; suppliers: Party[]; items: Item[]; docs: Doc[]; payments: Payment[];
-  expenses: Expense[]; moves: StockMove[]; recurring: Recurring[]; tasks: Task[]; audit: any[];
+  expenses: Expense[]; moves: StockMove[]; recurring: Recurring[]; tasks: Task[]; categories: Category[]; audit: any[];
+  saveCategory(kind: "product" | "service", name: string, oldName?: string): Promise<void>;
+  removeCategory(kind: "product" | "service", name: string): Promise<void>;
   saveTask(t: Partial<Task>): Promise<void>;
   removeTask(id: string): Promise<void>;
   load(): Promise<void>;
@@ -42,20 +44,47 @@ const list = <T,>(kind: string) => call<T[]>(blr().db.list(kind));
 export const useData = create<DataState>((set, get) => ({
   loaded: false,
   settings: DEFAULT_SETTINGS,
-  clients: [], suppliers: [], items: [], docs: [], payments: [], expenses: [], moves: [], recurring: [], tasks: [], audit: [],
+  clients: [], suppliers: [], items: [], docs: [], payments: [], expenses: [], moves: [], recurring: [], tasks: [], categories: [], audit: [],
 
   async load() {
-    const [settingsArr, clients, suppliers, items, docs, payments, expenses, moves, recurring, tasks, audit] = await Promise.all([
+    const [settingsArr, clients, suppliers, items, docs, payments, expenses, moves, recurring, tasks, categories, audit] = await Promise.all([
       list<Settings>("settings"), list<Party>("clients"), list<Party>("suppliers"), list<Item>("items"), list<Doc>("docs"),
-      list<Payment>("payments"), list<Expense>("expenses"), list<StockMove>("moves"), list<Recurring>("recurring"), list<Task>("tasks"), list<any>("audit"),
+      list<Payment>("payments"), list<Expense>("expenses"), list<StockMove>("moves"), list<Recurring>("recurring"), list<Task>("tasks"), list<Category>("categories"), list<any>("audit"),
     ]);
     const saved = settingsArr.find((s) => s.id === "main");
     const settings: Settings = saved
       ? { ...DEFAULT_SETTINGS, ...saved, company: { ...DEFAULT_SETTINGS.company, ...saved.company }, currency: { ...DEFAULT_SETTINGS.currency, ...saved.currency }, numbering: { ...DEFAULT_SETTINGS.numbering, ...saved.numbering } }
       : DEFAULT_SETTINGS;
-    set({ settings, clients, suppliers, items, docs, payments, expenses, moves, recurring, tasks, audit: audit.sort((a, b) => b.at - a.at), loaded: true });
+    set({ settings, clients, suppliers, items, docs, payments, expenses, moves, recurring, tasks, categories, audit: audit.sort((a, b) => b.at - a.at), loaded: true });
   },
-  reset: () => set({ loaded: false, clients: [], suppliers: [], items: [], docs: [], payments: [], expenses: [], moves: [], recurring: [], tasks: [], audit: [] }),
+  reset: () => set({ loaded: false, clients: [], suppliers: [], items: [], docs: [], payments: [], expenses: [], moves: [], recurring: [], tasks: [], categories: [], audit: [] }),
+
+  // rename (oldName given) or add a category; renaming also moves the items that used it
+  async saveCategory(kind, name, oldName) {
+    const n = name.trim();
+    if (!n) return;
+    const st = get();
+    const existing = st.categories.find((c) => c.kind === kind && c.name === (oldName ?? n));
+    const ops: any[] = [{ op: "save", kind: "categories", doc: { ...(existing || {}), kind, name: n } }];
+    if (oldName && oldName !== n) for (const it of st.items) if (it.category === oldName && (kind === "service") === (it.type === "service")) ops.push({ op: "save", kind: "items", doc: { ...it, category: n } });
+    const res = await call<any[]>(blr().db.batch(ops));
+    set((s) => ({
+      categories: upsert(s.categories, res[0]),
+      items: res.slice(1).reduce((acc, it) => upsert(acc, it), s.items),
+    }));
+  },
+  async removeCategory(kind, name) {
+    const st = get();
+    const ops: any[] = st.categories.filter((c) => c.kind === kind && c.name === name).map((c) => ({ op: "remove", kind: "categories", id: c.id }));
+    const moved = st.items.filter((it) => it.category === name && (kind === "service") === (it.type === "service")).map((it) => ({ ...it, category: "" }));
+    for (const it of moved) ops.push({ op: "save", kind: "items", doc: it });
+    if (!ops.length) return;
+    const res = await call<any[]>(blr().db.batch(ops));
+    set((s) => ({
+      categories: s.categories.filter((c) => !(c.kind === kind && c.name === name)),
+      items: res.slice(ops.filter((o) => o.op === "remove").length).reduce((acc, it) => upsert(acc, it), s.items),
+    }));
+  },
 
   async saveTask(t) {
     const saved = await call<Task>(blr().db.save("tasks", t));
@@ -123,6 +152,13 @@ export const useData = create<DataState>((set, get) => ({
       for (const l of doc.lines) {
         const it = st.items.find((i) => i.id === l.itemId);
         if (it?.trackStock) effect[it.id] = (effect[it.id] || 0) + sign * num(l.qty);
+        // a service consumes the goods listed in its materials (restored by a credit note)
+        if (it?.type === "service" && doc.type !== "purchase") {
+          for (const m of it.materials || []) {
+            const mi = st.items.find((i) => i.id === m.itemId);
+            if (mi?.trackStock) effect[mi.id] = (effect[mi.id] || 0) + sign * num(m.qty) * num(l.qty);
+          }
+        }
       }
     }
     const applied = prev?.stockApplied || {};

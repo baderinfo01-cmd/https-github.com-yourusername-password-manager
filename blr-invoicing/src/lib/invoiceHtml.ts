@@ -49,14 +49,24 @@ export async function buildDocHtml(doc: Doc, o: Opts): Promise<string> {
         party ? [party.company, party.address, party.city, party.phone, party.email, party.taxId && `NIF: ${party.taxId}`, party.rc && `RC: ${party.rc}`, party.ai && `AI: ${party.ai}`, party.nis && `NIS: ${party.nis}`].filter(Boolean).map((x) => `<div>${esc(x)}</div>`).join("") : ""
       }</div>`
     : "";
-  const coBlock = `<div class="box"><div class="strong big">${esc(co.name || "—")}</div>${
-    [co.legalName, co.address, co.phone, co.email, co.website, co.taxId && `NIF: ${co.taxId}`, co.rc && `RC: ${co.rc}`, co.ai && `AI: ${co.ai}`, co.nis && `NIS: ${co.nis}`].filter(Boolean).map((x) => `<div>${esc(x)}</div>`).join("")
-  }</div>`;
+  const coLines = [co.legalName, co.address, co.phone, co.email, co.website, co.taxId && `NIF: ${co.taxId}`, co.rc && `RC: ${co.rc}`, co.ai && `AI: ${co.ai}`, co.nis && `NIS: ${co.nis}`].filter(Boolean) as string[];
+  // empty company details are simply not printed (no blank box)
+  const coBlock = co.name || coLines.length
+    ? `<div class="box">${co.name ? `<div class="strong big">${esc(co.name)}</div>` : ""}${coLines.map((x) => `<div>${esc(x)}</div>`).join("")}</div>`
+    : "";
+  const boxes = [coBlock, partyBlock].filter(Boolean).length;
+  const notesBlock = [
+    doc.notes ? `<div><div class="lbl">${t("notes")}</div>${esc(doc.notes)}</div>` : "",
+    doc.terms ? `<div><div class="lbl">${t("terms")}</div>${esc(doc.terms)}</div>` : "",
+    co.bank ? `<div><div class="lbl">${t("bank_details")}</div>${esc(co.bank)}</div>` : "",
+  ].filter(Boolean);
 
   const css = `
   *{box-sizing:border-box}html,body{margin:0;padding:0}
-  body{font-family:"Segoe UI",Tahoma,"Noto Sans Arabic",Arial,sans-serif;color:#0f172a;font-size:${thermal ? 10 : 12}px;line-height:1.5;direction:${rtl ? "rtl" : "ltr"}}
-  .page{width:${thermal ? "72mm" : "210mm"};min-height:${thermal ? "auto" : "297mm"};margin:0 auto;padding:${thermal ? "4mm" : "14mm 14mm 12mm"};position:relative}
+  body{font-family:"El Messiri","Segoe UI",Tahoma,"Noto Sans Arabic",Arial,sans-serif;color:#0f172a;font-size:${thermal ? 10 : 12}px;line-height:1.5;direction:${rtl ? "rtl" : "ltr"}}
+  .page{width:${thermal ? "72mm" : "210mm"};min-height:${thermal ? "auto" : "297mm"};margin:0 auto;padding:${thermal ? "4mm" : "14mm 14mm 12mm"};position:relative;display:flex;flex-direction:column}
+  .tail{margin-top:auto;padding-top:14px}
+  .grid.one{grid-template-columns:${thermal ? "1fr" : "1fr 1fr"}}
   .top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:${thermal ? 6 : 18}px}
   .logo{max-height:${thermal ? 40 : 64}px;max-width:${thermal ? 120 : 180}px;object-fit:contain;display:block;margin-bottom:6px}
   .title{font-size:${thermal ? 15 : 26}px;font-weight:800;color:${accent};letter-spacing:.5px}
@@ -69,14 +79,14 @@ export async function buildDocHtml(doc: Doc, o: Opts): Promise<string> {
   .items td{padding:7px 8px;border-bottom:1px solid #e2e8f0;vertical-align:top}
   .items tbody tr:nth-child(even){background:#f8fafc}
   .n{text-align:${rtl ? "left" : "right"};white-space:nowrap;direction:ltr;unicode-bidi:plaintext}.c{text-align:center;width:28px}.b{font-weight:700}.u{color:#64748b;font-size:10px}
-  .bottom{display:flex;justify-content:space-between;gap:16px;margin-top:14px;align-items:flex-start;flex-direction:${thermal ? "column" : "row"}}
+  .bottom{display:flex;justify-content:flex-end;margin-top:14px;align-items:flex-start}
   .totals{min-width:${thermal ? "100%" : "260px"};border:1px solid #e2e8f0;border-radius:8px;overflow:hidden}
   .totals td{padding:6px 12px;border-bottom:1px solid #eef2f7}.totals tr:last-child td{border-bottom:0}
   .grand td{background:${accent};color:#fff;font-weight:800;font-size:${thermal ? 12 : 14}px}
   .due td{background:#fef3c7;font-weight:700}
   .subj{font-size:13px;font-weight:600;color:#334155;margin-top:2px}
   .words{margin-top:14px;padding:8px 12px;border:1px dashed #cbd5e1;border-radius:8px;background:#f8fafc;font-size:${thermal ? 10 : 12}px}
-  .notes{flex:1;font-size:11px;color:#334155;white-space:pre-wrap}
+  .notes{display:grid;grid-template-columns:${thermal ? "1fr" : "repeat(auto-fit,minmax(150px,1fr))"};gap:10px 18px;font-size:11px;color:#334155;white-space:pre-wrap;border-top:1px solid #e2e8f0;padding-top:10px}
   .stamp{position:absolute;top:46mm;${rtl ? "left" : "right"}:20mm;transform:rotate(-14deg);border:3px solid;border-radius:8px;padding:2px 14px;font-size:26px;font-weight:800;letter-spacing:2px;opacity:.55}
   .paid{color:#059669;border-color:#059669}.void{color:#dc2626;border-color:#dc2626}
   .foot{margin-top:18px;display:flex;justify-content:space-between;align-items:flex-end;gap:12px;border-top:1px solid #e2e8f0;padding-top:10px;font-size:10px;color:#64748b}
@@ -91,10 +101,9 @@ export async function buildDocHtml(doc: Doc, o: Opts): Promise<string> {
   <div class="top"><div>${co.logo ? `<img class="logo" src="${esc(co.logo)}" alt="">` : ""}${thermal ? "" : ""}<div class="title">${esc(title)}</div>${doc.subject ? `<div class="subj">${esc(doc.subject)}</div>` : ""}
     <div class="meta"><div><b>${t("number")}</b> ${esc(doc.number)}</div><div><b>${t("date")}</b> ${esc(doc.date)}</div>${doc.dueDate && hasBalance ? `<div><b>${t("due_date")}</b> ${esc(doc.dueDate)}</div>` : ""}${doc.validUntil ? `<div><b>${t("valid_until")}</b> ${esc(doc.validUntil)}</div>` : ""}${doc.poRef ? `<div><b>${t("po_ref")}</b> ${esc(doc.poRef)}</div>` : ""}${doc.refNumber ? `<div><b>${t("reference")}</b> ${esc(doc.refNumber)}</div>` : ""}</div></div>
     ${qr && !thermal ? `<img src="${qr}" alt="" width="84" height="84">` : ""}</div>
-  <div class="grid">${coBlock}${partyBlock}</div>
+  ${boxes ? `<div class="grid${boxes === 1 ? " one" : ""}">${coBlock}${partyBlock}</div>` : ""}
   <table class="items"><thead><tr>${head}</tr></thead><tbody>${rows}</tbody></table>
-  <div class="bottom"><div class="notes">${doc.notes ? `<div class="lbl">${t("notes")}</div>${esc(doc.notes)}` : ""}${doc.terms ? `<div class="lbl" style="margin-top:8px">${t("terms")}</div>${esc(doc.terms)}` : ""}${co.bank ? `<div class="lbl" style="margin-top:8px">${t("bank_details")}</div>${esc(co.bank)}` : ""}</div>
-  <table class="totals"><tbody>
+  <div class="bottom"><table class="totals"><tbody>
     <tr><td>${t("subtotal")}</td><td class="n">${money(doc.subtotal)}</td></tr>
     ${doc.discountAmount ? `<tr><td>${t("discount")}</td><td class="n">- ${money(doc.discountAmount)}</td></tr>` : ""}
     ${taxRows || (doc.tax ? `<tr><td>${t("tax")}</td><td class="n">${money(doc.tax)}</td></tr>` : "")}
@@ -107,6 +116,7 @@ export async function buildDocHtml(doc: Doc, o: Opts): Promise<string> {
     ${hasBalance && (paid || credits) ? `<tr class="due"><td>${t("balance_due")}</td><td class="n">${money(due)}</td></tr>` : ""}
   </tbody></table></div>
   <div class="words"><b>${t("amount_in_words")}:</b> ${esc(amountInWords(doc.total, lang, s.currency.code, s.currency.decimals))}</div>
+  <div class="tail">${notesBlock.length ? `<div class="notes">${notesBlock.join("")}</div>` : ""}
   <div class="foot"><div>${esc(s.footer)}${thermal && qr ? `<div style="margin-top:6px"><img src="${qr}" width="70" height="70" alt=""></div>` : ""}</div>${thermal ? "" : `<div class="sig">${co.stamp ? `<img src="${esc(co.stamp)}" style="max-height:78px;max-width:120px;position:absolute;margin:-70px 0 0 -60px;opacity:.9" alt="">` : ""}${co.signature ? `<img src="${esc(co.signature)}" style="max-height:56px;display:block;margin:-52px auto 0" alt="">` : ""}${t("signature")} &amp; ${t("stamp")}</div>`}</div>
-  </div></body></html>`;
+  </div></div></body></html>`;
 }

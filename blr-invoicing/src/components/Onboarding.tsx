@@ -5,6 +5,7 @@ import { LicenseStamp } from "./LicenseStamp";
 import { Button, Field, Input, Modal, Select } from "./ui";
 import { blr, call } from "@/lib/api";
 import { toDataUrl } from "@/lib/image";
+import { withFont } from "@/lib/fontEmbed";
 import { LOCALE, useT } from "@/lib/i18n";
 import { licenseApi, type LicenseStatus } from "@/lib/license";
 import { buildLicenseHtml } from "@/lib/licenseHtml";
@@ -37,7 +38,7 @@ export function LicenseStep({ onDone }: { onDone: () => void }) {
   const done = () => { setFlag(FLAG_LICENSE); onDone(); };
   const pdf = async () => {
     if (!s) return;
-    const html = buildLicenseHtml(s, lang, version, window.location.origin);
+    const html = await withFont(buildLicenseHtml(s, lang, version, window.location.origin));
     const r = await call<{ saved: boolean }>(blr().print.pdf(html, "BLR-Fatourati-license.pdf"));
     if (r.saved) useUi.getState().notify(t("saved"));
   };
@@ -57,9 +58,9 @@ export function LicenseStep({ onDone }: { onDone: () => void }) {
                 <div key={k} className="flex justify-between gap-4 py-2.5"><dt className="text-muted">{k}</dt><dd className="font-semibold" dir="ltr">{v}</dd></div>
               ))}
             </dl>
-            <div className="mx-auto flex flex-col items-center gap-2">
-              <LicenseStamp width={168} tone={tone} title={s.dev ? t("stamp_dev") : ok ? t("stamp_title_ok") : t("stamp_title_bad")} subtitle={s.dev ? "DEVELOPMENT BUILD" : ok ? "GENUINE LICENSE" : "NOT ACTIVATED"} detail={`BLR FATOURATI · ${(s.plan || s.edition || "").toUpperCase() || "LICENSE"}`} footer={`ID: ${s.license_id || "—"} · BADERINFO`} />
-              <img src="/brand/seal.png" alt="Baderinfo" className="h-[96px] w-[96px]" />
+            <div className="mx-auto flex items-center gap-2">
+              <LicenseStamp width={140} tone={tone} title={s.dev ? t("stamp_dev") : ok ? t("stamp_title_ok") : t("stamp_title_bad")} subtitle={s.dev ? "DEVELOPMENT BUILD" : ok ? "GENUINE LICENSE" : "NOT ACTIVATED"} detail={`BLR FATOURATI · ${(s.plan || s.edition || "").toUpperCase() || "LICENSE"}`} footer={`ID: ${s.license_id || "—"} · BADERINFO`} />
+              <img src="/brand/seal.png" alt="Baderinfo" className="h-[84px] w-[84px]" />
             </div>
           </div>
         )}

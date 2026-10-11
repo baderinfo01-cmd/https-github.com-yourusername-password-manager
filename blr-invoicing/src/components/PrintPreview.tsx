@@ -3,6 +3,7 @@ import { FileDown, Printer, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Button, Input, Select } from "./ui";
 import { blr, call } from "@/lib/api";
+import { withFont } from "@/lib/fontEmbed";
 import { useT } from "@/lib/i18n";
 import { usePreview, type Paper } from "@/store/preview";
 import { useUi } from "@/store/ui";
@@ -33,7 +34,7 @@ export function PrintPreviewHost() {
   useEffect(() => {
     if (!req) return;
     let live = true;
-    req.build(paper).then((x) => live && setHtml(x));
+    req.build(paper).then(withFont).then((x) => live && setHtml(x));
     return () => { live = false; };
   }, [req, paper]);
   useEffect(() => {

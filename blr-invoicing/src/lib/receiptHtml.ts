@@ -25,7 +25,7 @@ export function buildReceiptHtml(p: Payment, o: { lang: Lang; settings: Settings
   if (doc) rows.push([t("document"), `${t("t_" + doc.type)} ${doc.number}`]);
   if (o.balanceAfter !== undefined && doc) rows.push([t("balance_due"), money(o.balanceAfter)]);
   return `<!doctype html><html lang="${lang}" dir="${rtl ? "rtl" : "ltr"}"><head><meta charset="utf-8"><title>${esc(p.number)}</title><style>
-  *{box-sizing:border-box}html,body{margin:0}body{font-family:"Segoe UI",Tahoma,"Noto Sans Arabic",Arial,sans-serif;color:#0f172a;font-size:${thermal ? 10 : 13}px;line-height:1.6;direction:${rtl ? "rtl" : "ltr"}}
+  *{box-sizing:border-box}html,body{margin:0}body{font-family:"El Messiri","Segoe UI",Tahoma,"Noto Sans Arabic",Arial,sans-serif;color:#0f172a;font-size:${thermal ? 10 : 13}px;line-height:1.6;direction:${rtl ? "rtl" : "ltr"}}
   .page{width:${thermal ? "72mm" : "210mm"};min-height:${thermal ? "auto" : "148mm"};margin:0 auto;padding:${thermal ? "4mm" : "14mm"}}
   .head{display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:3px solid ${accent};padding-bottom:10px;margin-bottom:14px}
   .logo{max-height:${thermal ? 36 : 60}px;max-width:150px;object-fit:contain}.co{font-weight:800;font-size:${thermal ? 12 : 16}px}.sm{color:#64748b;font-size:${thermal ? 9 : 11}px}

@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { LicenseStamp } from "@/components/LicenseStamp";
 import { printLicense } from "@/components/Onboarding";
 import { buildLicenseHtml } from "@/lib/licenseHtml";
+import { withFont } from "@/lib/fontEmbed";
 import { Button, Card, PageHeader } from "@/components/ui";
 import { blr, call } from "@/lib/api";
 import { BRAND } from "@/lib/brand";
@@ -68,16 +69,16 @@ export default function LicensePage() {
                   {s.days_left !== null && row(<Clock size={15} />, t("lic_days_left"), s.days_left)}
                 </>}
               </div>
-              <div className="mx-auto flex flex-col items-center justify-center gap-3">
-                {s && <LicenseStamp tone={tone} title={s.dev ? t("stamp_dev") : ok ? t("stamp_title_ok") : t("stamp_title_bad")} subtitle={s.dev ? "DEVELOPMENT BUILD" : ok ? "GENUINE LICENSE" : "NOT ACTIVATED"} width={176} detail={`BLR FATOURATI · ${(s.plan || s.edition || "").toUpperCase() || "LICENSE"}`} footer={`ID: ${s.license_id || "—"} · BADERINFO`} />}
-                <img src="/brand/seal.png" alt="Baderinfo" className="h-[104px] w-[104px]" />
+              <div className="mx-auto flex items-center justify-center gap-3">
+                {s && <LicenseStamp tone={tone} title={s.dev ? t("stamp_dev") : ok ? t("stamp_title_ok") : t("stamp_title_bad")} subtitle={s.dev ? "DEVELOPMENT BUILD" : ok ? "GENUINE LICENSE" : "NOT ACTIVATED"} width={150} detail={`BLR FATOURATI · ${(s.plan || s.edition || "").toUpperCase() || "LICENSE"}`} footer={`ID: ${s.license_id || "—"} · BADERINFO`} />}
+                <img src="/brand/seal.png" alt="Baderinfo" className="h-[92px] w-[92px]" />
               </div>
             </div>
             <p className="relative mt-4 flex items-center gap-1.5 text-xs text-muted"><ShieldCheck size={13} />{t("lic_signed_note")}</p>
             <div className="relative mt-5 flex flex-wrap gap-2">
               <Button className="flex-1" disabled={busy} onClick={() => load(true)}><RefreshCw size={15} className={busy ? "animate-spin" : ""} />{t("lic_check_now")}</Button>
               <Button variant="secondary" disabled={!s} onClick={() => s && printLicense(s, lang, version)}><Printer size={15} />{t("print")}</Button>
-              <Button variant="secondary" disabled={!s} onClick={async () => { if (!s) return; const r = await call<{ saved: boolean }>(blr().print.pdf(buildLicenseHtml(s, lang, version, window.location.origin), "BLR-Fatourati-license.pdf")); if (r.saved) useUi.getState().notify(t("saved")); }}>PDF</Button>
+              <Button variant="secondary" disabled={!s} onClick={async () => { if (!s) return; const r = await call<{ saved: boolean }>(blr().print.pdf(await withFont(buildLicenseHtml(s, lang, version, window.location.origin)), "BLR-Fatourati-license.pdf")); if (r.saved) useUi.getState().notify(t("saved")); }}>PDF</Button>
             </div>
           </div>
         </Card>

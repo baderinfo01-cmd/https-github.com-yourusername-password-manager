@@ -9,7 +9,10 @@ export interface Party {
 export interface Item {
   id: string; name: string; sku?: string; barcode?: string; category?: string; unit?: string; type: "product" | "service";
   cost: number; price: number; taxRate: number; trackStock: boolean; stock: number; minStock: number; notes?: string; image?: string;
+  createdAt?: number; active?: boolean; supplierId?: string; location?: string; description?: string; reorderQty?: number;
+  durationMin?: number; materials?: { itemId: string; qty: number }[]; // services: time needed and goods consumed per unit
 }
+export interface Category { id: string; name: string; kind: "product" | "service" }
 export type DocType = "invoice" | "quote" | "proforma" | "delivery" | "credit" | "purchase" | "order";
 export type DocStatus = "draft" | "sent" | "accepted" | "rejected" | "void" | "issued";
 export interface Line { id: string; itemId?: string; desc: string; qty: number; unit?: string; price: number; discountPct: number; taxRate: number }

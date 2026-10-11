@@ -6,6 +6,7 @@ import { blr, call } from "@/lib/api";
 import { computeTotals, num, round, stampDuty, todayIso } from "@/lib/calc";
 import { PAYMENT_METHODS } from "@/lib/defaults";
 import { buildDocHtml } from "@/lib/invoiceHtml";
+import { withFont } from "@/lib/fontEmbed";
 import { useMoney } from "@/lib/hooks";
 import { useT } from "@/lib/i18n";
 import type { Doc, Item } from "@/lib/types";
@@ -35,7 +36,7 @@ export default function Pos() {
 
   const shown = useMemo(() => {
     const k = q.trim().toLowerCase();
-    return items.filter((i) => !k || [i.name, i.sku, i.barcode].some((v) => v?.toLowerCase().includes(k))).slice(0, 40);
+    return items.filter((i) => i.active !== false).filter((i) => !k || [i.name, i.sku, i.barcode].some((v) => v?.toLowerCase().includes(k))).slice(0, 40);
   }, [items, q]);
 
   const add = (i: Item) => setCart((c) => (c.some((l) => l.item.id === i.id) ? c.map((l) => (l.item.id === i.id ? { ...l, qty: l.qty + 1 } : l)) : [...c, { item: i, qty: 1 }]));
@@ -66,7 +67,7 @@ export default function Pos() {
       const saved = await saveDoc(draft);
       await addPayment({ docId: saved.id, partyId: saved.partyId, kind: "in", amount: saved.total, date, method });
       if (printAfter) {
-        const h = await buildDocHtml(saved, { lang, settings, party: client, paid: saved.total, paper: "thermal" });
+        const h = await withFont(await buildDocHtml(saved, { lang, settings, party: client, paid: saved.total, paper: "thermal" }));
         await call(blr().print.html(h, { paper: "thermal" }));
       }
       notify(`${t("sale_done")} ${saved.number}`);

@@ -51,3 +51,15 @@ test("amount in words (ar/fr/en)", () => {
   assert.equal(amountInWords(17548, "fr", "DZD"), "Arrêtée à la somme de : dix-sept mille cinq cent quarante-huit dinars algériens");
   assert.match(amountInWords(120.5, "ar", "DZD"), /^فقط مائة وعشرون دينار جزائري و.* سنتيم لا غير$/);
 });
+
+import { CODE128_PATTERNS, code128Values, code128Svg } from "../src/lib/barcode.ts";
+test("code128 table is well-formed and encodes with a valid checksum", () => {
+  assert.equal(CODE128_PATTERNS.length, 107);
+  CODE128_PATTERNS.slice(0, 106).forEach((p, i) => assert.equal([...p].reduce((a, c) => a + Number(c), 0), 11, "pattern " + i));
+  assert.equal([...CODE128_PATTERNS[106]].reduce((a, c) => a + Number(c), 0), 13);
+  // Wikipedia vector "PJJ123C": checksum 54 with start A (103); start B (104) adds 1 -> 55
+  const v = code128Values("PJJ123C");
+  assert.deepEqual(v.slice(0, 1), [104]);
+  assert.equal(v[v.length - 2], 55);
+  assert.match(code128Svg("123456"), /^<svg/);
+});

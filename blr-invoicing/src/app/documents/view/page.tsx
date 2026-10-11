@@ -7,6 +7,7 @@ import { PaymentModal } from "@/components/PaymentModal";
 import { Badge, Button, Card, Confirm, Empty } from "@/components/ui";
 import { blr, call } from "@/lib/api";
 import { buildDocHtml } from "@/lib/invoiceHtml";
+import { withFont } from "@/lib/fontEmbed";
 import { buildReceiptHtml } from "@/lib/receiptHtml";
 import { openPreview } from "@/store/preview";
 import { PAY_TONE, useDocRows, useMoney, usePayLabel } from "@/lib/hooks";
@@ -49,7 +50,7 @@ function Inner() {
   useEffect(() => {
     if (!doc || !row) return;
     let live = true;
-    buildDocHtml(doc, { lang, settings, party, paid: row.paid, credits: row.credits }).then((h) => live && setHtml(h));
+    buildDocHtml(doc, { lang, settings, party, paid: row.paid, credits: row.credits }).then(withFont).then((h) => live && setHtml(h));
     return () => { live = false; };
   }, [doc, row, lang, settings, party]);
 
@@ -98,7 +99,7 @@ function Inner() {
 
       <div className="grid gap-5 lg:grid-cols-[1fr_320px]">
         <div ref={box} className="overflow-hidden rounded-xl border border-line bg-white shadow-sm" style={{ height: 1123 * scale, direction: "ltr" }}>
-          <iframe title="preview" srcDoc={html} sandbox="" className="block border-0 bg-white" style={{ width: 794, height: 1123, transform: `scale(${scale})`, transformOrigin: "top left" }} />
+          <iframe title="preview" srcDoc={html} sandbox="allow-same-origin" className="block border-0 bg-white" style={{ width: 794, height: 1123, transform: `scale(${scale})`, transformOrigin: "top left" }} />
         </div>
         <div className="space-y-5">
           {hasPay && (

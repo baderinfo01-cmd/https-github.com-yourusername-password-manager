@@ -111,7 +111,7 @@ export default function Reports() {
   const exportIt = () => exportXlsx(`report-${tab}`, t("rep_" + tab), [table.head, ...table.data, ...(table.total ? [table.total] : [])]);
   const buildReport = async () => {
     const body = [...table.data, ...(table.total ? [table.total] : [])].map((r) => `<tr>${r.map((c, i) => `<td class="${i ? "n" : ""}">${typeof c === "number" ? fmt(c, i) : c}</td>`).join("")}</tr>`).join("");
-    const html = `<!doctype html><html dir="${lang === "ar" ? "rtl" : "ltr"}"><meta charset=utf-8><style>body{font-family:Segoe UI,Tahoma,Arial;padding:16mm;font-size:12px}h1{font-size:20px;margin:0}p{color:#64748b}table{width:100%;border-collapse:collapse;margin-top:14px}th{background:#f1f5f9;text-align:start}td,th{padding:7px 8px;border-bottom:1px solid #e2e8f0}.n{text-align:end;direction:ltr}tr:last-child td{font-weight:700}</style><h1>${tr(lang, "rep_" + tab)}</h1><p>${settings.company.name} · ${from || "…"} → ${to || "…"}</p><table><tr>${table.head.map((h) => `<th>${h}</th>`).join("")}</tr>${body}</table></html>`;
+    const html = `<!doctype html><html dir="${lang === "ar" ? "rtl" : "ltr"}"><meta charset=utf-8><style>body{font-family:"El Messiri",Segoe UI,Tahoma,Arial;padding:16mm;font-size:12px}h1{font-size:20px;margin:0}p{color:#64748b}table{width:100%;border-collapse:collapse;margin-top:14px}th{background:#f1f5f9;text-align:start}td,th{padding:7px 8px;border-bottom:1px solid #e2e8f0}.n{text-align:end;direction:ltr}tr:last-child td{font-weight:700}</style><h1>${tr(lang, "rep_" + tab)}</h1><p>${settings.company.name} · ${from || "…"} → ${to || "…"}</p><table><tr>${table.head.map((h) => `<th>${h}</th>`).join("")}</tr>${body}</table></html>`;
     return html;
   };
 
