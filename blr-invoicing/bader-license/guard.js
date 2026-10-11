@@ -56,7 +56,8 @@ function openActivationWindow(BrowserWindow, createWindow) {
         resizable: false,
         fullscreenable: false,
         maximizable: false,
-        title: 'License',
+        title: 'BLR — License',
+        icon: path.join(__dirname, '..', 'build', 'icon.png'),
         autoHideMenuBar: true,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
