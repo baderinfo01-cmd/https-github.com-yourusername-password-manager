@@ -1,0 +1,37 @@
+name: Build BLR Fatourati (Windows installer)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: blr-invoicing
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: blr-invoicing/package-lock.json
+      - run: npm ci
+      - run: npm test
+      - run: npm run dist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: BLR-Fatourati-Setup
+          path: blr-invoicing/dist/*.exe
+      - name: Publish release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          TAG="blr-fatourati-v${VERSION}"
+          gh release delete "$TAG" --yes --cleanup-tag --repo "$GITHUB_REPOSITORY" || true
+          gh release create "$TAG" dist/*.exe --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --title "BLR Fatourati ${VERSION}" --notes "Windows installer for BLR Fatourati ${VERSION}. Unsigned build: on first run Windows SmartScreen may ask you to choose More info, then Run anyway."
