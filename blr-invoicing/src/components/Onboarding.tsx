@@ -1,13 +1,13 @@
 "use client";
 import { Printer, ShieldCheck } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { LicenseSeals } from "./LicenseSeals";
 import { Button, Field, Input, Modal, Select } from "./ui";
 import { blr, call } from "@/lib/api";
 import { toDataUrl } from "@/lib/image";
 import { withFont } from "@/lib/fontEmbed";
 import { LOCALE, useT } from "@/lib/i18n";
 import { licenseApi, type LicenseStatus } from "@/lib/license";
+import { CertPreview } from "@/components/CertPreview";
 import { buildLicenseHtml } from "@/lib/licenseHtml";
 import { useData } from "@/store/data";
 import { openPreview } from "@/store/preview";
@@ -19,7 +19,7 @@ const flag = (k: string) => { try { return localStorage.getItem(k) === "1"; } ca
 const setFlag = (k: string) => { try { localStorage.setItem(k, "1"); } catch {} };
 
 export function printLicense(s: LicenseStatus, lang: "ar" | "en" | "fr", version: string) {
-  openPreview({ title: "BLR Fatourati", fileName: "BLR-Fatourati-license.pdf", build: async () => buildLicenseHtml(s, lang, version, window.location.origin) });
+  openPreview({ title: "BLR Fatourati", fileName: "BLR-Fatourati-license.pdf", build: async () => await buildLicenseHtml(s, lang, version, window.location.origin) });
 }
 
 /** First run, right after activation: the license certificate can be printed / saved as PDF, or skipped. */
@@ -33,36 +33,23 @@ export function LicenseStep({ onDone }: { onDone: () => void }) {
     call<any>(blr().app.info()).then((i) => setVersion(i.version)).catch(() => {});
   }, []);
   const ok = !!s?.valid;
-  const tone = s?.dev ? "amber" : ok ? "green" : "red";
-  const fmt = (n: number) => (n ? new Date(n * 1000).toLocaleDateString("en-GB") : "—");
   const done = () => { setFlag(FLAG_LICENSE); onDone(); };
   const pdf = async () => {
     if (!s) return;
-    const html = await withFont(buildLicenseHtml(s, lang, version, window.location.origin));
+    const html = await withFont(await buildLicenseHtml(s, lang, version, window.location.origin));
     const r = await call<{ saved: boolean }>(blr().print.pdf(html, "BLR-Fatourati-license.pdf"));
     if (r.saved) useUi.getState().notify(t("saved"));
   };
   return (
     <div className="auth-bg grid min-h-screen place-items-center overflow-y-auto p-4">
-      <div className="glass pop w-full max-w-2xl rounded-[28px] p-7">
+      <div className="glass pop w-full max-w-3xl rounded-[28px] p-7">
         <div className="flex items-center gap-4">
           <img src="/brand/app-icon.png" alt="" width={64} height={64} className="glow-ring rounded-2xl" />
           <div><div className="text-xs text-muted">{t("license_certificate")}</div><h1 className="text-2xl font-bold text-accent">BLR Fatourati</h1></div>
           <span className={`ms-auto inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-sm font-bold ${s?.dev ? "bg-warn/15 text-warn" : ok ? "bg-ok/15 text-ok" : "bg-bad/15 text-bad"}`}><ShieldCheck size={15} />{!s ? "…" : s.dev ? t("lic_dev") : ok ? t("lic_active") : t("lic_inactive")}</span>
         </div>
         <p className="mt-3 text-sm text-muted">{t("license_step_hint")}</p>
-        {s && (
-          <div className="mt-4 grid items-center gap-5 md:grid-cols-[1fr_auto]">
-            <dl className="divide-y divide-line text-sm">
-              {([[t("lic_owner"), s.customer || "—"], [t("lic_plan"), s.plan || s.edition || "—"], [t("lic_number"), s.license_id || "—"], [t("lic_activated"), fmt(s.activated)], [t("lic_expires"), s.expires ? fmt(s.expires) : t("lic_lifetime")]] as [string, string][]).map(([k, v]) => (
-                <div key={k} className="flex justify-between gap-4 py-2.5"><dt className="text-muted">{k}</dt><dd className="font-semibold" dir="ltr">{v}</dd></div>
-              ))}
-            </dl>
-            <div className="mx-auto flex items-center justify-center">
-              <LicenseSeals size={170} tone={tone} title={s.dev ? t("stamp_dev") : ok ? t("stamp_signed") : t("stamp_title_bad")} plan={s.plan || s.edition} id={s.license_id || "—"} />
-            </div>
-          </div>
-        )}
+        {s && <div className="mt-4 max-h-[58vh] overflow-y-auto rounded-xl"><CertPreview s={s} lang={lang} version={version} /></div>}
         <div className="mt-6 flex flex-wrap items-center justify-end gap-2">
           <Button variant="ghost" onClick={done}>{t("skip")}</Button>
           <Button variant="secondary" onClick={pdf} disabled={!s}>PDF</Button>

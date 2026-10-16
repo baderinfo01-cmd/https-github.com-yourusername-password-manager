@@ -1,0 +1,60 @@
+{
+  "name": "template-app",
+  "version": "1.0.0",
+  "description": "Template App - desktop business application",
+  "author": "Template Author",
+  "private": true,
+  "main": "electron/main.js",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "electron:dev": "concurrently \"npm run dev\" \"wait-on http://localhost:3000/ && electron .\"",
+    "dist": "npm run build && electron-builder --win --x64",
+    "dist:dir": "npm run build && electron-builder --dir",
+    "typecheck": "tsc --noEmit",
+    "test": "node --experimental-strip-types --test tests/db.test.cjs tests/calc.test.mts tests/license.test.cjs tests/dict.test.mts",
+    "license:doctor": "node tools/license-doctor.cjs"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "clsx": "^2.1.1",
+    "concurrently": "^10.0.5",
+    "cross-env": "^7.0.3",
+    "electron": "^44.5.1",
+    "electron-builder": "^26.15.3",
+    "lucide-react": "^1.52.0",
+    "next": "16.3.8",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "tailwindcss": "^4",
+    "typescript": "^5",
+    "wait-on": "^9.5.1",
+    "zustand": "^5.0.15"
+  },
+  "build": {
+    "appId": "com.example.templateapp",
+    "productName": "Template App",
+    "npmRebuild": false,
+    "buildDependenciesFromSource": false,
+    "directories": { "output": "dist", "buildResources": "build" },
+    "files": ["electron/**/*", "bader-license/**/*", "build/icon.png", "out/**/*", "package.json"],
+    "win": {
+      "target": [{ "target": "nsis", "arch": ["x64"] }],
+      "icon": "build/icon.png",
+      "artifactName": "${productName}-Setup-${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Template App"
+    },
+    "asar": true,
+    "publish": null
+  },
+  "homepage": "https://baderinfo.com"
+}

@@ -1,14 +1,14 @@
 "use client";
-import { BadgeCheck, CalendarDays, Clock, Copy, KeyRound, Mail, MessageCircle, Monitor, Phone, Printer, RefreshCw, ShieldCheck, User } from "lucide-react";
-import { useCallback, useEffect, useState, type ReactNode } from "react";
-import { LicenseSeals } from "@/components/LicenseSeals";
+import { Clock, Copy, Mail, MessageCircle, Phone, Printer, RefreshCw, ShieldCheck } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+import { CertPreview } from "@/components/CertPreview";
 import { printLicense } from "@/components/Onboarding";
 import { buildLicenseHtml } from "@/lib/licenseHtml";
 import { withFont } from "@/lib/fontEmbed";
 import { Button, Card, PageHeader } from "@/components/ui";
 import { blr, call } from "@/lib/api";
 import { BRAND } from "@/lib/brand";
-import { LOCALE, useT } from "@/lib/i18n";
+import { useT } from "@/lib/i18n";
 import { useUi } from "@/store/ui";
 
 interface Status { valid: boolean; message: string; plan: string; edition: string; customer: string; license_id: string; domain: string; activated: number; expires: number; days_left: number | null; dev?: boolean }
@@ -21,7 +21,6 @@ export default function LicensePage() {
   const [busy, setBusy] = useState(false);
   const [copied, setCopied] = useState(false);
   const [version, setVersion] = useState("");
-  const fmt = (n: number) => (n ? new Date(n * 1000).toLocaleDateString("en-GB") : "—");
 
   const load = useCallback(async (recheck = false) => {
     if (!window.baderLicense) return setBridge(false);
@@ -31,10 +30,6 @@ export default function LicensePage() {
   useEffect(() => { load(); call<any>(blr().app.info()).then((i) => setVersion(i.version)).catch(() => {}); }, [load]);
 
   const ok = !!s?.valid;
-  const tone = s?.dev ? "amber" : ok ? "green" : "red";
-  const row = (icon: ReactNode, label: string, value: ReactNode) => (
-    <div className="flex items-center gap-3 border-b border-line py-2.5 text-sm last:border-0"><span className="text-muted">{icon}</span><span className="w-36 text-muted">{label}</span><span className="min-w-0 flex-1 font-medium">{value}</span></div>
-  );
   const contacts = [
     { icon: <Mail size={16} />, label: "Email", text: BRAND.email, href: `mailto:${BRAND.email}` },
     { icon: <Phone size={16} />, label: t("phone"), text: BRAND.phone, href: `tel:${BRAND.phone}` },
@@ -42,42 +37,25 @@ export default function LicensePage() {
   ];
 
   return (
-    <div className="mx-auto max-w-3xl">
+    <div className="mx-auto max-w-4xl">
       <PageHeader title={t("license")} />
       {!bridge ? <Card><p className="text-sm text-muted">{t("license_desktop_only")}</p></Card> : (
         <Card pad={false} className="overflow-hidden">
-          <div className="flex items-center gap-4 px-6 py-5 text-white" style={{ backgroundImage: "linear-gradient(135deg, var(--accent), var(--accent-2))" }}>
-            <img src="/brand/icon-192.png" alt="" width={56} height={56} className="rounded-2xl shadow-lg" />
-            <div className="min-w-0"><div className="text-xs opacity-80">{t("license_certificate")}</div><div className="text-2xl font-bold">BLR Fatourati</div></div>
-            <div className="ms-auto hidden text-end text-xs opacity-90 sm:block"><div>v{version}</div><div>{t("issued_by")} Baderinfo</div></div>
+          <div className="flex flex-wrap items-center gap-3 border-b border-line px-5 py-4">
+            <span className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-sm font-bold ${s?.dev ? "bg-warn/15 text-warn" : ok ? "bg-ok/15 text-ok" : "bg-bad/15 text-bad"}`}>
+              {s?.dev ? <Clock size={15} /> : <ShieldCheck size={15} />}{!s ? "…" : s.dev ? t("lic_dev") : ok ? t("lic_active") : t("lic_inactive")}
+            </span>
+            <span className="min-w-0 flex-1 truncate text-sm text-muted">{s?.message}</span>
+            {s && s.days_left !== null && <span className="text-sm text-muted">{t("lic_days_left")}: <b>{s.days_left}</b></span>}
+            {s && <button className="inline-flex items-center gap-1 font-mono text-xs text-muted" dir="ltr" onClick={() => { navigator.clipboard?.writeText(s.domain); setCopied(true); setTimeout(() => setCopied(false), 1500); }}>{s.domain ? `${s.domain.slice(0, 10)}…${s.domain.slice(-6)}` : "—"} <Copy size={12} />{copied && <span className="text-ok">✓</span>}</button>}
           </div>
-          <div className="relative p-6">
-            <div className="relative grid items-start gap-6 md:grid-cols-[1fr_auto]">
-              <div>
-                <span className={`mb-2 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-sm font-bold ${s?.dev ? "bg-warn/15 text-warn" : ok ? "bg-ok/15 text-ok" : "bg-bad/15 text-bad"}`}>
-                  {s?.dev ? <Clock size={15} /> : <ShieldCheck size={15} />}{!s ? "…" : s.dev ? t("lic_dev") : ok ? t("lic_active") : t("lic_inactive")}
-                </span>
-                {s && <>
-                  <p className="mb-3 text-sm text-muted">{s.message}</p>
-                  {row(<User size={15} />, t("lic_owner"), s.customer || "—")}
-                  {row(<BadgeCheck size={15} />, t("lic_plan"), s.plan || s.edition || "—")}
-                  {row(<KeyRound size={15} />, t("lic_number"), <span dir="ltr">{s.license_id || "—"}</span>)}
-                  {row(<Monitor size={15} />, t("lic_device"), <button className="inline-flex items-center gap-1 font-mono text-xs" dir="ltr" onClick={() => { navigator.clipboard?.writeText(s.domain); setCopied(true); setTimeout(() => setCopied(false), 1500); }}>{s.domain ? `${s.domain.slice(0, 12)}…${s.domain.slice(-6)}` : "—"} <Copy size={12} />{copied && <span className="text-ok">✓</span>}</button>)}
-                  {row(<CalendarDays size={15} />, t("lic_activated"), fmt(s.activated))}
-                  {row(<CalendarDays size={15} />, t("lic_expires"), s.expires ? fmt(s.expires) : t("lic_lifetime"))}
-                  {s.days_left !== null && row(<Clock size={15} />, t("lic_days_left"), s.days_left)}
-                </>}
-              </div>
-              <div className="mx-auto flex items-center justify-center">
-                {s && <LicenseSeals tone={tone} title={s.dev ? t("stamp_dev") : ok ? t("stamp_signed") : t("stamp_title_bad")} plan={s.plan || s.edition} id={s.license_id || "—"} />}
-              </div>
-            </div>
-            <p className="relative mt-4 flex items-center gap-1.5 text-xs text-muted"><ShieldCheck size={13} />{t("lic_signed_note")}</p>
-            <div className="relative mt-5 flex flex-wrap gap-2">
-              <Button className="flex-1" disabled={busy} onClick={() => load(true)}><RefreshCw size={15} className={busy ? "animate-spin" : ""} />{t("lic_check_now")}</Button>
-              <Button variant="secondary" disabled={!s} onClick={() => s && printLicense(s, lang, version)}><Printer size={15} />{t("print")}</Button>
-              <Button variant="secondary" disabled={!s} onClick={async () => { if (!s) return; const r = await call<{ saved: boolean }>(blr().print.pdf(await withFont(buildLicenseHtml(s, lang, version, window.location.origin)), "BLR-Fatourati-license.pdf")); if (r.saved) useUi.getState().notify(t("saved")); }}>PDF</Button>
-            </div>
+          <div className="bg-surface2 p-3 sm:p-5">
+            {s && <CertPreview s={s} lang={lang} version={version} />}
+          </div>
+          <div className="flex flex-wrap gap-2 p-5">
+            <Button className="flex-1" disabled={busy} onClick={() => load(true)}><RefreshCw size={15} className={busy ? "animate-spin" : ""} />{t("lic_check_now")}</Button>
+            <Button variant="secondary" disabled={!s} onClick={() => s && printLicense(s, lang, version)}><Printer size={15} />{t("print")}</Button>
+            <Button variant="secondary" disabled={!s} onClick={async () => { if (!s) return; const r = await call<{ saved: boolean }>(blr().print.pdf(await withFont(await buildLicenseHtml(s, lang, version, window.location.origin)), "BLR-Fatourati-license.pdf")); if (r.saved) useUi.getState().notify(t("saved")); }}>PDF</Button>
           </div>
         </Card>
       )}

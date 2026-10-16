@@ -1,0 +1,15 @@
+# dependencies / build output
+/node_modules
+/.next/
+/out/
+/dist
+/coverage
+*.tsbuildinfo
+next-env.d.ts
+.DS_Store
+*.pem
+.env*
+npm-debug.log*
+
+# !!! build/icon.png and public/** MUST stay tracked: electron-builder needs build/icon.png and the
+# static export needs public/. Never add "build" or "build/" to this file (pitfall seen in CI).
