@@ -12,7 +12,7 @@ import type { Item, Settings } from "@/lib/types";
  *   2. state array + load() entry + reset() entry
  *   3. saveX / removeX that call api().db.* then upsert into state
  * Anything touching several records (a document + stock + payments) goes through api().db.batch(ops):
- * one SQLite transaction, all-or-nothing. See references/data-model.md (saveDoc in BLR Fatourati).
+ * one SQLite transaction, all-or-nothing. See references/data-model.md (the reference saveDoc is described in the skill's references/data-model.md).
  */
 interface DataState {
   loaded: boolean;

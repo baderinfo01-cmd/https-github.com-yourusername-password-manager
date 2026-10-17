@@ -41,7 +41,7 @@ export function addPeriod(iso: string, every: "week" | "month" | "quarter" | "ye
   return toIso(d);
 }
 
-// ---- document totals (same rules as BLR Fatourati; see references/data-model.md) ----
+// ---- document totals (see the skill's references/data-model.md) ----
 export const lineNet = (l: Line) => round(num(l.qty) * num(l.price) * (1 - num(l.discountPct) / 100), 4);
 
 export interface Totals { subtotal: number; discountAmount: number; tax: number; total: number; taxByRate: Record<string, number> }
