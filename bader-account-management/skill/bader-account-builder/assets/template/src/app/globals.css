@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+/* El Messiri is bundled in public/fonts: works offline and inside the .exe
+   (next/font/google needs internet at BUILD time and breaks proxied/offline CI builds). */
+@font-face { font-family: "El Messiri"; font-style: normal; font-weight: 400 700; font-display: swap; src: url(/fonts/ElMessiri-arabic.woff2) format("woff2"); unicode-range: U+0600-06FF,U+0750-077F,U+08A0-08FF,U+FB50-FDFF,U+FE70-FEFC,U+200C-200E; }
+@font-face { font-family: "El Messiri"; font-style: normal; font-weight: 400 700; font-display: swap; src: url(/fonts/ElMessiri-latin.woff2) format("woff2"); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2212; }
+@font-face { font-family: "El Messiri"; font-style: normal; font-weight: 400 700; font-display: swap; src: url(/fonts/ElMessiri-latin-ext.woff2) format("woff2"); unicode-range: U+0100-02AF,U+1E00-1EFF,U+2020,U+20A0-20AB; }
+
+/* Colour tokens are space-separated RGB triples so rgba(var(--c-primary), .2) works. They are exposed to Tailwind
+   through @theme below, so bg-primary / text-muted / border-border / bg-card ... are REAL utilities.
+   (The first version of the app used --color-primary as a bare triple: utilities like text-primary silently did nothing.) */
+:root {
+  --c-primary: 14 165 233;
+  --c-bg: 240 249 255;
+  --c-fg: 15 23 42;
+  --c-muted: 100 116 139;
+  --c-card: 255 255 255;
+  --c-border: 186 230 253;
+  --c-accent: 224 242 254;
+}
+/* colour themes (Settings). "brand" = the :root values above (new_app.py --accent changes them) */
+[data-theme="purple"] { --c-primary: 168 85 247; --c-bg: 250 245 255; --c-accent: 245 243 255; --c-border: 233 213 255; }
+[data-theme="green"] { --c-primary: 34 197 94; --c-bg: 240 253 244; --c-accent: 220 252 231; --c-border: 187 247 208; }
+[data-theme="pink"] { --c-primary: 236 72 153; --c-bg: 253 242 248; --c-accent: 252 231 243; --c-border: 249 168 212; }
+[data-theme="brown"] { --c-primary: 146 64 14; --c-bg: 254 243 232; --c-accent: 254 215 170; --c-border: 253 186 116; }
+
+/* dark mode: toggled in the header (data-mode on <html>, stored in localStorage by ModeToggle) */
+html[data-mode="dark"] {
+  color-scheme: dark;
+  --c-bg: 11 17 32;
+  --c-fg: 226 232 240;
+  --c-muted: 148 163 184;
+  --c-card: 30 41 59;
+  --c-border: 51 65 85;
+  --c-accent: 30 41 59;
+}
+
+@theme inline {
+  --color-primary: rgb(var(--c-primary));
+  --color-background: rgb(var(--c-bg));
+  --color-fg: rgb(var(--c-fg));
+  --color-muted: rgb(var(--c-muted));
+  --color-card: rgb(var(--c-card));
+  --color-border: rgb(var(--c-border));
+  --color-accent: rgb(var(--c-accent));
+  --font-sans: "El Messiri", "Segoe UI", Tahoma, "Noto Sans Arabic", system-ui, -apple-system, Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+html { background: rgb(var(--c-bg)); }
+html, body { font-family: var(--font-sans); }
+body {
+  background:
+    radial-gradient(1200px 600px at 100% -10%, rgba(var(--c-primary), 0.10), transparent 60%),
+    radial-gradient(900px 500px at -10% 110%, rgba(var(--c-primary), 0.08), transparent 60%),
+    rgb(var(--c-bg));
+  background-attachment: fixed;
+  color: rgb(var(--c-fg));
+  min-height: 100vh;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+input, select, textarea, button { font-family: inherit; }
+/* numbers, passwords, e-mails, ids stay left-to-right inside Arabic text */
+.num { font-variant-numeric: tabular-nums; direction: ltr; unicode-bidi: plaintext; }
+
+.glass {
+  background: rgba(var(--c-card), 0.78);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(var(--c-primary), 0.2);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06), 0 12px 32px -12px rgba(15, 23, 42, 0.2);
+}
+.btn-3d {
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 14px 0 rgba(var(--c-primary), 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+.btn-3d:hover { transform: translateY(-2px); box-shadow: 0 8px 20px 0 rgba(var(--c-primary), 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.5); }
+.btn-3d:active { transform: translateY(0); }
+
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+.animate-float { animation: float 3s ease-in-out infinite; }
+@keyframes slideUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
+.animate-slide-up { animation: slideUp 0.5s ease-out; }
+
+::selection { background: rgba(var(--c-primary), 0.25); }
+input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: none;
+  border-color: rgb(var(--c-primary)) !important;
+  box-shadow: 0 0 0 4px rgba(var(--c-primary), 0.18);
+}
+button:focus-visible, a:focus-visible { outline: 2px solid rgb(var(--c-primary)); outline-offset: 2px; }
+button:not(:disabled) { cursor: pointer; }
+button:active:not(:disabled) { transform: scale(0.98); }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: rgb(var(--c-accent)); }
+::-webkit-scrollbar-thumb { background: rgb(var(--c-primary)); border-radius: 4px; }
+table { border-collapse: separate; border-spacing: 0; }
+tbody tr:hover { background: rgba(var(--c-primary), 0.05); }
+
+@media print { .no-print { display: none !important; } body { background: white !important; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }

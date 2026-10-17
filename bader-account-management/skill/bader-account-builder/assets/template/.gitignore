@@ -1,0 +1,13 @@
+# dependencies / build output (never commit or zip these)
+/node_modules
+/.next/
+/out/
+/dist
+*.tsbuildinfo
+next-env.d.ts
+npm-debug.log*
+# secrets
+.env*
+*.pem
+.DS_Store
+# NOTE: do NOT ignore /build (electron-builder needs build/icon.png) or package-lock.json (CI uses npm ci).

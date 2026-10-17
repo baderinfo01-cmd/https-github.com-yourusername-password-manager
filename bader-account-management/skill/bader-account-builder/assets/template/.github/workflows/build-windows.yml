@@ -1,0 +1,42 @@
+name: Build Template-App (Windows installer)
+
+# Variant for an app that lives at the ROOT of its repository.
+# Monorepo (app in a sub-folder): put this file in the repo-root .github/workflows/ and add
+#   defaults.run.working-directory: <folder>, cache-dependency-path: <folder>/package-lock.json,
+#   artifact path: <folder>/dist/*.exe, paths: ['.github/workflows/<this file>', '<folder>/**'],
+#   and `git archive ... HEAD:<folder>`.  Use a unique tag per program (template-app-v<version>).
+on:
+  workflow_dispatch:
+  push:
+    tags: ['template-app-v*']
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run dist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Template-App-Setup
+          path: dist/*.exe
+      - name: Publish release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          TAG="template-app-v${VERSION}"
+          gh release delete "$TAG" --yes --cleanup-tag --repo "$GITHUB_REPOSITORY" || true
+          git archive --format=zip --prefix=template-app/ -o "$RUNNER_TEMP/Template-App-source-${VERSION}.zip" HEAD
+          gh release create "$TAG" dist/*.exe "$RUNNER_TEMP/Template-App-source-${VERSION}.zip" --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --title "Template App ${VERSION}" --notes "Windows installer for Template App ${VERSION}. Unsigned build: on first run Windows SmartScreen may ask you to choose More info, then Run anyway."
