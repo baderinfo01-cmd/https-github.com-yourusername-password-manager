@@ -6,13 +6,15 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useMemo, useState, type ReactNode } from "react";
+import { Suspense, useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import { Toast, Button, Input, Field } from "./ui";
 import { blr, call } from "@/lib/api";
 import { PrintPreviewHost } from "./PrintPreview";
 import { RecoveryKeyDialog } from "./RecoveryKeyDialog";
 import { CompanyWizard, LicenseStep } from "./Onboarding";
 import { licenseApi } from "@/lib/license";
+import { installNative, isNative } from "@/lib/mobile/native";
+import { ActivationGate } from "@/components/mobile/ActivationGate";
 import { useT } from "@/lib/i18n";
 import { can, COLORS, useUi, type Lang } from "@/store/ui";
 import { useData } from "@/store/data";
@@ -81,7 +83,17 @@ export function Shell({ children }: { children: ReactNode }) {
   const { loaded, load, runRecurring, settings } = useData();
   // first run (no account yet) right after activation: show the license certificate once
   const [showLicense, setShowLicense] = useState(() => { try { return !!licenseApi() && localStorage.getItem("blr-first-license-step") !== "1"; } catch { return false; } });
-  useEffect(() => { hydrate(); boot().catch(() => useUi.setState({ authState: "login" })); }, [hydrate, boot]);
+  // Android: install the phone bridge + licence client first, then require an activated licence for this phone
+  const [gate, setGate] = useState<"checking" | "locked" | "ok">("checking");
+  const startApp = useCallback(() => { hydrate(); boot().catch(() => useUi.setState({ authState: "login" })); }, [hydrate, boot]);
+  useEffect(() => {
+    (async () => {
+      if (!isNative()) { setGate("ok"); return startApp(); }
+      await installNative();
+      const st = await window.baderLicense!.status().catch(() => null);
+      if (st?.valid) { setGate("ok"); startApp(); } else setGate("locked");
+    })();
+  }, [startApp]);
   useEffect(() => {
     if (authState !== "in") { useData.getState().reset(); return; }
     load().then(async () => {
@@ -101,6 +113,8 @@ export function Shell({ children }: { children: ReactNode }) {
     return () => { clearTimeout(timer); ev.forEach((e) => window.removeEventListener(e, reset)); };
   }, [authState, settings.autoLockMin]);
 
+  if (gate === "checking") return <Splash />;
+  if (gate === "locked") return <><ActivationGate onActivated={() => { try { localStorage.removeItem("blr-first-license-step"); } catch {} setShowLicense(true); setGate("ok"); startApp(); }} /><Toast /></>;
   if (!hydrated || authState === "loading") return <Splash />;
   if (authState === "setup" && showLicense) return <><LicenseStep onDone={() => setShowLicense(false)} /><PrintPreviewHost /><Toast /></>;
   if (authState !== "in") return <><AuthScreen mode={authState} /><RecoveryKeyDialog /><PrintPreviewHost /><Toast /></>;
@@ -126,7 +140,7 @@ function Frame({ children }: { children: ReactNode }) {
   };
   const initials = (user?.name || "?").split(/\s+/).map((w) => w[0]).slice(0, 2).join("").toUpperCase();
   return (
-    <div className="flex h-screen gap-3 overflow-hidden p-3">
+    <div className="frame-root flex h-dvh gap-3 overflow-hidden p-3">
       {open && <div className="fixed inset-0 z-30 bg-black/40 lg:hidden" onClick={() => setOpen(false)} />}
       <aside className={clsx("glass no-print fixed inset-y-3 start-3 z-40 flex w-64 shrink-0 flex-col rounded-3xl transition-transform lg:static", open ? "translate-x-0" : "max-lg:ltr:-translate-x-[110%] max-lg:rtl:translate-x-[110%]")}>
         <div className="flex items-center gap-3 px-5 pb-3 pt-5">
@@ -156,6 +170,13 @@ function Frame({ children }: { children: ReactNode }) {
             );
           })}
         </nav>
+        <div className="native-only flex-wrap items-center justify-center gap-2 border-t border-line/70 p-3">
+          <select value={lang} onChange={(e) => setLang(e.target.value as Lang)} className="h-9 rounded-xl border border-line bg-surface px-2 text-xs" aria-label="language">
+            <option value="ar">العربية</option><option value="fr">Français</option><option value="en">English</option>
+          </select>
+          <ColorPicker />
+          <button onClick={() => setTheme(theme === "dark" ? "light" : "dark")} className="rounded-xl p-2.5 text-muted hover:bg-surface2" aria-label="theme">{theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}</button>
+        </div>
         <div className="border-t border-line/70 p-3 text-center text-[11px] text-muted">BLR Fatourati v1.0 · Baderinfo</div>
       </aside>
 
@@ -164,23 +185,46 @@ function Frame({ children }: { children: ReactNode }) {
           <button className="rounded-lg p-2 text-muted hover:bg-surface2 lg:hidden" onClick={() => setOpen(true)} aria-label="menu"><Menu size={20} /></button>
           <QuickCreate />
           <GlobalSearch />
-          <HeaderClock />
+          <span className="hide-native contents"><HeaderClock /></span>
           <div className="flex items-center gap-1">
-            <select value={lang} onChange={(e) => setLang(e.target.value as Lang)} className="h-9 rounded-xl border border-line bg-surface px-2 text-xs" aria-label="language">
+            <select value={lang} onChange={(e) => setLang(e.target.value as Lang)} className="hide-native h-9 rounded-xl border border-line bg-surface px-2 text-xs" aria-label="language">
               <option value="ar">العربية</option><option value="fr">Français</option><option value="en">English</option>
             </select>
-            <ColorPicker />
-            <button onClick={() => setTheme(theme === "dark" ? "light" : "dark")} className="rounded-xl p-2.5 text-muted hover:bg-surface2" aria-label="theme">{theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}</button>
+            <span className="hide-native contents"><ColorPicker /></span>
+            <button onClick={() => setTheme(theme === "dark" ? "light" : "dark")} className="hide-native rounded-xl p-2.5 text-muted hover:bg-surface2" aria-label="theme">{theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}</button>
             <button onClick={() => signOut()} title={t("lock")} className="rounded-xl p-2.5 text-muted hover:bg-surface2"><Lock size={18} /></button>
           </div>
         </header>
         <main className="min-h-0 flex-1 overflow-y-auto rounded-2xl px-1 pb-2 pe-2 pt-1 sm:px-2">{children}</main>
+        <BottomNav active={active} onMore={() => setOpen(true)} />
       </div>
       <PrintPreviewHost />
       <CompanyWizard />
       <RecoveryKeyDialog />
       <Toast />
     </div>
+  );
+}
+
+/** Phone-only tab bar (shown by the `native` class); the full menu opens from "More". */
+function BottomNav({ active, onMore }: { active: (href: string) => boolean; onMore: () => void }) {
+  const t = useT();
+  const user = useUi((u) => u.user);
+  const tabs: (NavItem & { fab?: boolean })[] = [
+    { href: "/", key: "home", icon: <LayoutDashboard size={20} /> },
+    { href: "/documents/?type=invoice", key: "invoices", icon: <FileText size={20} />, perm: "sales:read" },
+    { href: "/pos/", key: "pos", icon: <ScanLine size={24} />, perm: "pos", fab: true },
+    { href: "/clients/", key: "clients", icon: <BookUser size={20} />, perm: "clients:read" },
+  ].filter((i) => !i.perm || can(user?.role, i.perm));
+  return (
+    <nav className="bottom-nav glass no-print">
+      {tabs.map((i) => (
+        <Link key={i.key} href={i.href} className={clsx("bn-item", active(i.href) && "bn-on", i.fab && "bn-fab")}>
+          <span className="bn-ic">{i.icon}</span><span className="bn-tx">{t(i.key)}</span>
+        </Link>
+      ))}
+      <button className="bn-item" onClick={onMore}><span className="bn-ic"><Menu size={20} /></span><span className="bn-tx">{t("more")}</span></button>
+    </nav>
   );
 }
 

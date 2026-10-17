@@ -1,0 +1,42 @@
+name: Build Template App (Windows installer)
+
+# Standalone repository layout (package.json at the repo root).
+# If the app lives in a SUBFOLDER of a bigger repo, see references/packaging-ci.md (monorepo variant):
+# add `defaults.run.working-directory`, prefix `cache-dependency-path` and the artifact path, and narrow `paths`.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/build-windows.yml', 'package.json', 'electron/**', 'bader-license/**', 'src/**', 'public/**', 'build/**', 'tests/**', 'next.config.ts']
+
+permissions:
+  contents: write   # needed by `gh release create`
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22        # node:sqlite needs >= 22.13 (tests run on the CI node, the app runs on Electron's node)
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - run: npm ci               # package-lock.json MUST be committed
+      - run: npm test
+      - run: npm run typecheck
+      - run: npm run dist         # next build (static export to out/) + electron-builder --win --x64
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Template-App-Setup
+          path: dist/*.exe
+      - name: Publish release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          TAG="template-app-v${VERSION}"
+          gh release delete "$TAG" --yes --cleanup-tag --repo "$GITHUB_REPOSITORY" || true
+          git archive --format=zip --prefix=template-app/ -o "$RUNNER_TEMP/Template-App-source-${VERSION}.zip" HEAD
+          gh release create "$TAG" dist/*.exe "$RUNNER_TEMP/Template-App-source-${VERSION}.zip" --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --title "Template App ${VERSION}" --notes "Windows installer for Template App ${VERSION}. Unsigned build: on first run Windows SmartScreen may ask you to choose More info, then Run anyway."

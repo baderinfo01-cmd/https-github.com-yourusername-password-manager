@@ -31,6 +31,10 @@ interface DataState {
 
 const list = <T,>(kind: string) => call<T[]>(api().db.list(kind));
 
+// Extra stores (scripts/add_module.py creates one per module) register here so that signing out wipes their data too.
+const resetters = new Set<() => void>();
+export const onReset = (fn: () => void) => { resetters.add(fn); };
+
 export const useData = create<DataState>((set, get) => ({
   loaded: false,
   settings: DEFAULT_SETTINGS,
@@ -46,7 +50,7 @@ export const useData = create<DataState>((set, get) => ({
       : DEFAULT_SETTINGS;
     set({ settings, items, audit: audit.sort((a, b) => b.at - a.at), loaded: true });
   },
-  reset: () => set({ loaded: false, items: [], audit: [] }),
+  reset: () => { resetters.forEach((fn) => fn()); set({ loaded: false, items: [], audit: [] }); },
 
   async saveSettings(s) {
     const saved = await call<Settings>(api().db.save("settings", s));

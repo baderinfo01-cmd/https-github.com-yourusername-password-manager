@@ -1,0 +1,10 @@
+{
+  "appId": "com.baderinfo.blr.mobile",
+  "appName": "BLR Fatourati",
+  "webDir": "out",
+  "android": { "backgroundColor": "#0b1f17", "allowMixedContent": false },
+  "plugins": {
+    "SplashScreen": { "launchShowDuration": 0, "backgroundColor": "#0a9f63" },
+    "CapacitorHttp": { "enabled": true }
+  }
+}

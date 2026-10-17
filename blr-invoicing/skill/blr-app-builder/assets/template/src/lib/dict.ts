@@ -168,6 +168,8 @@ export const DICT: Record<string, [string, string, string]> = {
   report_title: ["قائمة الأصناف", "Item list", "Liste des articles"],
   welcome_dashboard: ["مرحبًا، {name}", "Welcome, {name}", "Bienvenue, {name}"],
   dashboard_hint: ["ابدأ بإضافة الأصناف من القائمة الجانبية.", "Start by adding items from the side menu.", "Commencez par ajouter des articles depuis le menu."],
+  optional_but_recommended: ["اختياري (موصى به)", "Optional (recommended)", "Facultatif (recommandé)"],
+  roles_title: ["الأدوار", "Roles", "Rôles"],
   language: ["اللغة", "Language", "Langue"],
   theme: ["المظهر", "Theme", "Thème"],
   settings_security: ["الأمان", "Security", "Sécurité"],

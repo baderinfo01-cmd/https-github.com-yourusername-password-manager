@@ -1,0 +1,111 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* El Messiri, bundled in public/fonts (works offline and in the .exe; next/font/google would need internet at build time).
+   unicode-range lets the browser load only the subsets a page uses. */
+@font-face { font-family: "El Messiri"; font-style: normal; font-weight: 400 700; font-display: swap; src: url(/fonts/ElMessiri-arabic.woff2) format("woff2"); unicode-range: U+0600-06FF,U+0750-077F,U+08A0-08FF,U+FB50-FDFF,U+FE70-FEFC,U+200C-200E; }
+@font-face { font-family: "El Messiri"; font-style: normal; font-weight: 400 700; font-display: swap; src: url(/fonts/ElMessiri-latin.woff2) format("woff2"); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2212; }
+@font-face { font-family: "El Messiri"; font-style: normal; font-weight: 400 700; font-display: swap; src: url(/fonts/ElMessiri-latin-ext.woff2) format("woff2"); unicode-range: U+0100-02AF,U+1E00-1EFF,U+2020,U+20A0-20AB; }
+
+:root {
+  --bg: #f4f6fb;
+  --surface: #ffffff;
+  --surface-2: #f8fafc;
+  --border: #e3e8f0;
+  --text: #0f172a;
+  --muted: #64748b;
+  --accent: #0a9f63;
+  --accent-2: #067a4c;
+  --glass: rgba(255,255,255,.72);
+  --glass-edge: rgba(255,255,255,.9);
+  --side: #0b1220;
+  --side-text: #cbd5e1;
+  --ok: #059669;
+  --warn: #d97706;
+  --bad: #dc2626;
+}
+.dark {
+  --glass: rgba(15,24,40,.72);
+  --glass-edge: rgba(255,255,255,.08);
+  --bg: #0a0f1a;
+  --surface: #111a2b;
+  --surface-2: #0e1626;
+  --border: #223049;
+  --text: #e6edf7;
+  --muted: #94a3b8;
+  --side: #070b14;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface2: var(--surface-2);
+  --color-line: var(--border);
+  --color-ink: var(--text);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent2: var(--accent-2);
+  --color-ok: var(--ok);
+  --color-warn: var(--warn);
+  --color-bad: var(--bad);
+  --font-sans: "El Messiri", "Segoe UI", Tahoma, "Noto Sans Arabic", system-ui, -apple-system, Arial, sans-serif;
+}
+
+html, body { height: 100%; }
+body { background: var(--bg); color: var(--text); font-family: var(--font-sans); font-size: 15px; }
+input, select, textarea, button { font-family: inherit; }
+* { scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
+input, select, textarea { color: var(--text); }
+input[type="number"] { -moz-appearance: textfield; }
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.num { font-variant-numeric: tabular-nums; direction: ltr; unicode-bidi: plaintext; }
+@media print { .no-print { display: none !important; } }
+@keyframes pop { from { opacity: 0; transform: translateY(6px) scale(.98); } to { opacity: 1; transform: none; } }
+.pop { animation: pop .16s ease-out; }
+
+/* ---- brand colour: change --accent / --accent-2 in :root (top of file) to rebrand the whole app ---- */
+
+/* ---- professional buttons ---- */
+.btn { position: relative; transition: transform .18s cubic-bezier(.4,0,.2,1), box-shadow .18s, background-color .18s, filter .18s; }
+.btn:active { transform: translateY(0) scale(.98); }
+.btn-primary {
+  color: #fff;
+  background-image: linear-gradient(135deg, var(--accent), var(--accent-2));
+  box-shadow: 0 6px 16px -6px color-mix(in srgb, var(--accent) 70%, transparent), inset 0 1px 0 rgba(255,255,255,.28), inset 0 -1px 0 rgba(0,0,0,.12);
+}
+.btn-primary:hover { transform: translateY(-1px); filter: brightness(1.06); box-shadow: 0 10px 22px -8px color-mix(in srgb, var(--accent) 80%, transparent), inset 0 1px 0 rgba(255,255,255,.35); }
+.btn-success { color:#fff; background-image: linear-gradient(135deg,#10b981,#059669); box-shadow: 0 6px 16px -6px rgba(5,150,105,.6), inset 0 1px 0 rgba(255,255,255,.28); }
+.btn-success:hover { transform: translateY(-1px); filter: brightness(1.06); }
+.btn-danger { color:#fff; background-image: linear-gradient(135deg,#ef4444,#dc2626); box-shadow: 0 6px 16px -6px rgba(220,38,38,.6), inset 0 1px 0 rgba(255,255,255,.25); }
+.btn-danger:hover { transform: translateY(-1px); filter: brightness(1.06); }
+.btn-secondary { background: var(--surface); border: 1px solid var(--border); box-shadow: 0 1px 2px rgba(15,23,42,.06); }
+.btn-secondary:hover { transform: translateY(-1px); border-color: color-mix(in srgb, var(--accent) 45%, var(--border)); box-shadow: 0 6px 14px -8px rgba(15,23,42,.25); background: var(--surface-2); }
+.btn-ghost:hover { background: var(--surface-2); }
+.card-soft { box-shadow: 0 1px 2px rgba(15,23,42,.05), 0 10px 28px -16px rgba(15,23,42,.18); }
+.swatch { width: 22px; height: 22px; border-radius: 9999px; border: 2px solid var(--surface); box-shadow: 0 0 0 1px var(--border); transition: transform .15s; }
+.swatch:hover { transform: scale(1.18); }
+
+.nav-active { background-image: linear-gradient(135deg, var(--accent), var(--accent-2)); box-shadow: 0 8px 18px -8px color-mix(in srgb, var(--accent) 80%, transparent), inset 0 1px 0 rgba(255,255,255,.22); }
+
+
+/* ---- glass look ---- */
+body { background-color: var(--bg); background-image:
+  radial-gradient(900px 520px at 100% -8%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 65%),
+  radial-gradient(800px 520px at -6% 108%, color-mix(in srgb, var(--accent-2) 12%, transparent), transparent 65%),
+  linear-gradient(135deg, rgba(14,165,233,.05), rgba(168,85,247,.04)); background-attachment: fixed; }
+.dark body { background-image:
+  radial-gradient(900px 520px at 100% -8%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 65%),
+  radial-gradient(800px 520px at -6% 108%, color-mix(in srgb, var(--accent-2) 16%, transparent), transparent 65%); }
+.glass { background: var(--glass); -webkit-backdrop-filter: blur(20px) saturate(170%); backdrop-filter: blur(20px) saturate(170%); border: 1px solid var(--glass-edge);
+  box-shadow: 0 1px 2px rgba(15,23,42,.05), 0 14px 34px -18px rgba(15,23,42,.22); }
+.btn-primary { background-image: linear-gradient(180deg, rgba(255,255,255,.2), rgba(255,255,255,0) 55%), linear-gradient(135deg, var(--accent), var(--accent-2)); }
+.pill { transition: all .18s; }
+.auth-bg { background-image:
+  radial-gradient(700px 480px at 85% 0%, color-mix(in srgb, var(--accent) 30%, transparent), transparent 60%),
+  radial-gradient(700px 520px at 0% 100%, color-mix(in srgb, var(--accent-2) 26%, transparent), transparent 60%),
+  linear-gradient(160deg, #eaf6f2, #e6eef8 55%, #efeaf8); }
+.dark .auth-bg { background-image:
+  radial-gradient(700px 480px at 85% 0%, color-mix(in srgb, var(--accent) 28%, transparent), transparent 60%),
+  radial-gradient(700px 520px at 0% 100%, color-mix(in srgb, var(--accent-2) 24%, transparent), transparent 60%),
+  linear-gradient(160deg, #08111d, #0b1626); }
+.glow-ring { box-shadow: 0 18px 40px -12px color-mix(in srgb, var(--accent) 70%, transparent); }

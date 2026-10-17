@@ -79,7 +79,7 @@ function apply(lang: Lang, theme: Theme) {
  */
 const PERMS: Record<Role, string[]> = {
   admin: ["*"],
-  manager: ["items", "reports", "delete"],
+  manager: ["items", "reports", "delete"], // @perms:manager (add_module.py appends here)
   cashier: ["items:read"],
   accountant: ["items:read", "reports"],
 };

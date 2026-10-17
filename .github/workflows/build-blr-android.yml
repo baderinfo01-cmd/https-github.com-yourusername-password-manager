@@ -1,0 +1,65 @@
+name: Build BLR Fatourati (Android APK)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [claude/gifted-faraday-mwhxt8]
+    paths: ['.github/workflows/build-blr-android.yml', 'blr-invoicing/**']
+
+permissions:
+  contents: write
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: blr-invoicing
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: blr-invoicing/package-lock.json
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: android-actions/setup-android@v3
+      - run: npm ci
+      - run: npm test
+      - run: npx next build
+      - run: npx cap sync android
+      - name: Prepare signing key (optional secrets)
+        env:
+          KS: ${{ secrets.ANDROID_KEYSTORE_B64 }}
+        run: |
+          if [ -n "$KS" ]; then
+            echo "$KS" | base64 -d > "$RUNNER_TEMP/blr.keystore"
+            echo "BLR_KEYSTORE_FILE=$RUNNER_TEMP/blr.keystore" >> "$GITHUB_ENV"
+            echo "BLR_KEYSTORE_PASSWORD=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> "$GITHUB_ENV"
+            echo "BLR_KEY_ALIAS=${{ secrets.ANDROID_KEY_ALIAS }}" >> "$GITHUB_ENV"
+            echo "BLR_KEY_PASSWORD=${{ secrets.ANDROID_KEY_PASSWORD }}" >> "$GITHUB_ENV"
+            echo "TASK=assembleRelease" >> "$GITHUB_ENV"
+          else
+            echo "TASK=assembleDebug" >> "$GITHUB_ENV"
+          fi
+      - name: Build APK
+        working-directory: blr-invoicing/android
+        run: ./gradlew "$TASK" --no-daemon
+      - name: Collect APK
+        run: |
+          mkdir -p dist-apk
+          cp "$(find android/app/build/outputs/apk -name '*.apk' | head -1)" dist-apk/BLR-Fatourati-android.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: BLR-Fatourati-Android
+          path: blr-invoicing/dist-apk/*.apk
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="blr-fatourati-android-v1.0.0"
+          gh release delete "$TAG" --yes --cleanup-tag --repo "$GITHUB_REPOSITORY" || true
+          gh release create "$TAG" dist-apk/BLR-Fatourati-android.apk --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --title "BLR Fatourati Android 1.0.0" --notes "Android APK for BLR Fatourati. Allow installation from unknown sources, install, then enter the activation code (one phone per code). Product id in the licence dashboard: blr-fatourati-mobile."

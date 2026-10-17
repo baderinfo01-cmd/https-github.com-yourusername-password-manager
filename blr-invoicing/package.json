@@ -12,15 +12,17 @@
     "dist": "npm run build && electron-builder --win --x64",
     "dist:dir": "npm run build && electron-builder --dir",
     "typecheck": "tsc --noEmit",
-    "test": "node --experimental-strip-types --test tests/db.test.cjs tests/calc.test.mts tests/license.test.cjs",
+    "test": "node --experimental-strip-types --test tests/db.test.cjs tests/calc.test.mts tests/license.test.cjs tests/mobile-license.test.mts",
     "license:doctor": "node tools/license-doctor.cjs"
   },
   "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
+    "@capacitor/cli": "^8.5.3",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^22",
+    "@types/qrcode": "^1.5.5",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@types/qrcode": "^1.5.5",
     "clsx": "^2.1.1",
     "concurrently": "^10.0.5",
     "electron": "^44.5.1",
@@ -42,10 +44,26 @@
     "productName": "BLR Fatourati",
     "npmRebuild": false,
     "buildDependenciesFromSource": false,
-    "directories": { "output": "dist", "buildResources": "build" },
-    "files": ["electron/**/*", "bader-license/**/*", "build/icon.png", "out/**/*", "package.json"],
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "electron/**/*",
+      "bader-license/**/*",
+      "build/icon.png",
+      "out/**/*",
+      "package.json"
+    ],
     "win": {
-      "target": [{ "target": "nsis", "arch": ["x64"] }],
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
       "icon": "build/icon.png",
       "artifactName": "${productName}-Setup-${version}.${ext}"
     },
@@ -59,5 +77,19 @@
     "asar": true,
     "publish": null
   },
-  "homepage": "https://baderinfo.com"
+  "homepage": "https://baderinfo.com",
+  "dependencies": {
+    "@capacitor/android": "^8.5.3",
+    "@capacitor/app": "^8.1.2",
+    "@capacitor/core": "^8.5.3",
+    "@capacitor/device": "^8.0.3",
+    "@capacitor/filesystem": "^8.1.5",
+    "@capacitor/preferences": "^8.0.1",
+    "@capacitor/share": "^8.0.3",
+    "@capacitor/splash-screen": "^8.0.2",
+    "@capacitor/status-bar": "^8.0.4",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^4.2.1",
+    "tweetnacl": "^1.0.3"
+  }
 }

@@ -1,7 +1,7 @@
 "use client";
 import clsx from "clsx";
 import { X } from "lucide-react";
-import { useEffect, type ComponentProps, type ReactNode } from "react";
+import { useEffect, useRef, type ComponentProps, type ReactNode } from "react";
 import { useT } from "@/lib/i18n";
 import { useUi } from "@/store/ui";
 
@@ -130,9 +130,21 @@ export function Empty({ text, action }: { text: string; action?: ReactNode }) {
 }
 
 export function Table({ head, children, className }: { head: ReactNode[]; children: ReactNode; className?: string }) {
+  // on phones (html.native) rows become cards; each cell is labelled with its column title
+  const ref = useRef<HTMLTableElement>(null);
+  useEffect(() => {
+    const tbl = ref.current; if (!tbl || !document.documentElement.classList.contains("native")) return;
+    const label = () => {
+      const heads = Array.from(tbl.tHead?.rows[0]?.cells || []).map((h) => h.textContent || "");
+      tbl.querySelectorAll("tbody tr").forEach((r) => Array.from(r.children).forEach((c, i) => { if (!(c as HTMLElement).dataset.label) (c as HTMLElement).dataset.label = heads[i] || ""; }));
+    };
+    label();
+    const mo = new MutationObserver(label); mo.observe(tbl.tBodies[0], { childList: true, subtree: true });
+    return () => mo.disconnect();
+  }, []);
   return (
     <div className={clsx("overflow-x-auto", className)}>
-      <table className="w-full min-w-[640px] border-collapse text-sm">
+      <table ref={ref} className="ctable w-full min-w-[640px] border-collapse text-sm">
         <thead>
           <tr className="border-b-2 border-accent/25 bg-surface2 text-xs text-muted">
             {head.map((h, i) => <th key={i} className="px-3 py-2.5 text-start font-medium whitespace-nowrap">{h}</th>)}
