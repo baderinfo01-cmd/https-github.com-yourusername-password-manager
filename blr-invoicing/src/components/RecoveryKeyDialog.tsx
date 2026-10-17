@@ -16,7 +16,7 @@ export function RecoveryKeyDialog() {
   if (!key) return null;
   const copy = async () => { try { await navigator.clipboard.writeText(key); notify(t("copied")); } catch { notify(t("error"), "err"); } };
   const save = async () => {
-    const text = `BLR Fatourati — ${t("recovery_key")}\\r\\n\\r\\n${key}\\r\\n\\r\\n${t("recovery_file_note")}\\r\\n`;
+    const text = `BLR Fatourati — ${t("recovery_key")}\r\n\r\n${key}\r\n\r\n${t("recovery_file_note")}\r\n`;
     try { const r = await call<{ saved: boolean }>(blr().file.saveText("BLR-recovery-key.txt", text)); if (r.saved) notify(t("saved")); } catch { notify(t("error"), "err"); }
   };
   return (
